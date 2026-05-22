@@ -1,6 +1,6 @@
 ---
-name: FeatureRequest - 이슈
-about: 어떤 작업을 수행했는지 구체적으로 적어 주세요
+name: "✨ FeatureRequest - 새로운 기능 추가"
+about: 새로운 기능 개발 시 사용!
 title: ''
 labels: Feat
 assignees: ''

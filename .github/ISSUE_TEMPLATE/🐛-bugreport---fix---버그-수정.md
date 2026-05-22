@@ -1,6 +1,6 @@
 ---
-name: 'BugReport - 고칠 것 '
-about: 버그가 발생했을 때 사용하세요
+name: "\U0001F41B BugReport + Fix - 버그 수정"
+about: 버그가 발생했을 때 사용!
 title: ''
 labels: Bug
 assignees: ''
