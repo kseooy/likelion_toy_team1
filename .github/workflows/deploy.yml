@@ -1,7 +1,7 @@
 name: Deploy (systemd-lite)
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy:
@@ -19,10 +19,11 @@ jobs:
           script: |
             set -e
 
-            cd ${{ secrets.REPO_DIR }}
-            git pull origin main
+            cd /home/ec2-user/likelion_toy_team1
+            git reset --hard HEAD
+            git pull https://github.com/kseooy/likelion_toy_team1.git main
 
-            cd ${{ secrets.APP_DIR }}
+            cd /home/ec2-user/likelion_toy_team1/everytime
             if [ -d "myvenv" ]; then
               source myvenv/bin/activate
               pip install --upgrade pip
