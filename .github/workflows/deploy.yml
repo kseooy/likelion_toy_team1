@@ -20,17 +20,29 @@ jobs:
             set -e
 
             cd /home/ec2-user/likelion_toy_team1
-            git reset --hard HEAD
-            git pull https://github.com/kseooy/likelion_toy_team1.git main
+            git fetch origin main
+            git reset --hard origin/main
 
-            cd /home/ec2-user/likelion_toy_team1/everytime
             if [ -d "myvenv" ]; then
               source myvenv/bin/activate
+            elif [ -d "everytime/myvenv" ]; then
+              source everytime/myvenv/bin/activate
+            fi
+
+            if [ -n "$VIRTUAL_ENV" ]; then
               pip install --upgrade pip
-              if [ -f requirements.txt ]; then
+              
+              if [ -f "requirements.txt" ]; then
                 pip install -r requirements.txt
+              elif [ -f "everytime/requirements.txt" ]; then
+                pip install -r everytime/requirements.txt
               fi
-              python manage.py migrate --noinput
+
+              if [ -f "everytime/manage.py" ]; then
+                python everytime/manage.py migrate --noinput
+              elif [ -f "manage.py" ]; then
+                python manage.py migrate --noinput
+              fi
             fi
 
             sudo systemctl restart uwsgi
