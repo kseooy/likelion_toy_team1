@@ -9,18 +9,40 @@
     <a href="{% url 'posts:list' %}">목록으로 돌아가기</a>
     <hr>
 
+    <form method="GET" action="{% url 'posts:create' %}">
+        <p>1. 학과 선택: 
+            <select name="department" onchange="this.form.submit();">
+                <option value="">-- 학과를 선택하세요 --</option>
+                {% for dept in departments %}
+                    <option value="{{ dept }}" {% if dept == selected_dept %}selected{% endif %}>{{ dept }}</option>
+                {% endfor %}
+            </select>
+            <noscript><input type="submit" value="교수 조회"></noscript>
+        </p>
+    </form>
+
     <form method="POST" action="{% url 'posts:create' %}" enctype="multipart/form-data">
-        {% csrf_token %} <p>교수 소속 학과: <input type="text" name="department" placeholder="예: 디지털소프트웨어공학" required></p>
-        <p>교수 이름: <input type="text" name="professor_name" placeholder="예: 김나은" required></p>
+        {% csrf_token %}
+        
+        <p>2. 교수 선택: 
+            <select name="professor_id" required>
+                <option value="">-- 교수님을 선택하세요 --</option>
+                {% for prof in professors %}
+                    <option value="{{ prof.id }}">{{ prof.name }} 교수님</option>
+                {% endfor %}
+            </select>
+            {% if selected_dept and not professors %}
+                <span style="color: red; font-size: 12px;">(해당 학과에 등록된 교수님이 없습니다. admin에서 먼저 등록해 주세요!)</span>
+            {% endif %}
+        </p>
+
         <p>별점 (1~5): <input type="number" name="rating" min="1" max="5" placeholder="5" required></p>
         <p>글 제목: <input type="text" name="title" placeholder="제목을 입력하세요" required></p>
         <p>후기 내용:<br><textarea name="content" cols="50" rows="10" placeholder="1000자 이내 후기 작성" required></textarea></p>
-        
         <p>이미지 첨부 (최대 5장): <input type="file" name="images" multiple></p>
-        
         <p><input type="checkbox" name="is_anonymous" id="anon" checked> <label for="anon">익명으로 작성하기</label></p>
         
-        <input type="submit" value="[교안 p.43] 작성하기">
+        <input type="submit" value="작성하기">
     </form>
 </body>
 </html>

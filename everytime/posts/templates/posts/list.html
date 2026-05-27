@@ -20,7 +20,7 @@
         <div style="border: 1px solid gray; padding: 10px; margin-bottom: 10px;">
             <h3>
                 <a href="{% url 'posts:detail' post.id %}">
-                    [{{ post.department }} - {{ post.professor_name }} 교수님] {{ post.title }}
+                    [{{ post.professor.department }} - {{ post.professor.name }} 교수님] {{ post.title }}
                 </a>
             </h3>
             <p>⭐ 별점: {{ post.rating }} / 조회수: {{ post.views_count }}</p>
