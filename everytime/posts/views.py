@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages  # 필수 항목 누락이나 글자 수 제한 알림창(messages) 기능
-from .models import Post, PostImage
+from .models import Professor, Post, PostImage
 
 def list(request):
     """
@@ -21,63 +21,61 @@ def list(request):
 
 def create(request):
     """
-    2. 교수 후기 작성 화면 (게시글 작성)
-    - 필수값 체크, 본문 1000자 제한, 이미지 최대 5장, 각 10MB 미만 제한
+    2. 교수 후기 작성 화면
     """
+    departments = Professor.objects.values_list('department', flat=True).distinct()
+    
+    # 임시 변수 세팅
+    selected_dept = request.GET.get('department', '') 
+    professors = []
+    
+    if selected_dept:
+        professors = Professor.objects.filter(department=selected_dept).order_by('name')
 
     if request.method == "POST":
-        # 사용자가 폼에 입력한 텍스트 데이터 추출 
-        department = request.POST.get('department')
-        professor_name = request.POST.get('professor_name')
+        professor_id = request.POST.get('professor_id')
         rating = request.POST.get('rating')
         title = request.POST.get('title')
         content = request.POST.get('content')
-        
-        # 익명 여부 체크박스(on/off) 확인
         is_anonymous = request.POST.get('is_anonymous') == 'on'
         images = request.FILES.getlist('images')
 
-        # [예외처리] 필수 항목 중 하나라도 비어있으면 알림창을 띄우고 다시 작성 화면으로 가기
-        if not (department and professor_name and rating and title and content):
-            messages.error(request, "필수 항목을 모두 입력해주세요.")
-            return render(request, 'posts/create.html')
+        # [예외처리] 최종 교수가 선택되었는지 검증
+        if not (professor_id and rating and title and content):
+            messages.error(request, "학과와 교수님을 포함한 필수 항목을 모두 입력해주세요.")
+            return render(request, 'posts/create.html', {
+                'departments': departments,
+                'selected_dept': selected_dept,
+                'professors': professors
+            })
 
-        # [예외처리] 본문 글자 수 1000자 제한 검증
+        # 글자 수 1000자 제한, 이미지 제한 규칙 
         if len(content) > 1000:
             messages.error(request, "본문은 1000자 이하로 작성해주세요.")
-            return render(request, 'posts/create.html')
+            return render(request, 'posts/create.html', {'departments': departments, 'selected_dept': selected_dept, 'professors': professors})
 
-        # [예외처리] 이미지 첨부 개수 최대 5장 제한 검증
-        if len(images) > 5:
-            messages.error(request, "이미지는 최대 5장까지만 첨부할 수 있습니다.")
-            return render(request, 'posts/create.html')
+        # 검증 통과 시 객체 안전 생성
+        selected_professor = get_object_or_404(Professor, id=professor_id)
 
-        # [예외처리] 각 이미지 파일 용량 10MB 미만 제한 검증
-        max_size = 10 * 1024 * 1024  # 10MB를 바이트 단위로 계산
-        for img in images:
-            if img.size > max_size:
-                messages.error(request, f"이미지 용량은 10MB 미만이어야 합니다. ({img.name})")
-                return render(request, 'posts/create.html')
-
-        # 모든 검증을 통과했다면 안전하게 DB에 Post 객체 생성
         post = Post.objects.create(
-            department=department,
-            professor_name=professor_name,
-            rating=int(rating),  # 문자로 들어온 별점을 숫자로 변환
+            professor=selected_professor,
+            rating=int(rating),
             title=title,
             content=content,
             is_anonymous=is_anonymous
         )
         
-        # 생성된 게시글(post)과 이미지 파일들을 연결하여 차례대로 PostImage 테이블에 저장
         for img in images:
             PostImage.objects.create(post=post, image=img)
             
-        # 성공 시 목록 리스트 페이지로 이동
         return redirect('posts:list') 
         
-    # 만약 사용자가 URL에 접속한 상태(GET 요청)라면 글 쓰는 화면(create.html)을 보여줌
-    return render(request, 'posts/create.html')
+    # 처음에 글 쓰기 화면에 진입했을 때 (GET)
+    return render(request, 'posts/create.html', {
+        'departments': departments,      # 1번 창에 뜰 학과 리스트
+        'selected_dept': selected_dept,  # 사용자가 고른 학과 기억용
+        'professors': professors         # 2번 창에 뜰 필터링된 교수 리스트
+    })
 
 
 def detail(request, id):
