@@ -162,3 +162,17 @@ def delete(request, id):
     post.delete()
     
     return redirect('posts:list')
+
+# posts/views.py
+
+def post_like(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    
+    if request.user in post.like_users.all():
+        post.like_users.remove(request.user)
+    else:
+        post.like_users.add(request.user)
+        
+    # ❌ 기존: return redirect('posts:detail', post_id=post.id)
+    # ✨ 변경: 친구의 URL 규칙에 맞춰 post_id 대신 id로 변경!
+    return redirect('posts:detail', id=post.id)
