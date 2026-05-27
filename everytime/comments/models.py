@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from posts.models import Post  # 친구가 만든 진짜 Post 모델 임포트
 
 class Comment(models.Model):
-    # 친구가 작성한 Post 모델과 N:1 관계 설정
+    # Post 모델과 N:1 관계 설정
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     # 댓글 작성자
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
@@ -18,7 +18,7 @@ class Comment(models.Model):
     likes = models.ManyToManyField(User, blank=True, related_name='liked_comments')
 
     class Meta:
-        ordering = ['created_at']  # 댓글은 기본적으로 작성된 시간 순서대로 정렬
+        ordering = ['created_at']  # 기본적으로 작성된 시간 순서대로 정렬
 
     def __str__(self):
         return f"{'대댓글: ' if self.parent else '댓글: '}{self.content[:10]}"
