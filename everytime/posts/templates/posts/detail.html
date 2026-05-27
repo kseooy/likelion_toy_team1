@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>후기 상세보기</title>
+</head>
+<body>
+    <h2>🔍 교수 후기 상세보기</h2>
+    <a href="{% url 'posts:list' %}">🔙 목록으로</a> | 
+    <a href="{% url 'posts:update' post.id %}">⚙️ 수정하기</a> | 
+    <a href="{% url 'posts:delete' post.id %}" onclick="return confirm('게시글이 삭제됩니다. 정말 삭제하시겠습니까?');">🗑️ 삭제하기</a>
+    <hr>
+
+    <h3>[{{ post.department }}] {{ post.professor_name }} 교수님 후기</h3>
+    <p><b>제목:</b> {{ post.title }}</p>
+    <p><b>별점:</b> ⭐ {{ post.rating }} / 5.0 | <b>조회수:</b> {{ post.views_count }}</p>
+    <p><b>작성일:</b> [교안 p.51] {{ post.created_at }}</p>
+    <hr>
+    
+    <p style="white-space: pre-wrap;"><b>본문 내용:</b><br>{{ post.content }}</p>
+    <hr>
+
+    <h4>🖼️ 첨부 이미지 (총 {{ post.images.count }}장)</h4>
+    {% if post.images.all %}
+        {% for img_obj in post.images.all %}
+            <img src="{{ img_obj.image.url }}" width="300" style="margin-right: 10px; border: 1px solid #ccc;">
+        {% endfor %}
+    {% else %}
+        <p>첨부된 이미지가 없습니다.</p>
+    {% endif %}
+</body>
+</html>
