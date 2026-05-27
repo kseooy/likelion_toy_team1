@@ -34,6 +34,9 @@ class Post(models.Model):
     views_count = models.IntegerField(default=0)           # 조회수
     created_at = models.DateTimeField(auto_now_add=True)   # 작성일자 
 
+    # 이 글을 좋아하는 유저들 목록
+    like_users = models.ManyToManyField(User, related_name='like_posts', blank=True)
+
     def __str__(self):
         return f"[{self.professor.department} - {self.professor.name} 교수님] {self.title}"
     
