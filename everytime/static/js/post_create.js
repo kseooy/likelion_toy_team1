@@ -140,17 +140,12 @@ submitBtn.addEventListener("click", function(){
         //배경 블러
         backBlur.style.display="block";
     }
-
-    confirmBtn.addEventListener("click", ()=>{
-        requiredAlert.style.display="none";
-        backBlur.style.display="none";
-    });
-    
 });
 
-
-
-
+confirmBtn.addEventListener("click", ()=>{
+    requiredAlert.style.display="none";
+    backBlur.style.display="none";
+});
 
 
 //제목 글자 수
@@ -166,5 +161,5 @@ const textareaCnt = document.querySelector(".textLimit2");
 const textareaContent = document.querySelector(".articleTextarea");
 
 textareaContent.addEventListener("input", function(){
-    textareaCnt.innerHTML=`${textareaContent.value.length}/50`;
+    textareaCnt.innerHTML=`${textareaContent.value.length}/1000`;
 });
