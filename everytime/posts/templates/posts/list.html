@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>교수 후기 게시판</title>
+</head>
+<body>
+    <h2>🏫 교수 후기 메인 게시판</h2>
+    
+    <a href="{% url 'posts:create' %}">✏️ 새 후기 작성하기</a>
+    <hr>
+
+    <div>
+        <a href="{% url 'posts:list' %}?sort=latest">최신순</a> | 
+        <a href="{% url 'posts:list' %}?sort=popular">인기순</a>
+    </div>
+    <br>
+
+    {% for post in posts %}
+        <div style="border: 1px solid gray; padding: 10px; margin-bottom: 10px;">
+            <h3>
+                <a href="{% url 'posts:detail' post.id %}">
+                    [{{ post.department }} - {{ post.professor_name }} 교수님] {{ post.title }}
+                </a>
+            </h3>
+            <p>⭐ 별점: {{ post.rating }} / 조회수: {{ post.views_count }}</p>
+            <p>내용 요약: {{ post.content|truncatechars:50 }}</p> {% if post.images.all %}
+                <div>🖼️ 이미지 있음 (총 {{ post.images.count }}장)</div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>작성된 교수 후기가 없습니다.</p>
+    {% endfor %}
+</body>
+</html>
