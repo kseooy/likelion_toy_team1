@@ -11,7 +11,7 @@
     <a href="{% url 'posts:delete' post.id %}" onclick="return confirm('게시글이 삭제됩니다. 정말 삭제하시겠습니까?');">🗑️ 삭제하기</a>
     <hr>
 
-    <h3>[{{ post.department }}] {{ post.professor_name }} 교수님 후기</h3>
+    <h3>[{{ post.professor.department }}] {{ post.professor.name }} 교수님 후기</h3>
     <p><b>제목:</b> {{ post.title }}</p>
     
     <p>
@@ -22,7 +22,7 @@
         | <b>조회수:</b> {{ post.views_count }}
     </p>
     
-    <p><b>작성일:</b> [교안 p.51] {{ post.created_at }}</p>
+    <p><b>작성일:</b> {{ post.created_at|date:"Y년 m월 d일 H:i" }}</p>
     <hr>
     
     <p style="white-space: pre-wrap;"><b>본문 내용:</b><br>{{ post.content }}</p>
@@ -57,7 +57,7 @@
                             {{ comment.author.username }}
                         {% endif %}
                     </b>
-                    <small>({{ comment.created_at }})</small>
+                    <small>({{ comment.created_at|date:"Y/m/d H:i" }})</small>
                 </p>
                 
                 <p>내용: {{ comment.content }}</p>
@@ -78,7 +78,7 @@
                                         {{ reply.author.username }}
                                     {% endif %}
                                 </b>
-                                <small>({{ reply.created_at }})</small>
+                                <small>({{ reply.created_at|date:"Y/m/d H:i" }})</small>
                             </p>
                             <p>{{ reply.content }}</p>
                             

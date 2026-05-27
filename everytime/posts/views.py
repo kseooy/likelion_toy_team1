@@ -163,7 +163,7 @@ def delete(request, id):
     
     return redirect('posts:list')
 
-# posts/views.py
+
 
 def post_like(request, post_id):
     post = get_object_or_404(Post, id=post_id)
