@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>후기 상세보기</title>
+</head>
+<body>
+    <h2>🔍 교수 후기 상세보기</h2>
+    <a href="{% url 'posts:list' %}">🔙 목록으로</a> | 
+    <a href="{% url 'posts:update' post.id %}">⚙️ 수정하기</a> | 
+    <a href="{% url 'posts:delete' post.id %}" onclick="return confirm('게시글이 삭제됩니다. 정말 삭제하시겠습니까?');">🗑️ 삭제하기</a>
+    <hr>
+
+    <h3>[{{ post.professor.department }}] {{ post.professor.name }} 교수님 후기</h3>
+    <p><b>제목:</b> {{ post.title }}</p>
+    
+    <p>
+        <a href="{% url 'posts:post_like' post.id %}" style="text-decoration: none;">
+            👍 <b>{{ post.like_users.count }}</b>
+        </a> 
+        | <b>별점:</b> ⭐ {{ post.rating }} / 5.0 
+        | <b>조회수:</b> {{ post.views_count }}
+    </p>
+    
+    <p><b>작성일:</b> {{ post.created_at|date:"Y년 m월 d일 H:i" }}</p>
+    <hr>
+    
+    <p style="white-space: pre-wrap;"><b>본문 내용:</b><br>{{ post.content }}</p>
+    <hr>
+
+    <h4>🖼️ 첨부 이미지 (총 {{ post.images.count }}장)</h4>
+    {% if post.images.all %}
+        {% for img_obj in post.images.all %}
+            <img src="{{ img_obj.image.url }}" width="300" style="margin-right: 10px; border: 1px solid #ccc;">
+        {% endfor %}
+    {% else %}
+        <p>첨부된 이미지가 없습니다.</p>
+    {% endif %}
+
+    <hr>
+    <h3>💬 댓글 (총 {{ post.comments.count }}개)</h3>
+    <p>최신순 | 인기순</p>
+    <hr>
+
+    {% for comment in post.comments.all %}
+        {% if not comment.parent %}
+            <div style="margin-bottom: 20px;">
+                <p>
+                    <b>👤 
+                        {% if comment.is_anonymous %}
+                            {% if comment.author == post.user %}
+                                <span style="color: red;">익명(작성자)</span>
+                            {% else %}
+                                <span>익명</span>
+                            {% endif %}
+                        {% else %}
+                            {{ comment.author.username }}
+                        {% endif %}
+                    </b>
+                    <small>({{ comment.created_at|date:"Y/m/d H:i" }})</small>
+                </p>
+                
+                <p>내용: {{ comment.content }}</p>
+                
+                <p>
+                    <a href="{% url 'comments:comment_like' comment.id %}" style="text-decoration: none;">
+                        👍 {{ comment.like_count }}  </a>
+                </p>
+
+                {% if comment.replies.all %}
+                    <blockquote style="background: #f9f9f9; padding: 10px; margin-left: 20px;">
+                        {% for reply in comment.replies.all %}
+                            <p>
+                                └ <b>
+                                    {% if reply.is_anonymous %}
+                                        {% if reply.author == post.user %}<span style="color: red;">익명(작성자)</span>{% else %}익명{% endif %}
+                                    {% else %}
+                                        {{ reply.author.username }}
+                                    {% endif %}
+                                </b>
+                                <small>({{ reply.created_at|date:"Y/m/d H:i" }})</small>
+                            </p>
+                            <p>{{ reply.content }}</p>
+                            
+                            <p>
+                                <a href="{% url 'comments:comment_like' reply.id %}" style="text-decoration: none; font-size: 0.8rem;">
+                                    👍 {{ reply.like_count }}
+                                </a>
+                            </p>
+                            <hr style="border: 0.5px solid #eee;">
+                        {% endfor %}
+                    </blockquote>
+                {% endif %}
+
+                <div style="margin-left: 20px; margin-top: 10px; background: #fdfdfd; padding: 5px; border: 1px dashed #ccc;">
+                    <form action="{% url 'comments:comment_create' post.id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                        <input type="text" name="content" placeholder="이 댓글에 답글 달기..." style="width: 70%;" required>
+                        <label><input type="checkbox" name="is_anonymous" checked> 익명</label>
+                        <button type="submit">답글등록</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+        {% endif %}
+    {% endfor %}
+
+    <h4>✍️ 새 댓글 작성하기</h4>
+    <form action="{% url 'comments:comment_create' post.id %}" method="POST">
+        {% csrf_token %}
+        <textarea name="content" placeholder="댓글을 입력하세요." style="width: 100%; height: 50px;" required></textarea>
+        <br>
+        <label><input type="checkbox" name="is_anonymous" checked> 익명으로 쓰기</label>
+        <button type="submit">🚀 댓글 등록</button>
+    </form>
+
+</body>
+</html>
