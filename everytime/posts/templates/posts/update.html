@@ -41,19 +41,20 @@
 </body>
 </html> -->
 
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/post_create.css">
+    <link rel="stylesheet" href="{% static 'css/post_create.css' %}">
     <title>교수 후기 작성</title>
 </head>
 <body>
 <div class="container">
     <header>
         <div class="headerBox">
-            <div class="backIcon"><img src="../static/img/icon-back.svg"></div>
+            <div class="backIcon"><img src="{% static 'img/icon-back.svg' %}"></div>
             <div class="headerTitle">교수 후기 작성</div>
             <button type="submit" class="submitBtn">등록</button>
         </div>
@@ -61,7 +62,7 @@
     <div class="container2">
         <aside>
             <div class="notice">
-                <img src="../static/img/icon-notice.svg" class="icon-notice">
+                <img src="{% static 'img/icon-notice.svg' %}" class="icon-notice">
                 <div class="noticeTxt">솔직하고 구체적인 후기는 다른 학생들에게 큰 도움이 됩니다!</div>
             </div>
         </aside>
@@ -150,11 +151,11 @@
                 <p class="evaluation">전반적인 만족도를 평가해주세요!</p>
                 <div class="starAndScore">
                     <div class="starBox">
-                        <img src="../static/img/icon-star-gray.svg" class="starImg">
-                        <img src="../static/img/icon-star-gray.svg" class="starImg">
-                        <img src="../static/img/icon-star-gray.svg" class="starImg">
-                        <img src="../static/img/icon-star-gray.svg" class="starImg">
-                        <img src="../static/img/icon-star-gray.svg" class="starImg">
+                        <img src="{% static 'img/icon-star-gray.svg' %}" class="starImg">
+                        <img src="{% static 'img/icon-star-gray.svg' %}" class="starImg">
+                        <img src="{% static 'img/icon-star-gray.svg' %}" class="starImg">
+                        <img src="{% static 'img/icon-star-gray.svg' %}" class="starImg">
+                        <img src="{% static 'img/icon-star-gray.svg' %}" class="starImg">
                     </div>
                     <p class="starCnt">0.0</p>
                 </div>
@@ -199,7 +200,7 @@
                 <input type="file" class="fileInput" multiple accept="image/*">
 
                 <div class="uploadInner">
-                    <img src="../static/img/icon-img.svg">
+                    <img src="{% static 'img/icon-img.svg' %}">
 
                     <div class="textLimit">
                         이미지를 선택해주세요.</br>
@@ -218,7 +219,7 @@
 
             <div class="anonymousBox">
 
-                <img src="../static/img/icon-check-gray.svg" class="checkImg">
+                <img src="{% static 'img/icon-check-gray.svg' %}" class="checkImg">
                 <div class="anonymousContent">
                     <div class="anonymousTitle">익명으로 작성하기</div>
                     <div class="anonymousDetail">익명으로 작성 시 닉네임이 '익명'으로 표시됩니다.</div>
@@ -235,6 +236,6 @@
         </div>
     </div>
 </div>
-<script src="../static/js/post_create.js"></script>
+<script src="{% static 'js/post_create.js' %}"></script>
 </body>
 </html>

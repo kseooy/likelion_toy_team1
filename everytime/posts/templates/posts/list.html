@@ -34,21 +34,23 @@
 </body>
 </html> -->
 
+
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/post_list.css">
+    <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
     <title>게시글 목록</title>
 </head>
 <body>
 <div class="container">
     <header>
         <div class="headerBox">
-            <div class="backIcon"><img src="../static/img/icon-bar.png" width="29px" height="29px"></div>
+            <div class="backIcon"><img src="{% static 'img/icon-bar.png' %}" width="29px" height="29px"></div>
             <div class="headerTitle">교수 후기</div>
-            <button type="button" class="submitBtn"><img width="24px" height="24px" src="../static/img/icon-search.png"></button>
+            <button type="button" class="submitBtn"><img width="24px" height="24px" src="{% static 'img/icon-search.png' %}"></button>
         </div>
     </header>
     <aside class="asideBox">
@@ -63,10 +65,10 @@
                 <div class="majorBadge">국어국문학전공</div> <!--연동-->
                 <div class="professor">@@@ 교수</div> <!--연동-->
                 <div class="starRaiting">
-                    <img class="starYellow" src="../static/img/icon-star-yellow.png">
+                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
                     <p class="starCount">5.0</p> <!--연동-->
                 </div>
-                <img class="bookMark" src="../static/img/icon-bookmark-gray.png"> <!--연동-->
+                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}"> <!--연동-->
             </div>
 
             <div class="contentBox">
@@ -85,11 +87,11 @@
 
                 <div class="reactionBox"><!--연동-->
                     <div class="likeBox">
-                        <img src="../static/img/icon-like-gray.png" width="18px" height="18px">
+                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
                         <p class="likeTxt">18</p>
                     </div>
                     <div class="commentBox">
-                        <img src="../static/img/icon-comment.png" width="15px" height="15px">
+                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
                         <p class="commentTxt">3</p>
                     </div>
                 </div>
@@ -101,10 +103,10 @@
                 <div class="majorBadge">자유전공학부</div> <!--연동-->
                 <div class="professor">@@@ 교수</div> <!--연동-->
                 <div class="starRaiting">
-                    <img class="starYellow" src="../static/img/icon-star-yellow.png">
+                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
                     <p class="starCount">5.0</p> <!--연동-->
                 </div>
-                <img class="bookMark" src="../static/img/icon-bookmark-gray.png"> <!--연동-->
+                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}"> <!--연동-->
             </div>
 
             <div class="contentBox">
@@ -123,11 +125,11 @@
 
                 <div class="reactionBox"><!--연동-->
                     <div class="likeBox">
-                        <img src="../static/img/icon-like-gray.png" width="18px" height="18px">
+                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
                         <p class="likeTxt">18</p>
                     </div>
                     <div class="commentBox">
-                        <img src="../static/img/icon-comment.png" width="15px" height="15px">
+                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
                         <p class="commentTxt">3</p>
                     </div>
                 </div>
@@ -139,10 +141,10 @@
                 <div class="majorBadge">약학과</div> <!--연동-->
                 <div class="professor">@@@ 교수</div> <!--연동-->
                 <div class="starRaiting">
-                    <img class="starYellow" src="../static/img/icon-star-yellow.png">
+                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
                     <p class="starCount">5.0</p> <!--연동-->
                 </div>
-                <img class="bookMarkRed" src="../static/img/icon-bookmark-red.png"> <!--연동-->
+                <img class="bookMarkRed" src="{% static 'img/icon-bookmark-red.png' %}"> <!--연동-->
             </div>
 
             <div class="contentBox">
@@ -161,11 +163,11 @@
 
                 <div class="reactionBox"><!--연동-->
                     <div class="likeBox">
-                        <img src="../static/img/icon-like-gray.png" width="18px" height="18px">
+                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
                         <p class="likeTxt">18</p>
                     </div>
                     <div class="commentBox">
-                        <img src="../static/img/icon-comment.png" width="15px" height="15px">
+                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
                         <p class="commentTxt">3</p>
                     </div>
                 </div>
@@ -178,10 +180,10 @@
                 <div class="majorBadge">화학전공</div> <!--연동-->
                 <div class="professor">@@@ 교수</div> <!--연동-->
                 <div class="starRaiting">
-                    <img class="starYellow" src="../static/img/icon-star-yellow.png">
+                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
                     <p class="starCount">5.0</p> <!--연동-->
                 </div>
-                <img class="bookMark" src="../static/img/icon-bookmark-gray.png"> <!--연동-->
+                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}"> <!--연동-->
             </div>
 
             <div class="contentBox">
@@ -200,11 +202,11 @@
 
                 <div class="reactionBox"><!--연동-->
                     <div class="likeBox">
-                        <img src="../static/img/icon-like-gray.png" width="18px" height="18px">
+                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
                         <p class="likeTxt">18</p>
                     </div>
                     <div class="commentBox">
-                        <img src="../static/img/icon-comment.png" width="15px" height="15px">
+                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
                         <p class="commentTxt">3</p>
                     </div>
                 </div>
@@ -216,10 +218,10 @@
                 <div class="majorBadge">시각디자인전공</div> <!--연동-->
                 <div class="professor">@@@ 교수</div> <!--연동-->
                 <div class="starRaiting">
-                    <img class="starYellow" src="../static/img/icon-star-yellow.png">
+                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
                     <p class="starCount">5.0</p> <!--연동-->
                 </div>
-                <img class="bookMark" src="../static/img/icon-bookmark-gray.png"> <!--연동-->
+                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}"> <!--연동-->
             </div>
 
             <div class="contentBox">
@@ -238,11 +240,11 @@
 
                 <div class="reactionBox"><!--연동-->
                     <div class="likeBox">
-                        <img src="../static/img/icon-like-red.png" width="18px" height="18px">
+                        <img src="{% static 'img/icon-like-red.png' %}" width="18px" height="18px">
                         <p class="likeTxtRed">18</p>
                     </div>
                     <div class="commentBox">
-                        <img src="../static/img/icon-comment.png" width="15px" height="15px">
+                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
                         <p class="commentTxt">3</p>
                     </div>
                 </div>
@@ -251,11 +253,11 @@
 
         
     </div>
-    
-    <img src="../static/img/icon-pencil.png" class="pencilButton">
-
+    <a href="{% url 'posts:create' %}">
+        <img src="{% static 'img/icon-pencil.png' %}" class="pencilButton">
+    </a>
 </div>
-<script src="../static/js/post_list.js">
+<script src="{% static 'js/post_list.js' %}">
 </script>
 </body>
 </html>
