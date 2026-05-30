@@ -51,40 +51,40 @@ fileInput.addEventListener("change", (e) => {
 
 });
 
-//교수 선택
-const majorSelect = document.querySelectorAll(".articleSelect")[0];
-const professorSelect = document.querySelectorAll(".articleSelect")[1];
+// //교수 선택
+// const majorSelect = document.querySelectorAll(".articleSelect")[0];
+// const professorSelect = document.querySelectorAll(".articleSelect")[1];
 
-professorSelect.disabled = true;
+// professorSelect.disabled = true;
 
-const professorByCollege = {
-    "글로벌융합대학" : ["박현용", "백철우", "강여선", "김성은", "이황희", "주정은", "이경옥"],
-    "과학기술대학" : ["유견아", "원대연", "배주화", "송유하", "이소영"],
-    "약학대학" : ["정우현", "차옥경", "권희정"],
-    "Art&Design 대학" : ["박영길", "차은영", "이주연"],
-    "미래인재대학" : ["신현길", "강성민","문지훈", "박성우", "임양미"]
-};
+// const professorByCollege = {
+//     "글로벌융합대학" : ["박현용", "백철우", "강여선", "김성은", "이황희", "주정은", "이경옥"],
+//     "과학기술대학" : ["유견아", "원대연", "배주화", "송유하", "이소영"],
+//     "약학대학" : ["정우현", "차옥경", "권희정"],
+//     "Art&Design 대학" : ["박영길", "차은영", "이주연"],
+//     "미래인재대학" : ["신현길", "강성민","문지훈", "박성우", "임양미"]
+// };
 
-majorSelect.addEventListener("change", function(){
+// majorSelect.addEventListener("change", function(){
 
-    professorSelect.disabled = false;
+//     professorSelect.disabled = false;
     
-    const selectedOption = majorSelect.options[majorSelect.selectedIndex];
-    const collegeName = selectedOption.parentElement.label;
+//     const selectedOption = majorSelect.options[majorSelect.selectedIndex];
+//     const collegeName = selectedOption.parentElement.label;
 
-    professorSelect.innerHTML = `
-        <option value="" selected disabled hidden>
-            교수명을 선택하세요
-        </option>
-    `;
-    professorByCollege[collegeName].forEach(function (professor) {
-        const option = document.createElement("option");
-        option.value = professor;
-        option.textContent = professor;
-        professorSelect.appendChild(option);
-    });
+//     professorSelect.innerHTML = `
+//         <option value="" selected disabled hidden>
+//             교수명을 선택하세요
+//         </option>
+//     `;
+//     professorByCollege[collegeName].forEach(function (professor) {
+//         const option = document.createElement("option");
+//         option.value = professor;
+//         option.textContent = professor;
+//         professorSelect.appendChild(option);
+//     });
     
-});
+// });
 
 //별점
 const starImg = document.querySelectorAll(".starImg");
@@ -96,6 +96,7 @@ starImg.forEach((star, index)=>{
         cnt = index + 1;
 
         starCnt.textContent=cnt.toFixed(1);
+        document.getElementById("ratingInput").value = cnt;
 
         starImg.forEach((s, i)=>{
             if(i < cnt){
@@ -108,15 +109,30 @@ starImg.forEach((star, index)=>{
 });
 
 //익명버튼
-const checkImg = document.querySelector(".checkImg");
 
-let isChecked = false;
+// const checkImg = document.querySelector(".checkImg");
+
+// let isChecked = false;
+// checkImg.addEventListener("click", ()=>{
+//     isChecked = !isChecked;
+//     if(isChecked){
+//         checkImg.src="../static/img/icon-check-red.png";
+//     }else{
+//         checkImg.src="../static/img/icon-check-gray.svg";
+//     }
+// });
+
+const anonCheckbox = document.getElementById("anon");
+const checkImg = document.getElementById("checkImg");
+
 checkImg.addEventListener("click", ()=>{
-    isChecked = !isChecked;
-    if(isChecked){
-        checkImg.src="../static/img/icon-check-red.png";
+
+    anonCheckbox.checked = !anonCheckbox.checked;
+
+    if(anonCheckbox.checked){
+        checkImg.src="/static/img/icon-check-red.png";
     }else{
-        checkImg.src="../static/img/icon-check-gray.svg";
+        checkImg.src="/static/img/icon-check-gray.svg";
     }
 });
 
