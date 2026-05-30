@@ -54,27 +54,33 @@
         </div>
     </header>
     <aside class="asideBox">
-        <button type="button" class="latesBtn">최신순</button>
-        <button type="button" class="popularBtn">인기순</button>
+        <a href="{% url 'posts:list' %}?sort=latest" ><button type="button" class="latesBtn">최신순</button></a>
+        <a href="{% url 'posts:list' %}?sort=popular"><button type="button" class="popularBtn">인기순</button></a>
     </aside>
 
     <div class="articleContainer">
         <article class="articleBox">
-
+            {% for post in posts %}
             <div class="articleTitle">
-                <div class="majorBadge">국어국문학전공</div> <!--연동-->
-                <div class="professor">@@@ 교수</div> <!--연동-->
+                <div class="majorBadge">{{ post.professor.department }}</div> <!--학과-->
+                <div class="professor">{{ post.professor.name }} 교수님</div> <!--교수명-->
                 <div class="starRaiting">
                     <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
-                    <p class="starCount">5.0</p> <!--연동-->
+                    <p class="starCount">{{ post.rating }}</p> <!--별점-->
                 </div>
                 <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}"> <!--연동-->
             </div>
 
             <div class="contentBox">
-                <p class="contentTitle">강의 스타일이 좋아요!</p><!--연동-->
-                <p class="contentTxt">이해하기 쉽게 설명해주시고 수업 분위기도 좋아요.</p><!--연동-->
+                <p class="contentTitle">{{ post.title }}</p><!--연동-->
+                <p class="contentTxt">{{ post.content|truncatechars:50 }}</p><!--연동-->
+                {% if post.images.all %}
+                <div>🖼️ 이미지 (총 {{ post.images.count }}장)</div>
+                {% endif %}
             </div>
+            {% empty %}
+            <p>작성된 교수 후기가 없습니다.</p>
+            {% endfor %}
 
             <div class="articleFooter"> <!--연동-->
                 <div class="postMeta">
@@ -82,7 +88,7 @@
                     <p>·</p>
                     <p class="writeTime">05/25</p>
                     <p>·</p>
-                    <p class="viewCount">조회 123</p>
+                    <p class="viewCount">조회수 : {{ post.views_count }}</p>
                 </div>
 
                 <div class="reactionBox"><!--연동-->
