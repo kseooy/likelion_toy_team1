@@ -86,27 +86,35 @@ fileInput.addEventListener("change", (e) => {
     
 // });
 
-//별점
+// 별점
 const starImg = document.querySelectorAll(".starImg");
 const starCnt = document.querySelector(".starCnt");
+const ratingInput = document.getElementById("ratingInput");
 
-let cnt = 0;
-starImg.forEach((star, index)=>{
-    star.addEventListener("click",()=>{
+let cnt = Number(ratingInput.value) || 0;
+
+function updateStars() {
+    starCnt.textContent = cnt.toFixed(1);
+    ratingInput.value = cnt;
+
+    starImg.forEach((s, i) => {
+        if (i < cnt) {
+            s.src = "/static/img/icon-star-red.svg";
+        } else {
+            s.src = "/static/img/icon-star-gray.svg";
+        }
+    });
+}
+
+updateStars();
+
+starImg.forEach((star, index) => {
+    star.addEventListener("click", () => {
         cnt = index + 1;
-
-        starCnt.textContent=cnt.toFixed(1);
-        document.getElementById("ratingInput").value = cnt;
-
-        starImg.forEach((s, i)=>{
-            if(i < cnt){
-                s.src="../static/img/icon-star-red.svg";
-            }else{
-                s.src="../static/img/icon-star-gray.svg";
-            }
-        });
+        updateStars();
+    });
 });
-});
+
 
 //익명버튼
 

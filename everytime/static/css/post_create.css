@@ -13,6 +13,15 @@ body{
     gap:25px;
     padding:15px;
 }
+
+
+/*form*/
+.container2 > form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
 /* 헤더 */
 header{
     width:100%;

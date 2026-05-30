@@ -59,203 +59,65 @@
     </aside>
 
     <div class="articleContainer">
+        {% for post in posts %}
+        <a href="{% url 'posts:detail' post.id %}" class="articleLink">
         <article class="articleBox">
-            {% for post in posts %}
+
             <div class="articleTitle">
-                <div class="majorBadge">{{ post.professor.department }}</div> <!--학과-->
-                <div class="professor">{{ post.professor.name }} 교수님</div> <!--교수명-->
+                <div class="majorBadge globalCollege">{{ post.professor.department }}</div>
+                <div class="professor">{{ post.professor.name }} 교수님</div>
+
                 <div class="starRaiting">
                     <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
-                    <p class="starCount">{{ post.rating }}</p> <!--별점-->
+                    <p class="starCount">{{ post.rating }}</p>
                 </div>
-                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}"> <!--연동-->
+
+                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}">
             </div>
 
             <div class="contentBox">
-                <p class="contentTitle">{{ post.title }}</p><!--연동-->
-                <p class="contentTxt">{{ post.content|truncatechars:50 }}</p><!--연동-->
+                <p class="contentTitle">{{ post.title }}</p>
+                <p class="contentTxt">{{ post.content|truncatechars:50 }}</p>
+
                 {% if post.images.all %}
                 <div>🖼️ 이미지 (총 {{ post.images.count }}장)</div>
                 {% endif %}
             </div>
-            {% empty %}
-            <p>작성된 교수 후기가 없습니다.</p>
-            {% endfor %}
 
-            <div class="articleFooter"> <!--연동-->
+            <div class="articleFooter">
                 <div class="postMeta">
-                    <p class="writer">익명</p>
+                    <p class="writer">
+                        {% if post.is_anonymous %}
+                            익명
+                        {% else %}
+                            {{ post.user.username }}
+                        {% endif %}
+                    </p>
                     <p>·</p>
-                    <p class="writeTime">05/25</p>
+                    <p class="writeTime">{{ post.created_at|date:"m/d H:i" }}</p>
                     <p>·</p>
-                    <p class="viewCount">조회수 : {{ post.views_count }}</p>
+                    <p class="viewCount">조회 {{ post.views_count }}</p>
                 </div>
 
-                <div class="reactionBox"><!--연동-->
+                <div class="reactionBox">
                     <div class="likeBox">
                         <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
-                        <p class="likeTxt">18</p>
+                        <p class="likeTxt">{{ post.like_users.count }}</p>
                     </div>
                     <div class="commentBox">
                         <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
-                        <p class="commentTxt">3</p>
+                        <p class="commentTxt">0</p>
                     </div>
                 </div>
             </div>
+
         </article>
-        <article class="articleBox">
-
-            <div class="articleTitle">
-                <div class="majorBadge">자유전공학부</div> <!--연동-->
-                <div class="professor">@@@ 교수</div> <!--연동-->
-                <div class="starRaiting">
-                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
-                    <p class="starCount">5.0</p> <!--연동-->
-                </div>
-                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}"> <!--연동-->
-            </div>
-
-            <div class="contentBox">
-                <p class="contentTitle">강의 스타일이 좋아요!</p><!--연동-->
-                <p class="contentTxt">이해하기 쉽게 설명해주시고 수업 분위기도 좋아요.</p><!--연동-->
-            </div>
-
-            <div class="articleFooter"> <!--연동-->
-                <div class="postMeta">
-                    <p class="writer">익명</p>
-                    <p>·</p>
-                    <p class="writeTime">05/25</p>
-                    <p>·</p>
-                    <p class="viewCount">조회 123</p>
-                </div>
-
-                <div class="reactionBox"><!--연동-->
-                    <div class="likeBox">
-                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
-                        <p class="likeTxt">18</p>
-                    </div>
-                    <div class="commentBox">
-                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
-                        <p class="commentTxt">3</p>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="articleBox">
-
-            <div class="articleTitle">
-                <div class="majorBadge">약학과</div> <!--연동-->
-                <div class="professor">@@@ 교수</div> <!--연동-->
-                <div class="starRaiting">
-                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
-                    <p class="starCount">5.0</p> <!--연동-->
-                </div>
-                <img class="bookMarkRed" src="{% static 'img/icon-bookmark-red.png' %}"> <!--연동-->
-            </div>
-
-            <div class="contentBox">
-                <p class="contentTitle">강의 스타일이 좋아요!</p><!--연동-->
-                <p class="contentTxt">이해하기 쉽게 설명해주시고 수업 분위기도 좋아요.</p><!--연동-->
-            </div>
-
-            <div class="articleFooter"> <!--연동-->
-                <div class="postMeta">
-                    <p class="writer">익명</p>
-                    <p>·</p>
-                    <p class="writeTime">05/25</p>
-                    <p>·</p>
-                    <p class="viewCount">조회 123</p>
-                </div>
-
-                <div class="reactionBox"><!--연동-->
-                    <div class="likeBox">
-                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
-                        <p class="likeTxt">18</p>
-                    </div>
-                    <div class="commentBox">
-                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
-                        <p class="commentTxt">3</p>
-                    </div>
-                </div>
-            </div>
-        </article>
-
-        <article class="articleBox">
-
-            <div class="articleTitle">
-                <div class="majorBadge">화학전공</div> <!--연동-->
-                <div class="professor">@@@ 교수</div> <!--연동-->
-                <div class="starRaiting">
-                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
-                    <p class="starCount">5.0</p> <!--연동-->
-                </div>
-                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}"> <!--연동-->
-            </div>
-
-            <div class="contentBox">
-                <p class="contentTitle">강의 스타일이 좋아요!</p><!--연동-->
-                <p class="contentTxt">이해하기 쉽게 설명해주시고 수업 분위기도 좋아요.</p><!--연동-->
-            </div>
-
-            <div class="articleFooter"> <!--연동-->
-                <div class="postMeta">
-                    <p class="writer">익명</p>
-                    <p>·</p>
-                    <p class="writeTime">05/25</p>
-                    <p>·</p>
-                    <p class="viewCount">조회 123</p>
-                </div>
-
-                <div class="reactionBox"><!--연동-->
-                    <div class="likeBox">
-                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
-                        <p class="likeTxt">18</p>
-                    </div>
-                    <div class="commentBox">
-                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
-                        <p class="commentTxt">3</p>
-                    </div>
-                </div>
-            </div>
-        </article>
-        <article class="articleBox">
-
-            <div class="articleTitle">
-                <div class="majorBadge">시각디자인전공</div> <!--연동-->
-                <div class="professor">@@@ 교수</div> <!--연동-->
-                <div class="starRaiting">
-                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
-                    <p class="starCount">5.0</p> <!--연동-->
-                </div>
-                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}"> <!--연동-->
-            </div>
-
-            <div class="contentBox">
-                <p class="contentTitle">강의 스타일이 좋아요!</p><!--연동-->
-                <p class="contentTxt">이해하기 쉽게 설명해주시고 수업 분위기도 좋아요.</p><!--연동-->
-            </div>
-
-            <div class="articleFooter"> <!--연동-->
-                <div class="postMeta">
-                    <p class="writer">익명</p>
-                    <p>·</p>
-                    <p class="writeTime">05/25</p>
-                    <p>·</p>
-                    <p class="viewCount">조회 123</p>
-                </div>
-
-                <div class="reactionBox"><!--연동-->
-                    <div class="likeBox">
-                        <img src="{% static 'img/icon-like-red.png' %}" width="18px" height="18px">
-                        <p class="likeTxtRed">18</p>
-                    </div>
-                    <div class="commentBox">
-                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
-                        <p class="commentTxt">3</p>
-                    </div>
-                </div>
-            </div>
-        </article>
+        </a>
+        {% empty %}
+        <p>작성된 교수 후기가 없습니다.</p>
+        
+        {% endfor %}
+    </div>
 
         
     </div>
