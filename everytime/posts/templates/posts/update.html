@@ -54,8 +54,10 @@
 <div class="container">
     <header>
         <div class="headerBox">
-            <div class="backIcon"><img src="{% static 'img/icon-back.svg' %}"></div>
-            <div class="headerTitle">교수 후기 작성</div>
+            <a href="{% url 'posts:detail' post.id %}">
+                <div class="backIcon"><img src="{% static 'img/icon-back.svg' %}"></div>
+            </a>
+                <div class="headerTitle">교수 후기 작성</div>
             <button type="submit" class="submitBtn">등록</button>
         </div>
     </header>
@@ -66,6 +68,11 @@
                 <div class="noticeTxt">솔직하고 구체적인 후기는 다른 학생들에게 큰 도움이 됩니다!</div>
             </div>
         </aside>
+
+        <form method="POST" action="{% url 'posts:update' post.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+
+
         <article class="articleContainer">
         <div class="articleHead">
             <div class="articleTitle">교수 정보</div>
@@ -78,6 +85,7 @@
                 <div class="articleTxt">전공</div>
 
                 <select class="articleSelect" id="majorSelect">
+                    
                     <option class="optionTxt" value="" selected disabled hidden>
                         전공을 선택하세요
                     </option>
@@ -140,7 +148,7 @@
             </div>
 
         </div>
-    </article>
+        </article>
 
         <article class="articleContainer">
             <div class="articleHead">
