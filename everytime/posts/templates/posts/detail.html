@@ -176,9 +176,10 @@
                         <div class="user-profile"><img src="{% static 'img/UserCircle.svg' %}" alt="유저 프로필"/></div>
                         <div class="user-meta">
                             <div class="user-name">
-                                {% if post.user == user and post.is_anonymous %} 익명
+                                {% if post.is_anonymous %}
+                                    <span style="color: #c62917; font-weight: bold;">익명(글쓴이)</span>
                                 {% else %}
-                                    익명
+                                    {{ post.author.username }}
                                 {% endif %}
                             </div>
                             <div class="post-date">{{ post.created_at|date:"Y년 m월 d일 H:i" }} · 조회 {{ post.views_count }}</div>
@@ -204,15 +205,10 @@
                 <div class="action-left">
                     <a href="{% url 'posts:post_like' post.id %}" class="like-count">
                         {% if request.user in post.like_users.all %}
-                            <img src="{% static 'img/LikeBtn_active.svg' %}" 
-                                id="likeBtnImg" 
-                                alt="좋아요 취소">
+                            <img src="{% static 'img/LikeBtn_active.svg' %}" id="likeBtnImg" alt="좋아요 취소">
                         {% else %}
-                            <img src="{% static 'img/LikeBtn.svg' %}" 
-                                id="likeBtnImg" 
-                                alt="좋아요">
+                            <img src="{% static 'img/LikeBtn.svg' %}" id="likeBtnImg" alt="좋아요">
                         {% endif %}
-
                         <span id="likeCount">{{ post.like_users.count }}</span>
                     </a>
 
@@ -237,7 +233,7 @@
             </div>
 
             <div class="comment-list">
-                {% for comment in post.comments.all %}
+                {% for comment in comments %}
                     {% if not comment.parent %}
                         <div class="comment-item-group" style="margin-bottom: 15px;">
                             <div class="comment-item">
@@ -246,15 +242,7 @@
                                         <div class="user-profile"><img src="{% static 'img/UserCircle.svg' %}" alt="유저 프로필"/></div>
                                         <div class="user-meta">
                                             <div class="user-name">
-                                                {% if comment.is_anonymous %}
-                                                    {% if comment.author == post.user %}
-                                                        <span style="color: #c62917;">익명(작성자)</span>
-                                                    {% else %}
-                                                        <span>익명</span>
-                                                    {% endif %}
-                                                {% else %}
-                                                    {{ comment.author.username }}
-                                                {% endif %}
+                                                <span>{{ comment.anonymous_name }}</span>
                                             </div>
                                             <div class="post-date">{{ comment.created_at|date:"Y/m/d · H:i" }}</div>
                                         </div>
@@ -264,10 +252,10 @@
                                         <div class="comment-bar">
                                             <a href="{% url 'comments:comment_like' comment.id %}" class="comment-like-btn">
                                                 <img src="{% static 'img/LikeBtn.svg' %}" 
-                                                    class="comment-like-img" 
-                                                    alt="좋아요"
-                                                    data-active="{% static 'img/LikeBtn_active.svg' %}"
-                                                    data-inactive="{% static 'img/LikeBtn.svg' %}"/>
+                                                     class="comment-like-img" 
+                                                     alt="좋아요"
+                                                     data-active="{% static 'img/LikeBtn_active.svg' %}"
+                                                     data-inactive="{% static 'img/LikeBtn.svg' %}"/>
                                                 <span class="comment-like-count">{{ comment.like_count }}</span>
                                             </a>
                                             <button type="button" class="comment-reply-btn" onclick="prepareReply('{{ comment.id }}')">답글달기</button>
@@ -304,15 +292,7 @@
                                                     <div class="user-profile"><img src="{% static 'img/UserCircle.svg' %}" alt="유저 프로필"/></div>
                                                     <div class="user-meta">
                                                         <div class="user-name">
-                                                            {% if reply.is_anonymous %}
-                                                                {% if reply.author == post.user %}
-                                                                    <span style="color: #c62917;">익명(작성자)</span>
-                                                                {% else %}
-                                                                    익명
-                                                                {% endif %}
-                                                            {% else %}
-                                                                {{ reply.author.username }}
-                                                            {% endif %}
+                                                            <span>{{ reply.anonymous_name }}</span>
                                                         </div>
                                                         <div class="post-date">{{ reply.created_at|date:"Y/m/d · H:i" }}</div>
                                                     </div>
@@ -359,7 +339,7 @@
                                         <div class="comment-input">
                                             <input type="text" name="content" placeholder="이 댓글에 답글 달기..." required/>
                                             <label class="checkbox-label">
-                                                <input type="checkbox" name="is_anonymous">
+                                                <input type="checkbox" name="is_anonymous" checked>
                                                 <span class="checkbox-text">익명</span>
                                             </label>
                                         </div>
@@ -377,9 +357,7 @@
 
         <form action="{% url 'comments:comment_create' post.id %}" method="POST">
             {% csrf_token %}
-            
             <input type="hidden" name="parent_id" id="parentCommentId" value="">
-            
             <div class="comment-input-area">
                 <div class="comment-input">
                     <input type="text" id="commentInput" name="content" placeholder="댓글을 입력해주세요." required/>
@@ -418,6 +396,7 @@
             </a>
         </div>
     </div>
+    
     <script src="{% static 'js/post_detail.js' %}" defer></script>
     <script src="{% static 'js/post_list.js' %}" defer></script>
 </body>

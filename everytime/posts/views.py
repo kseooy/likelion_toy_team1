@@ -4,6 +4,8 @@ from .models import Professor, Post, PostImage
 from django.db.models import Q
 from django.shortcuts import redirect
 
+from comments.models import Comment
+
 def home(request):
     if request.user.is_authenticated:
         return redirect('posts:list')
@@ -91,15 +93,47 @@ def detail(request, id):
     3. 게시글 상세보기 화면
     - 학과, 교수이름, 별점, 제목, 본문 전체, 첨부 이미지 n장 표시
     - 조건: 상세 페이지에 들어올 때마다 해당 데이터의 조회수가 +1 증가해야 함
+    - 추가: related_name='comments'를 반영한 실시간 에타식 익명 시스템
     """
     post = get_object_or_404(Post, id=id)
     
-    # [조회수 증가 로직] 게시글을 성공적으로 가져왔다면, DB에 저장하기 전에 조회수를 1 올림
+    # [조회수 증가 로직]
     post.views_count += 1
-    post.save() # 변경된 조회수를 데이터베이스에 최종 저장합니다.
+    post.save()
 
-    return render(request, 'posts/detail.html', {'post': post}) 
+    # ------------------ [에타식 익명 번호 계산 로직] ------------------
+    # comments 앱의 Comment 모델 related_name='comments'를 활용해 순서대로 가져옴
+    comments = post.comments.all().order_by('created_at')
+    
+    anonymous_dict = {}
+    anonymous_count = 1
+    
+    # 💡 서연님의 Post 모델 필드명인 'user'를 사용하도록 수정했습니다.
+    post_author_id = post.user.id if post.user else None
 
+    for comment in comments:
+        if comment.is_anonymous:  # 익명 체크가 된 댓글/대댓글인 경우
+            # 💡 comment.author는 comments 앱 모델 구조에 맞게 유지하되, 글쓴이 비교 대상을 post.user로 매칭합니다.
+            if comment.author and comment.author.id == post_author_id:
+                comment.anonymous_name = "익명(글쓴이)"
+            elif comment.author and comment.author.id in anonymous_dict:
+                comment.anonymous_name = f"익명{anonymous_dict[comment.author.id]}"
+            else:
+                if comment.author:
+                    anonymous_dict[comment.author.id] = anonymous_count
+                comment.anonymous_name = f"익명{anonymous_count}"
+                anonymous_count += 1
+        else:
+            # 실명 댓글인 경우
+            comment.anonymous_name = comment.author.username if comment.author else "알 수 없음"
+    # ------------------------------------------------------------------
+
+    context = {
+        'post': post,
+        'comments': comments,  
+    } 
+
+    return render(request, 'posts/detail.html', context)
 
 
 def update(request, id):
