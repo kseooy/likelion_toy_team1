@@ -18,27 +18,27 @@ if (bookmarkBtn && bookmarkImg) {
 
 // 좋아요 버튼
 // 게시글 좋아요 버튼 로직
-const mainLikeBtn = document.getElementById('likeBtn');
-const mainLikeBtnImg = document.getElementById('likeBtnImg');
-const mainLikeCount = document.getElementById('likeCount');
+// const mainLikeBtn = document.getElementById('likeBtn');
+// const mainLikeBtnImg = document.getElementById('likeBtnImg');
+// const mainLikeCount = document.getElementById('likeCount');
 
-if (mainLikeBtn && mainLikeBtnImg && mainLikeCount) {
-    mainLikeBtn.addEventListener('click', function(e) {
-        //새로고침(깜빡임) 강제로 막음
-        e.preventDefault(); 
+// if (mainLikeBtn && mainLikeBtnImg && mainLikeCount) {
+//     mainLikeBtn.addEventListener('click', function(e) {
+//         //새로고침(깜빡임) 강제로 막음
+//         e.preventDefault(); 
 
-        let currentCount = parseInt(mainLikeCount.innerText);
-        if (mainLikeBtnImg.src.includes('LikeBtn_active.svg')) {
-            mainLikeBtnImg.src = mainLikeBtnImg.dataset.inactive;
-            mainLikeBtnImg.alt = '좋아요';
-            mainLikeCount.innerText = currentCount - 1;
-        } else {
-            mainLikeBtnImg.src = mainLikeBtnImg.dataset.active;
-            mainLikeBtnImg.alt = '좋아요 취소';
-            mainLikeCount.innerText = currentCount + 1;
-        }
-    });
-}
+//         let currentCount = parseInt(mainLikeCount.innerText);
+//         if (mainLikeBtnImg.src.includes('LikeBtn_active.svg')) {
+//             mainLikeBtnImg.src = mainLikeBtnImg.dataset.inactive;
+//             mainLikeBtnImg.alt = '좋아요';
+//             mainLikeCount.innerText = currentCount - 1;
+//         } else {
+//             mainLikeBtnImg.src = mainLikeBtnImg.dataset.active;
+//             mainLikeBtnImg.alt = '좋아요 취소';
+//             mainLikeCount.innerText = currentCount + 1;
+//         }
+//     });
+// }
 
 // 댓글 & 대댓글 좋아요
 const commentLikeBtns = document.querySelectorAll('.comment-like-btn');

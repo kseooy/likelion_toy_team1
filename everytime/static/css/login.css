@@ -1,0 +1,113 @@
+body {
+margin: 0;
+}
+
+.container {
+width: 100%;
+max-width: 402px;
+min-height: 100vh;
+margin: 0 auto;
+}
+
+header {
+width: 100%;
+}
+
+.headerBox {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 16px;
+border-bottom: 1px solid #D5D6D7;
+}
+
+.backIcon img {
+display: block;
+}
+
+.headerTitle {
+font-size: 16px;
+font-weight: bold;
+}
+
+.emptyBox {
+width: 24px;
+height: 24px;
+}
+
+.loginContainer {
+display: flex;
+flex-direction: column;
+gap: 24px;
+padding: 15px;
+}
+
+.notice {
+display: flex;
+align-items: center;
+padding: 7px 10px 7px 4px;
+background-color: #FDF3F4;
+border-radius: 5px;
+}
+
+.icon-notice {
+background-color: white;
+border-radius: 50%;
+padding: 5px;
+}
+
+.noticeTxt {
+margin-left: 10px;
+font-size: 12px;
+font-weight: 500;
+}
+
+.loginForm {
+display: flex;
+flex-direction: column;
+gap: 16px;
+}
+
+.inputBox {
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+
+.inputBox label {
+font-size: 13px;
+font-weight: 500;
+}
+
+.inputBox input {
+border: 1px solid #D5D6D7;
+border-radius: 5px;
+padding: 13px 12px;
+font-size: 12px;
+outline: none;
+box-sizing: border-box;
+}
+
+.inputBox input:focus {
+border-color: #FE332E;
+}
+
+.loginBtn {
+margin-top: 8px;
+border: none;
+border-radius: 5px;
+background-color: #FE332E;
+color: white;
+padding: 14px;
+font-size: 15px;
+font-weight: 600;
+cursor: pointer;
+}
+
+.errorMessage {
+padding: 12px;
+background: #FDF3F4;
+color: #FE332E;
+border-radius: 5px;
+font-size: 12px;
+}

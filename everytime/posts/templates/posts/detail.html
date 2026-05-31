@@ -202,20 +202,17 @@
 
             <div class="action-bar">
                 <div class="action-left">
-                    <a href="{% url 'posts:post_like' post.id %}" id="likeBtn" class="like-count">
-                        {% if user in post.like_users.all %}
+                    <a href="{% url 'posts:post_like' post.id %}" class="like-count">
+                        {% if request.user in post.like_users.all %}
                             <img src="{% static 'img/LikeBtn_active.svg' %}" 
                                 id="likeBtnImg" 
-                                alt="좋아요 취소"
-                                data-active="{% static 'img/LikeBtn_active.svg' %}"
-                                data-inactive="{% static 'img/LikeBtn.svg' %}"/>
+                                alt="좋아요 취소">
                         {% else %}
                             <img src="{% static 'img/LikeBtn.svg' %}" 
                                 id="likeBtnImg" 
-                                alt="좋아요"
-                                data-active="{% static 'img/LikeBtn_active.svg' %}"
-                                data-inactive="{% static 'img/LikeBtn.svg' %}"/>
+                                alt="좋아요">
                         {% endif %}
+
                         <span id="likeCount">{{ post.like_users.count }}</span>
                     </a>
 

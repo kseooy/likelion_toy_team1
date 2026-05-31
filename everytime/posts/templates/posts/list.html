@@ -108,7 +108,7 @@
                     </div>
                     <div class="commentBox">
                         <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
-                        <p class="commentTxt">0</p>
+                        <p class="commentTxt">{{ post.comments.count }}</p>
                     </div>
                 </div>
             </div>

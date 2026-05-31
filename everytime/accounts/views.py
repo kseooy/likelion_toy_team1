@@ -28,4 +28,4 @@ def logout_view(request):
     2. 로그아웃 로직
     """
     auth_logout(request) 
-    return redirect('posts:list') # 로그아웃 시 메인 게시판으로 이동
+    return redirect('accounts:login') # 로그아웃 시 메인 게시판으로 이동

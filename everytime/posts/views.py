@@ -2,6 +2,13 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages  # 필수 항목 누락이나 글자 수 제한 알림창(messages) 기능
 from .models import Professor, Post, PostImage
 from django.db.models import Q
+from django.shortcuts import redirect
+
+def home(request):
+    if request.user.is_authenticated:
+        return redirect('posts:list')
+    return redirect('accounts:login')
+
 
 def list(request):
     """
@@ -171,18 +178,28 @@ def delete(request, id):
     return redirect('posts:list')
 
 
-
 def post_like(request, post_id):
+    print("===== 좋아요 함수 실행 =====")
+    print("post_id:", post_id)
+    print("user:", request.user)
+    print("is_authenticated:", request.user.is_authenticated)
+
     post = get_object_or_404(Post, id=post_id)
-    
-    if request.user in post.like_users.all():
+
+    print("누르기 전 좋아요 수:", post.like_users.count())
+
+    if post.like_users.filter(id=request.user.id).exists():
         post.like_users.remove(request.user)
+        print("좋아요 취소됨")
     else:
         post.like_users.add(request.user)
-        
-    # ❌ 기존: return redirect('posts:detail', post_id=post.id)
-    # ✨ 변경: 친구의 URL 규칙에 맞춰 post_id 대신 id로 변경!
+        print("좋아요 추가됨")
+
+    print("누른 후 좋아요 수:", post.like_users.count())
+    print("==========================")
+
     return redirect('posts:detail', id=post.id)
+
 
 
 def search(request):
