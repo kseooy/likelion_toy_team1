@@ -280,8 +280,8 @@
 
                                 {% if request.user == comment.author %}
                                     <div class="author-only" style="font-size: 11px;">
-                                        <a href="#">삭제</a> | 
-                                        <a href="#">수정</a>
+                                        <a href="{% url 'comments:comment_delete' comment.id %}" onclick="return confirm('댓글을 삭제하시겠습니까?');">삭제</a> | 
+                                        <a href="{% url 'comments:comment_update' comment.id %}">수정</a>
                                     </div>
                                 {% else %}
                                     <div class="dots-container">

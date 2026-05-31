@@ -52,7 +52,7 @@
         <div class="headerBox">
             <div class="backIcon"><img src="{% static 'img/icon-bar.png' %}" width="29px" height="29px"></div>
             <div class="headerTitle">교수 후기</div>
-            <button type="button" class="submitBtn"><img width="24px" height="24px" src="{% static 'img/icon-search.png' %}"></button>
+            <button type="button" class="submitBtn" onclick="location.href='{% url 'posts:search' %}'"><img width="24px" height="24px" src="{% static 'img/icon-search.png' %}"></button>
         </div>
     </header>
     <aside class="asideBox">
