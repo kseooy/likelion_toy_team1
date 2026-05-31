@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages  # 필수 항목 누락이나 글자 수 제한 알림창(messages) 기능
 from .models import Professor, Post, PostImage
+from django.db.models import Q
 
 def list(request):
     """
@@ -182,3 +183,27 @@ def post_like(request, post_id):
     # ❌ 기존: return redirect('posts:detail', post_id=post.id)
     # ✨ 변경: 친구의 URL 규칙에 맞춰 post_id 대신 id로 변경!
     return redirect('posts:detail', id=post.id)
+
+
+def search(request):
+    """
+    7. 검색 전용 페이지 및 검색 결과 반환
+    - 검색창에 처음 들어왔을 때는 빈 화면을 보여주고
+    - 검색어를 입력하고 엔터를 치면 그에 맞는 게시글 목록을 필터링하여 리턴함
+    """
+    search_query = request.GET.get('q', '') # 프론트엔드 검색창의 name="q" 값을 가져옴
+    posts = []
+    
+    # 사용자가 검색어를 입력하고 검색을 요청했을 때만 DB를 조회
+    if search_query:
+        posts = Post.objects.filter(
+            Q(title__icontains=search_query) |          # 제목에 검색어가 포함되거나
+            Q(content__icontains=search_query) |        # 본문에 검색어가 포함되거나
+            Q(professor__name__icontains=search_query)  # 우리가 주입한 교수님 이름에 포함된 경우
+        ).order_by('-id') # 최신순 정렬
+        
+    context = {
+        'posts': posts,
+        'search_query': search_query, # 내가 뭘 검색했는지 창에 남겨주기 위한 변수
+    }
+    return render(request, 'posts/search.html', context) # 프론트에서 만든 검색 전용 HTML로 렌더링
