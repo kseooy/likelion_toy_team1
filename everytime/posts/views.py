@@ -172,20 +172,42 @@ def delete(request, id):
 
 
 
-def post_like(request, post_id):
+# def post_like(request, post_id):
 
-    print("좋아요 함수 실행됨")
+#     print("좋아요 함수 실행됨")
+
+#     post = get_object_or_404(Post, id=post_id)
+    
+#     if request.user in post.like_users.all():
+#         post.like_users.remove(request.user)
+#     else:
+#         post.like_users.add(request.user)
+        
+#     # ❌ 기존: return redirect('posts:detail', post_id=post.id)
+#     # ✨ 변경: 친구의 URL 규칙에 맞춰 post_id 대신 id로 변경!
+#     return redirect('posts:detail', id=post.id)
+def post_like(request, post_id):
+    print("===== 좋아요 함수 실행 =====")
+    print("post_id:", post_id)
+    print("user:", request.user)
+    print("is_authenticated:", request.user.is_authenticated)
 
     post = get_object_or_404(Post, id=post_id)
-    
-    if request.user in post.like_users.all():
+
+    print("누르기 전 좋아요 수:", post.like_users.count())
+
+    if post.like_users.filter(id=request.user.id).exists():
         post.like_users.remove(request.user)
+        print("좋아요 취소됨")
     else:
         post.like_users.add(request.user)
-        
-    # ❌ 기존: return redirect('posts:detail', post_id=post.id)
-    # ✨ 변경: 친구의 URL 규칙에 맞춰 post_id 대신 id로 변경!
+        print("좋아요 추가됨")
+
+    print("누른 후 좋아요 수:", post.like_users.count())
+    print("==========================")
+
     return redirect('posts:detail', id=post.id)
+
 
 
 def search(request):
