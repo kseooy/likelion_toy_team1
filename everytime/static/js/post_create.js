@@ -133,6 +133,12 @@ starImg.forEach((star, index) => {
 const anonCheckbox = document.getElementById("anon");
 const checkImg = document.getElementById("checkImg");
 
+if (anonCheckbox.checked) {
+    checkImg.src = "/static/img/icon-check-red.png";
+} else {
+    checkImg.src = "/static/img/icon-check-gray.svg";
+}
+
 checkImg.addEventListener("click", ()=>{
 
     anonCheckbox.checked = !anonCheckbox.checked;

@@ -86,64 +86,33 @@
                     <div class="articleTxtBox">
                         <div class="articleTxt">전공</div>
 
-                        <select class="articleSelect" id="majorSelect" name="department" required>
-                            <option class="optionTxt" value="" disabled hidden>
-                                전공을 선택하세요
+                    <select class="articleSelect" id="majorSelect" name="department">
+
+                        {% for dept in departments %}
+                            <option value="{{ dept }}"
+                                {% if dept == selected_dept %}selected{% endif %}>
+                                {{ dept }}
                             </option>
+                        {% endfor %}
 
-                            <option class="optionTxt" disabled>전공 검색</option>
-
-                            <optgroup label="글로벌융합대학">
-                                <option {% if post.professor.department == "국어국문학전공" %}selected{% endif %}>국어국문학전공</option>
-                                <option {% if post.professor.department == "일어일문학전공" %}selected{% endif %}>일어일문학전공</option>
-                                <option {% if post.professor.department == "중어중문학전공" %}selected{% endif %}>중어중문학전공</option>
-                                <option {% if post.professor.department == "미술사학전공" %}selected{% endif %}>미술사학전공</option>
-                                <option {% if post.professor.department == "경영학전공" %}selected{% endif %}>경영학전공</option>
-                                <option {% if post.professor.department == "의상디자인전공" %}selected{% endif %}>의상디자인전공</option>
-                                <option {% if post.professor.department == "유아교육과" %}selected{% endif %}>유아교육과</option>
-                            </optgroup>
-
-                            <optgroup label="과학기술대학">
-                                <option {% if post.professor.department == "디지털소프트웨어공학부" %}selected{% endif %}>디지털소프트웨어공학부</option>
-                                <option {% if post.professor.department == "컴퓨터공학전공" %}selected{% endif %}>컴퓨터공학전공</option>
-                                <option {% if post.professor.department == "사이버보안전공" %}selected{% endif %}>사이버보안전공</option>
-                                <option {% if post.professor.department == "수학전공" %}selected{% endif %}>수학전공</option>
-                                <option {% if post.professor.department == "정보통계학전공" %}selected{% endif %}>정보통계학전공</option>
-                                <option {% if post.professor.department == "화학전공" %}selected{% endif %}>화학전공</option>
-                                <option {% if post.professor.department == "식품영양학전공" %}selected{% endif %}>식품영양학전공</option>
-                            </optgroup>
-
-                            <optgroup label="약학대학">
-                                <option {% if post.professor.department == "약학과" %}selected{% endif %}>약학과</option>
-                            </optgroup>
-
-                            <optgroup label="Art&Design 대학">
-                                <option {% if post.professor.department == "동양화전공" %}selected{% endif %}>동양화전공</option>
-                                <option {% if post.professor.department == "서양화전공" %}selected{% endif %}>서양화전공</option>
-                                <option {% if post.professor.department == "실내디자인전공" %}selected{% endif %}>실내디자인전공</option>
-                                <option {% if post.professor.department == "시각디자인전공" %}selected{% endif %}>시각디자인전공</option>
-                                <option {% if post.professor.department == "텍스타일디자인전공" %}selected{% endif %}>텍스타일디자인전공</option>
-                                <option {% if post.professor.department == "생활체육학전공" %}selected{% endif %}>생활체육학전공</option>
-                            </optgroup>
-
-                            <optgroup label="미래인재대학">
-                                <option {% if post.professor.department == "자유전공학부" %}selected{% endif %}>자유전공학부</option>
-                                <option {% if post.professor.department == "가상현실융합학과" %}selected{% endif %}>가상현실융합학과</option>
-                                <option {% if post.professor.department == "데이터사이언스학과" %}selected{% endif %}>데이터사이언스학과</option>
-                                <option {% if post.professor.department == "AI신약학과" %}selected{% endif %}>AI신약학과</option>
-                                <option {% if post.professor.department == "한국학전공" %}selected{% endif %}>한국학전공</option>
-                            </optgroup>
-                        </select>
+                    </select>
                     </div>
 
                     <div class="articleTxtBox">
                         <div class="articleTxt">교수명</div>
 
-                        <select class="articleSelect" id="professorSelect" name="professor_name" required>
-                            <option value="{{ post.professor.name }}" selected>
-                                {{ post.professor.name }} 교수님
+                    <select class="articleSelect" id="professorSelect" name="professor_id" required>
+
+                        {% for prof in professors %}
+                            <option
+                                value="{{ prof.id }}"
+                                {% if prof.id == post.professor.id %}selected{% endif %}
+                            >
+                                {{ prof.name }} 교수님
                             </option>
-                        </select>
+                        {% endfor %}
+
+                    </select>
                     </div>
                 </div>
             </article>
