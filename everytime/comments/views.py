@@ -44,15 +44,12 @@ def comment_delete(request, comment_id):
 # ✨ 댓글 수정 기능 
 @login_required
 def comment_update(request, comment_id):
-    """댓글 수정 기능"""
     comment = get_object_or_404(Comment, pk=comment_id)
-    post_id = comment.post.id  # 수정 전/후에 돌아갈 원본 게시글 ID
+    post_id = comment.post.id
     
-    # 1. 작성자가 아니면 원래 게시글로 튕겨내기
     if request.user != comment.author:
         return redirect('posts:detail', id=post_id)
         
-    # 2. [POST] 실제로 수정을 완료하고 수정 완료 버튼을 눌렀을 때
     if request.method == 'POST':
         content = request.POST.get('content')
         if content:
@@ -60,9 +57,7 @@ def comment_update(request, comment_id):
             comment.save()
         return redirect('posts:detail', id=post_id)
         
-
-    return redirect('posts:detail', id=post_id)
-
+    return render(request, 'comment_update.html', {'comment': comment})
 
 @login_required
 def comment_like(request, comment_id):
