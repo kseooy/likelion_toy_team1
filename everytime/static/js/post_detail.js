@@ -2,37 +2,40 @@
 const bookmarkBtn = document.getElementById('bookmarkBtn');
 const bookmarkImg = document.getElementById('bookmarkImg');
 
-bookmarkBtn.addEventListener('click', function() {
-    
-    if (bookmarkImg.src.includes('Bookmark.svg')) {
-        
-        bookmarkImg.src = '../static/img/Bookmark_active.svg';
-        bookmarkImg.alt = '북마크 취소';
-    } else {
-        bookmarkImg.src = '../static/img/Bookmark.svg';
-        bookmarkImg.alt = '북마크 하기';
-        
-    }
-});
+if (bookmarkBtn && bookmarkImg) {
+    bookmarkBtn.addEventListener('click', function() {
+        if (bookmarkImg.src.includes('Bookmark_active.svg')) {
+            // 이미 활성화된 상태라면 -> 비활성화(기본) 이미지로 변경
+            bookmarkImg.src = bookmarkImg.dataset.inactive;
+            bookmarkImg.alt = '북마크 하기';
+        } else {
+            // 기본 상태라면 -> 활성화 이미지로 변경
+            bookmarkImg.src = bookmarkImg.dataset.active;
+            bookmarkImg.alt = '북마크 취소';
+        }
+    });
+}
 
 // 좋아요 버튼
-// 게시글 좋아요
+// 게시글 좋아요 버튼 로직
 const mainLikeBtn = document.getElementById('likeBtn');
 const mainLikeBtnImg = document.getElementById('likeBtnImg');
 const mainLikeCount = document.getElementById('likeCount');
 
 if (mainLikeBtn && mainLikeBtnImg && mainLikeCount) {
-    mainLikeBtn.addEventListener('click', function() {
+    mainLikeBtn.addEventListener('click', function(e) {
+        //새로고침(깜빡임) 강제로 막음
+        e.preventDefault(); 
+
         let currentCount = parseInt(mainLikeCount.innerText);
-        
-        if (mainLikeBtnImg.src.includes('LikeBtn.svg')) {
-            mainLikeBtnImg.src = '../static/img/LikeBtn_active.svg';
-            mainLikeBtnImg.alt = '좋아요 취소';
-            mainLikeCount.innerText = currentCount + 1;
-        } else {
-            mainLikeBtnImg.src = '../static/img/LikeBtn.svg';
+        if (mainLikeBtnImg.src.includes('LikeBtn_active.svg')) {
+            mainLikeBtnImg.src = mainLikeBtnImg.dataset.inactive;
             mainLikeBtnImg.alt = '좋아요';
             mainLikeCount.innerText = currentCount - 1;
+        } else {
+            mainLikeBtnImg.src = mainLikeBtnImg.dataset.active;
+            mainLikeBtnImg.alt = '좋아요 취소';
+            mainLikeCount.innerText = currentCount + 1;
         }
     });
 }
@@ -41,21 +44,23 @@ if (mainLikeBtn && mainLikeBtnImg && mainLikeCount) {
 const commentLikeBtns = document.querySelectorAll('.comment-like-btn');
 
 commentLikeBtns.forEach(function(btn) {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault(); 
+
         const img = btn.querySelector('.comment-like-img');
         const countSpan = btn.querySelector('.comment-like-count');
         
         if (img && countSpan) {
             let currentCount = parseInt(countSpan.innerText);
             
-            if (img.src.includes('LikeBtn.svg')) {
-                img.src = '../static/img/LikeBtn_active.svg';
-                img.alt = '좋아요 취소';
-                countSpan.innerText = currentCount + 1;
-            } else {
-                img.src = '../static/img/LikeBtn.svg';
+            if (img.src.includes('LikeBtn_active.svg')) {
+                img.src = img.dataset.inactive;
                 img.alt = '좋아요';
                 countSpan.innerText = currentCount - 1;
+            } else {
+                img.src = img.dataset.active;
+                img.alt = '좋아요 취소';
+                countSpan.innerText = currentCount + 1;
             }
         }
     });
@@ -64,34 +69,38 @@ commentLikeBtns.forEach(function(btn) {
 // 익명 체크박스
 const anonToggleBtn = document.getElementById('anonToggleBtn');
 const anonCheckImg = document.getElementById('anonCheckImg');
+const anonCheckbox = document.getElementById('anonCheckbox');
 
 if (anonToggleBtn && anonCheckImg) {
     anonToggleBtn.addEventListener('click', function() {
         
-        if (anonCheckImg.src.includes('Checkbox.svg')) {
-            anonCheckImg.src = '../static/img/Checkbox_active.svg'; // 비어있는 체크박스 이미지명으로 변경하세요!
-            anonCheckImg.alt = '체크박스 해제';
-        } else {
-            anonCheckImg.src = '../static/img/Checkbox.svg';
+        if (anonCheckImg.src.includes('Checkbox_active.svg')) {
+            // 체크 해제 상태로 변경
+            anonCheckImg.src = anonCheckImg.dataset.inactive;
             anonCheckImg.alt = '체크박스';
+        } else {
+            // 체크 상태로 변경
+            anonCheckImg.src = anonCheckImg.dataset.active;
+            anonCheckImg.alt = '체크박스 해제';
         }
     });
 }
 
-// 댓글 입력창 텍스트 감지
+// 댓글 입력창 텍스트 감지, 전송 버튼 활성화
 const commentInput = document.getElementById('commentInput');
 const submitBtn = document.getElementById('submitBtn');
 const submitBtnImg = document.getElementById('submitBtnImg');
 
 if (commentInput && submitBtn && submitBtnImg) {
     commentInput.addEventListener('input', function() {
-
+        
         if (commentInput.value.trim().length > 0) {
             submitBtn.classList.add('active');
-            submitBtnImg.src = '../static/img/Submitbtn_active.svg'; 
+            submitBtnImg.src = submitBtnImg.dataset.active;
         } else {
+            // 텍스트가 다 지워지면 다시 비활성화 상태로 복구
             submitBtn.classList.remove('active');
-            submitBtnImg.src = '../static/img/Submitbtn.svg';
+            submitBtnImg.src = submitBtnImg.dataset.inactive;
         }
     });
 }
@@ -123,26 +132,6 @@ document.addEventListener('click', function() {
     });
 });
 
-// 게시글 삭제 버튼
-const deleteModal = document.getElementById('deleteModal');
-const modalConfirmBtn = document.getElementById('modalConfirmBtn');
-
-const postDeleteTrigger = document.querySelector('.post-actions span:first-child'); 
-
-// [삭제] 글씨를 클릭했을 때
-if (postDeleteTrigger && deleteModal) {
-    postDeleteTrigger.addEventListener('click', function() {
-        deleteModal.classList.add('show');
-    });
-}
-
-// 모달창 내부의 [확인] 버튼을 클릭했을 때
-if (modalConfirmBtn && deleteModal) {
-    modalConfirmBtn.addEventListener('click', function() {
-        deleteModal.classList.remove('show');
-    });
-}
-
 // 댓글 정렬 버튼 토글 (최신순 ↔ 인기순)
 const sortBtns = document.querySelectorAll('.comment-actions .sort-btn');
 
@@ -159,4 +148,53 @@ sortBtns.forEach(function(btn) {
         
         this.classList.add('active');
     });
+});
+
+// 1. 대댓글(답글) 작성 폼 열고 닫기 토글 함수
+function prepareReply(commentId) {
+    const parentInput = document.getElementById('parentCommentId');
+    const commentInput = document.getElementById('commentInput');
+    
+    if (parentInput && commentInput) {
+        parentInput.value = commentId;
+        commentInput.placeholder = '대댓글을 입력하세요.';
+        commentInput.focus();
+    }
+}
+
+// 2. 게시글 메인 로직 영역
+document.addEventListener('DOMContentLoaded', function() {
+    // [A] 삭제 확인 커스텀 모달창 관련 요소
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteTriggerBtn = document.getElementById('deleteTriggerBtn'); 
+
+    // [B] 익명 체크박스 토글 관련 요소
+    const anonToggleBtn = document.getElementById('anonToggleBtn');
+    const anonCheckbox = document.getElementById('anonCheckbox');
+    const anonCheckImg = document.getElementById('anonCheckImg');
+
+    // 모달창 띄우기 실행
+    if (deleteTriggerBtn && deleteModal) {
+        deleteTriggerBtn.addEventListener('click', function(e) {
+            e.preventDefault(); 
+            deleteModal.classList.add('show');
+        });
+
+        window.addEventListener('click', function(e) {
+            if (e.target === deleteModal) {
+                deleteModal.classList.remove('show');
+            }
+        });
+    }
+
+    if (anonToggleBtn && anonCheckbox && anonCheckImg) {
+        anonToggleBtn.addEventListener('click', function() {
+            // 라벨 클릭 시 체크박스의 checked 상태가 바뀐 직후 실행됩니다.
+            if (anonCheckbox.checked) {
+                anonCheckImg.src = anonCheckImg.dataset.active;
+            } else {
+                anonCheckImg.src = anonCheckImg.dataset.inactive;
+            }
+        });
+    }
 });
