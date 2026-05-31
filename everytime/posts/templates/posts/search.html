@@ -1,0 +1,132 @@
+<!--{% load static %}
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>교수 후기 검색</title>
+    <link rel="stylesheet" href="{% static 'css/post_search.css' %}" />
+  </head>
+  <body>
+    <div class="app-container">
+      <form action="" method="GET" class="search-form">
+        <div class="search-bar-wrap">
+          <input
+            type="text"
+            name="q"
+            id="searchInput"
+            placeholder="검색어를 입력하세요. (전공, 교수 등)"
+            autocomplete="off"
+          />
+
+          <button type="submit" class="search-submit-btn">
+            <img
+              src="{% static 'img/SearchBtn.svg' %}"
+              alt="검색하기"
+              id="searchBtn"
+            />
+          </button>
+        </div>
+      </form>
+      <div class="search-results-area" id="searchResults"></div>
+    </div>
+  </body>
+</html>-->
+
+{% load static %}
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>교수 후기 검색</title>
+    <link rel="stylesheet" href="{% static 'css/post_search.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/post_list.css' %}" />
+  </head>
+  <body>
+    <div class="app-container container">
+      
+      <form action="{% url 'posts:search' %}" method="GET" class="search-form">
+        <div class="search-bar-wrap">
+          <input
+            type="text"
+            name="q"
+            id="searchInput"
+            placeholder="검색어를 입력하세요. (전공, 교수 등)"
+            autocomplete="off"
+          />
+          <button type="submit" class="search-submit-btn">
+            <img src="{% static 'img/SearchBtn.svg' %}" alt="검색하기" id="searchBtn" />
+          </button>
+        </div>
+      </form>
+
+      <hr style="border: 0; height: 1px; background: #eee; margin: 15px 0;">
+
+      <div class="articleContainer">
+        {% for post in posts %}
+        <a href="{% url 'posts:detail' post.id %}" class="articleLink">
+          <article class="articleBox">
+            
+            <div class="articleTitle">
+                <div class="majorBadge globalCollege">{{ post.professor.department }}</div>
+                <div class="professor">{{ post.professor.name }} 교수님</div>
+
+                <div class="starRaiting">
+                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
+                    <p class="starCount">{{ post.rating }}</p>
+                </div>
+
+                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}">
+            </div>
+
+            <div class="contentBox">
+                <p class="contentTitle">{{ post.title }}</p>
+                <p class="contentTxt">{{ post.content|truncatechars:50 }}</p>
+
+                {% if post.images.all %}
+                <div>🖼️ 이미지 (총 {{ post.images.count }}장)</div>
+                {% endif %}
+            </div>
+
+            <div class="articleFooter">
+                <div class="postMeta">
+                    <p class="writer">
+                        {% if post.is_anonymous %}
+                            익명
+                        {% else %}
+                            {{ post.user.username }}
+                        {% endif %}
+                    </p>
+                    <p>·</p>
+                    <p class="writeTime">{{ post.created_at|date:"m/d H:i" }}</p>
+                    <p>·</p>
+                    <p class="viewCount">조회 {{ post.views_count }}</p>
+                </div>
+
+                <div class="reactionBox">
+                    <div class="likeBox">
+                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
+                        <p class="likeTxt">{{ post.like_users.count }}</p>
+                    </div>
+                    <div class="commentBox">
+                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
+                        <p class="commentTxt">{{ post.comments.count|default:0 }}</p> 
+                    </div>
+                </div>
+            </div>
+
+          </article>
+        </a>
+        {% empty %}
+        <div style="text-align: center; padding: 40px 0; color: #999;">
+            <p>검색 결과가 없습니다.</p>
+        </div>
+        {% endfor %}
+      </div>
+      
+    </div>
+
+    <script src="{% static 'js/post_list.js' %}"></script>
+  </body>
+</html>
