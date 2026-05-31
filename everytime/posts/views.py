@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages  # 필수 항목 누락이나 글자 수 제한 알림창(messages) 기능
 from .models import Professor, Post, PostImage
+from django.db.models import Q
 
 def list(request):
     """
@@ -23,7 +24,7 @@ def create(request):
     """
     2. 교수 후기 작성 화면
     """
-    departments = Professor.objects.values_list('department', flat=True).distinct()
+    departments = Professor.objects.values_list('department', flat=True).distinct().order_by('department')
     
     # 임시 변수 세팅
     selected_dept = request.GET.get('department', '') 
@@ -96,42 +97,43 @@ def detail(request, id):
 
 def update(request, id):
     """
-    4. 게시글 수정하기 
-    - GET: 기존 게시글 데이터를 포함한 수정 폼 표시
-    - POST: 제출된 데이터로 유효성 검사 후 기존 데이터 덮어쓰기 및 이미지 교체 
+    4. 게시글 수정하기 (Professor 모델 외래키 구조 이식)
     """
     post = get_object_or_404(Post, id=id)
     
-    # 사용자가 수정하기 버튼(제출)을 눌렀을 때 (POST 요청)
+    # 수정을 위해 학과 선택창 목록을 가져옴 (ㄱㄴㄷ순)
+    departments = Professor.objects.values_list('department', flat=True).distinct().order_by('department')
+    
+    # 수정 화면 진입 시 기존에 등록되어 있던 교수의 학과를 기본값으로 세팅
+    selected_dept = request.GET.get('department', post.professor.department)
+    professors = Professor.objects.filter(department=selected_dept).order_by('name')
+    
     if request.method == "POST":
-        # 사용자가 수정 폼에 새로 입력한 데이터 추출
-        department = request.POST.get('department')
-        professor_name = request.POST.get('professor_name')
+        professor_id = request.POST.get('professor_id')
         rating = request.POST.get('rating')
         title = request.POST.get('title')
         content = request.POST.get('content')
         is_anonymous = request.POST.get('is_anonymous') == 'on'
-        
         new_images = request.FILES.getlist('images')
 
         # [예외처리 1] 필수 항목 빈값 검증
-        if not (department and professor_name and rating and title and content):
+        if not (professor_id and rating and title and content):
             messages.error(request, "필수 항목을 모두 입력해주세요.")
-            return render(request, 'posts/update.html', {'post': post})
+            return render(request, 'posts/update.html', {'post': post, 'departments': departments, 'selected_dept': selected_dept, 'professors': professors})
 
         # [예외처리 2] 본문 1000자 제한 검증
         if len(content) > 1000:
             messages.error(request, "본문은 1000자 이하로 작성해주세요.")
-            return render(request, 'posts/update.html', {'post': post})
+            return render(request, 'posts/update.html', {'post': post, 'departments': departments, 'selected_dept': selected_dept, 'professors': professors})
 
         # [예외처리 3] 새로 올린 이미지 개수가 5장을 초과하는지 검증
         if len(new_images) > 5:
             messages.error(request, "이미지는 최대 5장까지만 첨부할 수 있습니다.")
-            return render(request, 'posts/update.html', {'post': post})
+            return render(request, 'posts/update.html', {'post': post, 'departments': departments, 'selected_dept': selected_dept, 'professors': professors})
 
-        # 데이터 업데이트 및 덮어쓰기 
-        post.department = department
-        post.professor_name = professor_name
+        # 외래키 구조로 덮어쓰기 진행
+        selected_professor = get_object_or_404(Professor, id=professor_id)
+        post.professor = selected_professor
         post.rating = int(rating)
         post.title = title
         post.content = content
@@ -147,8 +149,13 @@ def update(request, id):
                 PostImage.objects.create(post=post, image=img)
 
         return redirect('posts:detail', id=post.id)
-    return render(request, 'posts/update.html', {'post': post})
-
+        
+    return render(request, 'posts/update.html', {
+        'post': post,
+        'departments': departments,
+        'selected_dept': selected_dept,
+        'professors': professors
+    })
 
 def delete(request, id):
     """
@@ -176,3 +183,27 @@ def post_like(request, post_id):
     # ❌ 기존: return redirect('posts:detail', post_id=post.id)
     # ✨ 변경: 친구의 URL 규칙에 맞춰 post_id 대신 id로 변경!
     return redirect('posts:detail', id=post.id)
+
+
+def search(request):
+    """
+    7. 검색 전용 페이지 및 검색 결과 반환
+    - 검색창에 처음 들어왔을 때는 빈 화면을 보여주고
+    - 검색어를 입력하고 엔터를 치면 그에 맞는 게시글 목록을 필터링하여 리턴함
+    """
+    search_query = request.GET.get('q', '') # 프론트엔드 검색창의 name="q" 값을 가져옴
+    posts = []
+    
+    # 사용자가 검색어를 입력하고 검색을 요청했을 때만 DB를 조회
+    if search_query:
+        posts = Post.objects.filter(
+            Q(title__icontains=search_query) |          # 제목에 검색어가 포함되거나
+            Q(content__icontains=search_query) |        # 본문에 검색어가 포함되거나
+            Q(professor__name__icontains=search_query)  # 우리가 주입한 교수님 이름에 포함된 경우
+        ).order_by('-id') # 최신순 정렬
+        
+    context = {
+        'posts': posts,
+        'search_query': search_query, # 내가 뭘 검색했는지 창에 남겨주기 위한 변수
+    }
+    return render(request, 'posts/search.html', context) # 프론트에서 만든 검색 전용 HTML로 렌더링
