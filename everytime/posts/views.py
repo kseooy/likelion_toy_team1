@@ -173,6 +173,9 @@ def delete(request, id):
 
 
 def post_like(request, post_id):
+
+    print("좋아요 함수 실행됨")
+
     post = get_object_or_404(Post, id=post_id)
     
     if request.user in post.like_users.all():
