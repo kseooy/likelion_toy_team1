@@ -103,8 +103,19 @@
 
                 <div class="reactionBox">
                     <div class="likeBox">
-                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
-                        <p class="likeTxt">{{ post.like_users.count }}</p>
+
+                    {% if request.user in post.like_users.all %}
+
+                    <img src="{% static 'img/icon-like-red.png' %}" width="18px" height="18px">
+                    <p class="likeTxtRed">{{ post.like_users.count }}</p>
+
+                    {% else %}
+
+                    <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
+                    <p class="likeTxt">{{ post.like_users.count }}</p>
+
+                    {% endif %}
+                    
                     </div>
                     <div class="commentBox">
                         <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
