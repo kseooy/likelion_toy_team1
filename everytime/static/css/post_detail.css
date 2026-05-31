@@ -8,24 +8,26 @@ body {
     background-color: #f5f5f5;
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    align-items: flex-start; /* 🛠️ top에 딱 붙어서 시작하도록 수정 (가운데 정렬 해제) */
+    min-height: 100vh;       /* 🛠️ 화면 전체 높이를 차지하도록 보장 */
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
 
 /* 모바일 컨테이너 박스 */
 .app-container {
     width: 100%;
     max-width: 402px;
-    height: 874px;
+    min-height: 100vh;       /* 🛠️ 댓글이 없어도 하얀색 배경이 무조건 맨 밑까지 내려오도록 수정 */
     background-color: #ffffff;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
     position: relative;
-    padding-bottom: 70px;
+    padding-bottom: 80px;
     box-sizing: border-box;
     overflow-x: hidden;
-    -ms-overflow-style: none;
     &::-webkit-scrollbar {
         display: none; 
     }
@@ -38,7 +40,6 @@ body {
     border-bottom: 1px solid #D5D6D7;
     padding: 18px 23px 18px 7px;
     align-items: center;
-    /* gap: 139px; */
     box-sizing: border-box;
     width: 100%;
 }
@@ -64,9 +65,7 @@ body {
 .post-header h2{
     color: #000;
     font-size: 16px;
-    font-style: normal;
     font-weight: 700;
-    line-height: normal;
 }
 
 .bookmark-btn {
@@ -86,7 +85,7 @@ body {
 /* 게시글 본문 레이아웃 */
 .post-content {
     display: flex;
-    height: 210px;
+    height: 100%;
     flex-direction: column;
     gap: 10px;
     margin: 21px 17px 0 17px;
@@ -108,28 +107,21 @@ body {
     min-width: 0;
 }
 
-.dept-badge {
+.majorBadge {
     display: flex;
     padding: 5px 6px;
     justify-content: center;
     align-items: center;
     gap: 10px;
     border-radius: 5px;
-    background: #FDEBF0;
-    color: #FE332E;
     font-size: 11px;
-    font-style: normal;
     font-weight: 600;
-    line-height: normal;
     white-space: nowrap;
 }
 
 .prof-info {
     color: #686866;
     font-size: 11px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
     white-space: nowrap;
 }
 
@@ -148,21 +140,21 @@ body {
 .rating-score {
     color: #686866;
     font-size: 11px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
 }
 
 .post-actions,
 .comment-actions {
     color: #686866;
     font-size: 11px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
     white-space: nowrap;
     flex-shrink: 0;
     cursor: pointer;
+    text-decoration: none;
+}
+
+.author-only a {
+    color: #686866;
+    text-decoration: none;
 }
 
 .post-body {
@@ -178,9 +170,7 @@ body {
     align-self: stretch;
     color: #000;
     font-size: 16px;
-    font-style: normal;
     font-weight: 700;
-    line-height: normal;
 }
 
 /* 프로필 */
@@ -208,18 +198,14 @@ body {
     align-self: stretch;
     color: #000;
     font-size: 11px;
-    font-style: normal;
     font-weight: 500;
-    line-height: normal;
 }
 
 .post-date {
     color: #686866;
     text-align: center;
     font-size: 10px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+    white-space: nowrap;
 }
 
 .post-text {
@@ -229,6 +215,11 @@ body {
     font-style: normal;
     font-weight: 400;
     line-height: 20px;
+}
+
+.author-only{
+    color: #686866;
+    text-decoration: none;
 }
 
 /* 이미지 가로 스크롤 */
@@ -267,7 +258,6 @@ body {
     width: 130px;
     height: 130px;
     border-radius: 10px;
-    background: #FDF3F4;
     flex-shrink: 0;
 }
 
@@ -297,11 +287,10 @@ body {
     gap: 4px;
     color: #000;
     font-size: 11px;
-    font-style: normal;
-    font-weight: 400;
     line-height: 12px;
     background: none;
     border: none;
+    text-decoration: none
 }
 
 .like-count img,
@@ -316,8 +305,6 @@ body {
     gap: 4px;
     color: #000;
     font-size: 11px;
-    font-style: normal;
-    font-weight: 400;
     line-height: 12px;
     background: none;
     border: none;
@@ -375,9 +362,10 @@ body {
 .comment-list {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 13px;
     align-self: stretch;
+    width: 100%;
 }
 
 .comment-item {
@@ -435,11 +423,9 @@ body {
     gap: 4px;
     color: #686866;
     font-size: 10px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
     background: none;
     border: none;
+    text-decoration: none;
 }
 
 .comment-like-btn img {
@@ -547,15 +533,18 @@ body {
 .comment-input-area {
     position: fixed;
     bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
     max-width: 402px;
     box-sizing: border-box;
-    z-index: 10;
+    z-index: 99;
     background: #FFF;
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 10px 17px 20px 17px;
+    border-top: 1px solid #eee;
 }
 
 .comment-input {
@@ -649,42 +638,56 @@ body {
     display: flex;
 }
 
-/* 삭제 박스 */
+/* 삭제 박스 전체 틀 */
 .modal-box {
     background: #ffffff;
-    width: 206px;
+    width: 250px;
     border-radius: 10px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
+}
+
+/* 모달창 내부 텍스트 영역 */
+.modal-content {
+    padding: 24px 16px;
     text-align: center;
-    padding: 15px 10px 10px 10px;
 }
 
 .modal-content p {
     color: #000;
-    text-align: center;
     font-size: 16px;
-    font-style: normal;
     font-weight: 500;
-    line-height: normal;
-    margin-bottom: 5px;
+    margin: 0;
 }
 
-/* 삭제 확인 버튼 */
+/* 삭제 확인 버튼 (a 태그) */
 .modal-confirm-btn {
     width: 100%;
-    border: none;
-    background: none;
+    display: block;
     border-top: 1px solid #D5D6D7;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     color: #FE332E;
-    cursor: pointer;
-    padding: 10px 40px 0 40px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+    text-decoration: none;
     text-align: center;
-    font-style: normal;
+    padding: 12px 0;
+    box-sizing: border-box;
+}
+
+/*학과 코드*/
+/* 전공대학 뱃지 색상 */
+.globalCollege { background-color: #FDEBF0; color: #FE332E; }
+.artCollege { background-color: #F3EAFD; color: #5A3AAC; }
+.scienceCollege { background-color: #FFEFE3; color: #AB4C15; }
+.pharmacyCollege { background-color: #E1EDFD; color: #2183F9; }
+.futureCollege { background-color: #DCF8F0; color: #08734F; }
+
+/* 뱃지 기본 모양 (필요시 추가) */
+.majorBadge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
     font-weight: 500;
 }
