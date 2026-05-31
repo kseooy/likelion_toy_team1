@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     
     'posts',
     'comments',
+    'accounts',
 ]
 
 # DRF 기본 전역 설정 추가 (선택)
