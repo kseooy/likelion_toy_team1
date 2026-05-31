@@ -1,0 +1,224 @@
+body{
+    margin:0;
+}
+.container {
+    width: 100%;
+    max-width: 402px; 
+    min-height: 100vh;
+    margin: 0 auto;
+}
+
+/* 헤더 */
+header{
+    width:100%;
+}
+.headerBox{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    padding:16px;
+    border-bottom:1px solid #D5D6D7; 
+}
+.backIcon{
+    cursor:pointer;
+}
+.headerTitle{
+    font-size:16px;
+    font-weight: bold;
+}
+.submitBtn{
+    border:none;
+    background-color: transparent;
+    color:#FDCED0;
+    font-size:16px;
+    cursor:pointer;
+}
+.backIcon img, .submitBtn img{
+    display: block;
+}
+
+/*aside 버튼*/
+.asideBox{
+    display: flex;
+    justify-content: flex-end;
+    padding:10px 5px 5px 5px;
+    gap:10px;
+}
+.latesBtn{
+    border:none;
+    background-color: transparent;
+    cursor:pointer;
+
+    font-weight: 500;
+    font-size:12px;
+    padding:0;
+}
+.popularBtn{
+    border:none;
+    background-color: transparent;
+    cursor:pointer;
+    font-weight: 500;
+    font-size:12px;
+    padding:0;
+}
+
+/*article*/
+.articleLink,
+.articleLink *{
+    text-decoration: none;
+    color: inherit;
+}
+
+.articleContainer{
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+}
+/*article1*/
+.articleBox{
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #D5D6D7;
+    padding:5px 24px 10px 23px;
+}
+.articleTitle{
+    display: flex;
+    align-items: center;
+    gap:13px;
+}
+.majorBadge{
+    border-radius: 5px;
+    padding:5px 6px;
+    font-size:11px;
+    font-weight: 600;
+}
+
+
+
+/* 전공대학 */
+
+/* 글로벌융합대학 */
+.globalCollege{
+    background-color: #FDEBF0;
+    color:#FE332E;
+}
+/* Art&Design대학 */
+.artCollege{
+    background-color: #F3EAFD;
+    color:#5A3AAC;
+}
+/* 과학기술대학 */
+.scienceCollege{
+    background-color: #FFEFE3;
+    color:#AB4C15;
+}
+/* 약학대학 */
+.pharmacyCollege{
+    background-color: #E1EDFD;
+    color:#2183F9;
+}
+/* 미래인재대학 */
+.futureCollege{
+    background-color: #DCF8F0;
+    color:#08734F;
+}
+
+
+
+
+.professor{
+    color:#686866;
+    font-size:11px;
+    font-weight: 400;
+}
+
+.starRaiting{
+    display: flex;
+    align-items: center;
+
+}
+.starYellow{
+    width:16px;
+    height:16px;
+}
+.starCount{
+    color:#686866;
+    font-size:11px;
+    font-weight: 400;
+}
+.bookMark{
+    display: flex;
+    margin-left:auto;
+}
+.bookMarkRed{
+    display: flex;
+    margin-left:auto;
+    width:18px;
+    height:18px;
+}
+
+.contentBox{
+    display: flex;
+    flex-direction: column;
+    gap:7px;
+}
+.contentTitle{
+    margin:0;
+    font-weight: 700;
+    font-size: 15px;
+}
+.contentTxt{
+    margin:0;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.articleFooter{
+    display: flex;
+    align-items: center;
+}
+.postMeta{
+    display: flex;
+    gap:5px;
+}
+.postMeta p, .likeTxt, .commentTxt{
+    color:#686866;
+    font-size:11px;
+    font-weight: 400;
+}
+.likeTxtRed{
+    color:#FE332E;
+    font-size:11px;
+    font-weight: 400;
+}
+
+.reactionBox{
+    display: flex;
+    margin-left:auto;
+    gap:23px;
+}
+.likeBox{
+    display: flex;
+    align-items: center;
+    gap:3px;
+}
+.commentBox{
+    display: flex;
+    align-items: center;
+    gap:3px;
+}
+.pencilButton{
+    position: fixed;
+
+    left: 50%;
+    transform: translateX(120px);
+
+    bottom: 20px;
+
+    width: 56px;
+    height: 56px;
+
+    z-index: 999;
+
+    cursor: pointer;
+}

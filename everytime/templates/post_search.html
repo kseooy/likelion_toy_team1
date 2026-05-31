@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>교수 후기 검색</title>
+    <link rel="stylesheet" href="../static/css/post_search.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <form action="" method="GET" class="search-form">
+        <div class="search-bar-wrap">
+          <input
+            type="text"
+            name="q"
+            id="searchInput"
+            placeholder="검색어를 입력하세요. (전공, 교수 등)"
+            autocomplete="off"
+          />
+
+          <button type="submit" class="search-submit-btn">
+            <img
+              src="../static/img/SearchBtn.svg"
+              alt="검색하기"
+              id="searchBtn"
+            />
+          </button>
+        </div>
+      </form>
+      <div class="search-results-area" id="searchResults"></div>
+    </div>
+  </body>
+</html>

@@ -27,18 +27,6 @@ def comment_create(request, post_id):
         
     return redirect('posts:list')
 
-@login_required
-def comment_like(request, comment_id):
-    """댓글 좋아요 기능"""
-    comment = get_object_or_404(Comment, pk=comment_id)
-    
-    if request.user in comment.likes.all():
-        comment.likes.remove(request.user)
-    else:
-        comment.likes.add(request.user)
-        
-    # 좋아요 클릭 후 다시 보던 게시글 상세 페이지로 리다이렉트
-    return redirect('posts:detail', id=comment.post.id)
 
 # ✨ 댓글 삭제 기능
 @login_required
@@ -51,6 +39,7 @@ def comment_delete(request, comment_id):
         comment.delete()
         
     return redirect('posts:detail', id=post_id)
+
 
 # ✨ 댓글 수정 기능
 @login_required
@@ -69,3 +58,19 @@ def comment_update(request, comment_id):
         return redirect('posts:detail', id=comment.post.id)
         
     return render(request, 'comment_update.html', {'comment': comment})
+
+
+@login_required
+def comment_like(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    post_id = comment.post.id # 좋아요 처리 후 다시 돌아갈 원래 게시글 ID
+    
+    # 이미 좋아요를 누른 유저라면 목록에서 제거 (좋아요 취소)
+    if request.user in comment.like_users.all():
+        comment.like_users.remove(request.user)
+    else:
+        # 처음 누르는 유저라면 목록에 추가 (좋아요)
+        comment.like_users.add(request.user)
+        
+    # 원래 보고 있던 게시글 상세 페이지로 돌려보내기
+    return redirect('posts:detail', id=post_id)

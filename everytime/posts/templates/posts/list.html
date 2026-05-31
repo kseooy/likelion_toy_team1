@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -20,7 +20,7 @@
         <div style="border: 1px solid gray; padding: 10px; margin-bottom: 10px;">
             <h3>
                 <a href="{% url 'posts:detail' post.id %}">
-                    [{{ post.professor_name }} 교수님] {{ post.title }}
+                    [{{ post.professor.department }} - {{ post.professor.name }} 교수님] {{ post.title }}
                 </a>
             </h3>
             <p>⭐ 별점: {{ post.rating }} / 조회수: {{ post.views_count }}</p>
@@ -33,5 +33,101 @@
     {% empty %}
         <p>작성된 교수 후기가 없습니다.</p>
     {% endfor %}
+</body>
+</html> -->
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
+    <title>게시글 목록</title>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="headerBox">
+            <div class="backIcon"><img src="{% static 'img/icon-bar.png' %}" width="29px" height="29px"></div>
+            <div class="headerTitle">교수 후기</div>
+            <button type="button" class="submitBtn"><img width="24px" height="24px" src="{% static 'img/icon-search.png' %}"></button>
+        </div>
+    </header>
+    <aside class="asideBox">
+        <a href="{% url 'posts:list' %}?sort=latest" ><button type="button" class="latesBtn">최신순</button></a>
+        <a href="{% url 'posts:list' %}?sort=popular"><button type="button" class="popularBtn">인기순</button></a>
+    </aside>
+
+    <div class="articleContainer">
+        {% for post in posts %}
+        <a href="{% url 'posts:detail' post.id %}" class="articleLink">
+        <article class="articleBox">
+
+            <div class="articleTitle">
+                <div class="majorBadge globalCollege">{{ post.professor.department }}</div>
+                <div class="professor">{{ post.professor.name }} 교수님</div>
+
+                <div class="starRaiting">
+                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
+                    <p class="starCount">{{ post.rating }}</p>
+                </div>
+
+                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}">
+            </div>
+
+            <div class="contentBox">
+                <p class="contentTitle">{{ post.title }}</p>
+                <p class="contentTxt">{{ post.content|truncatechars:50 }}</p>
+
+                {% if post.images.all %}
+                <div>🖼️ 이미지 (총 {{ post.images.count }}장)</div>
+                {% endif %}
+            </div>
+
+            <div class="articleFooter">
+                <div class="postMeta">
+                    <p class="writer">
+                        {% if post.is_anonymous %}
+                            익명
+                        {% else %}
+                            {{ post.user.username }}
+                        {% endif %}
+                    </p>
+                    <p>·</p>
+                    <p class="writeTime">{{ post.created_at|date:"m/d H:i" }}</p>
+                    <p>·</p>
+                    <p class="viewCount">조회 {{ post.views_count }}</p>
+                </div>
+
+                <div class="reactionBox">
+                    <div class="likeBox">
+                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
+                        <p class="likeTxt">{{ post.like_users.count }}</p>
+                    </div>
+                    <div class="commentBox">
+                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
+                        <p class="commentTxt">0</p>
+                    </div>
+                </div>
+            </div>
+
+        </article>
+        </a>
+        {% empty %}
+        <p>작성된 교수 후기가 없습니다.</p>
+        
+        {% endfor %}
+    </div>
+
+        
+    </div>
+    <a href="{% url 'posts:create' %}">
+        <img src="{% static 'img/icon-pencil.png' %}" class="pencilButton">
+    </a>
+</div>
+<script src="{% static 'js/post_list.js' %}">
+</script>
 </body>
 </html>
