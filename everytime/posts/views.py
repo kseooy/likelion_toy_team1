@@ -96,7 +96,7 @@ def detail(request, id):
 
 def update(request, id):
     """
-    4. 게시글 수정하기 (찢어진 Professor 모델 외래키 구조 완벽 이식)
+    4. 게시글 수정하기 (Professor 모델 외래키 구조 이식)
     """
     post = get_object_or_404(Post, id=id)
     
