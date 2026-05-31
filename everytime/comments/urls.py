@@ -8,4 +8,6 @@ urlpatterns = [
     path('create/<int:post_id>/', views.comment_create, name='comment_create'),
     # 댓글 고유 id를 받아서 좋아요를 처리하는 경로
     path('like/<int:comment_id>/', views.comment_like, name='comment_like'),
+    path('delete/<int:comment_id>/', views.comment_delete, name='comment_delete'),
+    path('update/<int:comment_id>/', views.comment_update, name='comment_update'),
 ]
