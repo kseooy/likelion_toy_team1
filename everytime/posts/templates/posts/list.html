@@ -24,7 +24,9 @@
                 </a>
             </h3>
             <p>⭐ 별점: {{ post.rating }} / 조회수: {{ post.views_count }}</p>
-            <p>내용 요약: {{ post.content|truncatechars:50 }}</p> {% if post.images.all %}
+            <p>내용 요약: {{ post.content|truncatechars:50 }}</p> 
+            
+            {% if post.images.all %}
                 <div>🖼️ 이미지 있음 (총 {{ post.images.count }}장)</div>
             {% endif %}
         </div>
