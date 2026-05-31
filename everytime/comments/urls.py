@@ -1,6 +1,5 @@
-from django.urls import *
-from .views import comment_create, comment_like
-
+from django.urls import path
+from . import views 
 app_name = 'comments'
 
 urlpatterns = [
