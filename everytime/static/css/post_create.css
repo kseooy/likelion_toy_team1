@@ -41,12 +41,15 @@ header{
     font-weight: bold;
 }
 .submitBtn{
+    appearance:none;
+    -webkit-appearance:none;
+
     border:none;
-    background-color: transparent;
-    color:#FDCED0;
+    background:none;
+
+    color:#FE332E;
     font-size:16px;
-    cursor:pointer;
-    padding:0;
+    font-weight:600;
 }
 /*aside notice*/
 .notice{
