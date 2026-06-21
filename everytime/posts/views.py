@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages  # 필수 항목 누락이나 글자 수 제한 알림창(messages) 기능
+from django.contrib.auth.decorators import login_required  # 로그인 권한 데코레이터 추가
 from .models import Professor, Post, PostImage
 from django.db.models import Q
-from django.shortcuts import redirect
+from comments.models import Comment
 
 def home(request):
     if request.user.is_authenticated:
@@ -27,9 +28,11 @@ def list(request):
     return render(request, 'posts/list.html', {'posts': posts})
 
 
+@login_required
 def create(request):
     """
     2. 교수 후기 작성 화면
+    - [수정 완료] 익명 선택 해제 시 실명(user) 작성 가능하도록 로직 보완
     """
     departments = Professor.objects.values_list('department', flat=True).distinct().order_by('department')
     
@@ -45,7 +48,9 @@ def create(request):
         rating = request.POST.get('rating')
         title = request.POST.get('title')
         content = request.POST.get('content')
-        is_anonymous = request.POST.get('is_anonymous') == 'on'
+        
+        # 💡 명시적 삼항 연산자로 수정: 체크박스 해제 시 확실하게 False 지정
+        is_anonymous = True if request.POST.get('is_anonymous') == 'on' else False
         images = request.FILES.getlist('images')
 
         # [예외처리] 최종 교수가 선택되었는지 검증
@@ -65,11 +70,13 @@ def create(request):
         # 검증 통과 시 객체 안전 생성
         selected_professor = get_object_or_404(Professor, id=professor_id)
 
+        # 💡 user=request.user 를 추가하여 작성자가 정확히 매칭되도록 수정했습니다.
         post = Post.objects.create(
             professor=selected_professor,
             rating=int(rating),
             title=title,
             content=content,
+            user=request.user,
             is_anonymous=is_anonymous
         )
         
@@ -91,22 +98,58 @@ def detail(request, id):
     3. 게시글 상세보기 화면
     - 학과, 교수이름, 별점, 제목, 본문 전체, 첨부 이미지 n장 표시
     - 조건: 상세 페이지에 들어올 때마다 해당 데이터의 조회수가 +1 증가해야 함
+    - 추가: related_name='comments'를 반영한 실시간 에타식 익명 시스템
     """
     post = get_object_or_404(Post, id=id)
     
-    # [조회수 증가 로직] 게시글을 성공적으로 가져왔다면, DB에 저장하기 전에 조회수를 1 올림
+    # [조회수 증가 로직]
     post.views_count += 1
-    post.save() # 변경된 조회수를 데이터베이스에 최종 저장합니다.
+    post.save()
 
-    return render(request, 'posts/detail.html', {'post': post}) 
+    # ------------------ [에타식 익명 번호 계산 로직] ------------------
+    comments = post.comments.all().order_by('created_at')
+    
+    anonymous_dict = {}
+    anonymous_count = 1
+    
+    post_author_id = post.user.id if post.user else None
+
+    for comment in comments:
+        if comment.is_anonymous:  # 익명 체크가 된 댓글/대댓글인 경우
+            if comment.author and comment.author.id == post_author_id:
+                comment.anonymous_name = "익명(글쓴이)"
+            elif comment.author and comment.author.id in anonymous_dict:
+                comment.anonymous_name = f"익명{anonymous_dict[comment.author.id]}"
+            else:
+                if comment.author:
+                    anonymous_dict[comment.author.id] = anonymous_count
+                comment.anonymous_name = f"익명{anonymous_count}"
+                anonymous_count += 1
+        else:
+            # 실명 댓글인 경우
+            comment.anonymous_name = comment.author.username if comment.author else "알 수 없음"
+    # ------------------------------------------------------------------
+
+    context = {
+        'post': post,
+        'comments': comments,  
+    } 
+
+    return render(request, 'posts/detail.html', context)
 
 
-
+@login_required
 def update(request, id):
     """
     4. 게시글 수정하기 (Professor 모델 외래키 구조 이식)
+    - [보안 보완] 타인이 URL 주소 조작으로 강제 접근할 경우 차단하는 로직 추가
     """
     post = get_object_or_404(Post, id=id)
+    
+    # 💡 [보안 장치] 타인이 수정을 시도하면 글 상세페이지로 튕겨내기
+    if post.user != request.user:
+        messages.error(request, "본인이 작성한 글만 수정할 수 있습니다.")
+        return redirect('posts:detail', id=post.id)
     
     # 수정을 위해 학과 선택창 목록을 가져옴 (ㄱㄴㄷ순)
     departments = Professor.objects.values_list('department', flat=True).distinct().order_by('department')
@@ -120,7 +163,9 @@ def update(request, id):
         rating = request.POST.get('rating')
         title = request.POST.get('title')
         content = request.POST.get('content')
-        is_anonymous = request.POST.get('is_anonymous') == 'on'
+        
+        # 💡 명시적 삼항 연산자로 수정: 체크박스 해제 시 확실하게 False 지정
+        is_anonymous = True if request.POST.get('is_anonymous') == 'on' else False
         new_images = request.FILES.getlist('images')
 
         # [예외처리 1] 필수 항목 빈값 검증
@@ -164,13 +209,20 @@ def update(request, id):
         'professors': professors
     })
 
+
+@login_required
 def delete(request, id):
     """
     5. 게시글 삭제하기
-    - 사용자가 요청한 id의 게시글을 찾아 데이터베이스에서 영구 삭제
-    - 삭제 완료 후 메인 게시판 목록(list) 화면으로 사용자를 리다이렉트
+    - [보안 보완] 타인이 URL 주소 조작으로 강제 접근할 경우 차단하는 로직 추가
     """
     post = get_object_or_404(Post, id=id)
+    
+    # 💡 [보안 장치] 타인이 삭제를 시도하면 글 상세페이지로 튕겨내기
+    if post.user != request.user:
+        messages.error(request, "본인이 작성한 글만 삭제할 수 있습니다.")
+        return redirect('posts:detail', id=post.id)
+        
     for img in post.images.all():
         img.image.delete() 
     post.delete()
@@ -179,48 +231,32 @@ def delete(request, id):
 
 
 def post_like(request, post_id):
-    print("===== 좋아요 함수 실행 =====")
-    print("post_id:", post_id)
-    print("user:", request.user)
-    print("is_authenticated:", request.user.is_authenticated)
-
     post = get_object_or_404(Post, id=post_id)
-
-    print("누르기 전 좋아요 수:", post.like_users.count())
 
     if post.like_users.filter(id=request.user.id).exists():
         post.like_users.remove(request.user)
-        print("좋아요 취소됨")
     else:
         post.like_users.add(request.user)
-        print("좋아요 추가됨")
-
-    print("누른 후 좋아요 수:", post.like_users.count())
-    print("==========================")
 
     return redirect('posts:detail', id=post.id)
-
 
 
 def search(request):
     """
     7. 검색 전용 페이지 및 검색 결과 반환
-    - 검색창에 처음 들어왔을 때는 빈 화면을 보여주고
-    - 검색어를 입력하고 엔터를 치면 그에 맞는 게시글 목록을 필터링하여 리턴함
     """
-    search_query = request.GET.get('q', '') # 프론트엔드 검색창의 name="q" 값을 가져옴
+    search_query = request.GET.get('q', '') 
     posts = []
     
-    # 사용자가 검색어를 입력하고 검색을 요청했을 때만 DB를 조회
     if search_query:
         posts = Post.objects.filter(
-            Q(title__icontains=search_query) |          # 제목에 검색어가 포함되거나
-            Q(content__icontains=search_query) |        # 본문에 검색어가 포함되거나
-            Q(professor__name__icontains=search_query)  # 우리가 주입한 교수님 이름에 포함된 경우
-        ).order_by('-id') # 최신순 정렬
+            Q(title__icontains=search_query) |          
+            Q(content__icontains=search_query) |        
+            Q(professor__name__icontains=search_query)  
+        ).order_by('-id') 
         
     context = {
         'posts': posts,
-        'search_query': search_query, # 내가 뭘 검색했는지 창에 남겨주기 위한 변수
+        'search_query': search_query, 
     }
-    return render(request, 'posts/search.html', context) # 프론트에서 만든 검색 전용 HTML로 렌더링
+    return render(request, 'posts/search.html', context)

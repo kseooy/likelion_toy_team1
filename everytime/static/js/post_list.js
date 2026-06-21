@@ -40,3 +40,14 @@ document.querySelectorAll(".majorBadge").forEach((major) =>{
     }
 
 });
+const params = new URLSearchParams(window.location.search);
+const sort = params.get("sort");
+
+const latestBtn = document.querySelector(".latesBtn");
+const popularBtn = document.querySelector(".popularBtn");
+
+if(sort === "popular"){
+    popularBtn.classList.add("activeSort");
+}else{
+    latestBtn.classList.add("activeSort");
+}

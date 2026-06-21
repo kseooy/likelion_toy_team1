@@ -37,6 +37,10 @@ header{
     display: block;
 }
 
+.activeSort{
+    color:#FE332E;
+}
+
 /*aside 버튼*/
 .asideBox{
     display: flex;
