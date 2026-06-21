@@ -43,7 +43,7 @@ header{
 .submitBtn{
     appearance:none;
     -webkit-appearance:none;
-
+    cursor:pointer;
     border:none;
     background:none;
 
@@ -190,12 +190,17 @@ header{
 
 /*article4 본문*/
 .articleTextarea{
-    display: flex;
-    flex-direction: column;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
     border:1px solid #D5D6D7;
     border-radius: 5px;
     padding:12px;
     height:138px;
+    min-height:138px;
+    max-height:138px;
+    resize:none;
+    outline:none;
     font-size:12px;
     font-weight:400;
 }
