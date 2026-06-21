@@ -47,7 +47,7 @@ header{
     border:none;
     background:none;
 
-    color:#FE332E;
+    color:#FDCED0;
     font-size:16px;
     font-weight:600;
 }
@@ -86,16 +86,13 @@ header{
 }
 .articleTitle{
     font-weight:500;
-    font-size:14px;
+    font-size:16px;
 }
 .articleRequired{
     justify-content: center;
-    color:#FE332E;
-    font-size: 8px;
-    border:1px solid #FDCED0;
-    border-radius: 10px;
-    padding:0 7px;
+    padding:0 0 3px 0;
     margin-left:7px;
+    height:7px;
 }
 
 .articleOption{
@@ -138,6 +135,92 @@ header{
 .articleSelect option.optionTxt{
     color:#686866;
 }
+
+
+
+/* 커스텀 전공 드롭다운 */
+.customSelect {
+    position: relative;
+    width: 150px;
+}
+
+.selectBox {
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #686866;
+    font-size: 12px;
+    color: #686866;
+    padding: 0 5px 6px 5px;
+    width: 150px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.arrow img {
+    width: 9px;
+    height: 12px;
+    object-fit: contain;
+    padding:6px 0 0 0;
+}
+
+.optionList {
+    display: none;
+    position: absolute;
+    top: 28px;
+    left: 0;
+    width: 220px;
+    max-height: 260px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #D5D6D7;
+    border-radius: 5px;
+    z-index: 100;
+    box-sizing: border-box;
+}
+
+.optionList.show {
+    display: block;
+}
+
+.deptOption {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+    font-size: 12px;
+    color: black;
+    cursor: pointer;
+    background-color: white;
+}
+
+.deptOption:hover {
+    background-color: #FDF3F4;
+}
+
+.deptStar {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.deptOption span {
+    white-space: nowrap;
+}
+
+
+
 
 /*article 2*/
 .article2ContentBox{

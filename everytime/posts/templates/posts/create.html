@@ -20,20 +20,20 @@
     <div class="container2">
         <aside>
             <div class="notice">
-                <img src="{% static 'img/icon-notice.svg' %}" class="icon-notice">
-                <div class="noticeTxt">솔직하고 구체적인 후기는 다른 학생들에게 큰 도움이 됩니다!</div>
+                <img src="{% static 'img/icon-notice2.png' %}" class="icon-notice">
+                <div class="noticeTxt">구체적인 후기는 다른 학생들에게 큰 도움이 됩니다!</div>
             </div>
         </aside>
 
         <article class="articleContainer">
             <div class="articleHead">
                 <div class="articleTitle">교수 정보</div>
-                <div class="articleRequired">필수</div>
+                <img src="{% static 'img/icon-select.png' %}" class="articleRequired"></img>
             </div>
 
             <div class="articleContentBox">
 
-                <form method="GET" action="{% url 'posts:create' %}">
+                {% comment %} <form method="GET" action="{% url 'posts:create' %}">
                     <input type="hidden" name="title" id="hiddenTitle">
                     <input type="hidden" name="content" id="hiddenContent">
                     <input type="hidden" name="rating" id="hiddenRating">
@@ -63,7 +63,56 @@
                             {% endfor %}
                         </select>
                     </div>
+                </form> {% endcomment %}
+
+                <!-- 기존 select 대신 커스텀 드롭다운 -->
+                <form method="GET" action="{% url 'posts:create' %}" id="deptForm">
+                    <input type="hidden" name="department" id="departmentInput" value="{{ selected_dept }}">
+                    <input type="hidden" name="title" id="hiddenTitle">
+                    <input type="hidden" name="content" id="hiddenContent">
+                    <input type="hidden" name="rating" id="hiddenRating">
+
+                    <div class="articleTxtBox">
+                        <div class="articleTxt">전공</div>
+
+                        <div class="customSelect">
+                            {% comment %} <div class="selectBox" id="selectBox">
+                                {% if selected_dept %}
+                                    {{ selected_dept }}
+                                {% else %}
+                                    전공을 선택하세요
+                                {% endif %}
+                            </div> {% endcomment %}
+
+                            <div class="selectBox" id="selectBox">
+                                <span class="selectedText">
+                                    {% if selected_dept %}
+                                        {{ selected_dept }}
+                                    {% else %}
+                                        전공을 선택하세요
+                                    {% endif %}
+                                </span>
+
+                                <span class="arrow">
+                                    <img src="{% static 'img/icon-arrowdown.png' %}">
+                                </span>
+                            </div>
+
+
+                            <div class="optionList" id="optionList">
+                                {% for dept in departments %}
+                                    <div class="deptOption" data-dept="{{ dept }}">
+                                        <img src="{% static 'img/icon-star-gray.svg' %}" class="deptStar">
+                                        <span>{{ dept }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
                 </form>
+
+
+
 
                 <form method="POST" action="{% url 'posts:create' %}" enctype="multipart/form-data" id="postForm">
                     {% csrf_token %}
@@ -89,7 +138,7 @@
         <article class="articleContainer">
             <div class="articleHead">
                 <div class="articleTitle">별점</div>
-                <div class="articleRequired">필수</div>
+                <img src="{% static 'img/icon-select.png' %}" class="articleRequired"></img>
             </div>
 
             <div class="article2ContentBox">
@@ -119,7 +168,7 @@
             <div class="articleHeadBox">
                 <div class="articleHead">
                     <div class="articleTitle">제목</div>
-                    <div class="articleRequired">필수</div>
+                    <img src="{% static 'img/icon-select.png' %}" class="articleRequired"></img>
                 </div>
                 <p class="textLimit textLimit1">0/50</p>
             </div>
@@ -129,7 +178,7 @@
                    name="title"
                    class="articleInput"
                    value="{{ request.GET.title }}"
-                   placeholder="제목을 입력해주세요"
+                   placeholder="강의 스타일이 좋아요!"
                    maxlength="50"
                    required>
         </article>
@@ -138,7 +187,7 @@
             <div class="articleHeadBox">
                 <div class="articleHead">
                     <div class="articleTitle">본문</div>
-                    <div class="articleRequired">필수</div>
+                    <img src="{% static 'img/icon-select.png' %}" class="articleRequired"></img>
                 </div>
                 <p class="textLimit textLimit2">0/1000</p>
             </div>
