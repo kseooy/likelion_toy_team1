@@ -76,10 +76,10 @@
         <form id="updateForm" method="POST" action="{% url 'posts:update' post.id %}" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <article class="articleContainer">
+            <!-- <article class="articleContainer">
                 <div class="articleHead">
                     <div class="articleTitle">교수 정보</div>
-                    <div class="articleRequired">필수</div>
+                    <img src="{% static 'img/icon-select.png' %}" class="articleRequired"></img>
                 </div>
 
                 <div class="articleContentBox">
@@ -115,12 +115,68 @@
                     </select>
                     </div>
                 </div>
+            </article> -->
+
+
+            <article class="articleContainer">
+                <div class="articleHead">
+                    <div class="articleTitle">교수 정보</div>
+                    <img src="{% static 'img/icon-select.png' %}" class="articleRequired"></img>
+                </div>
+
+                <div class="articleContentBox">
+                    <div class="articleTxtBox">
+                        <div class="articleTxt">전공</div>
+
+                        <input type="hidden" name="department" id="departmentInput" value="{{ selected_dept }}">
+
+                        <div class="customSelect">
+                            <div class="selectBox" id="selectBox">
+                                <span class="selectedText">
+                                    {% if selected_dept %}
+                                        {{ selected_dept }}
+                                    {% else %}
+                                        전공을 선택하세요
+                                    {% endif %}
+                                </span>
+
+                                <span class="arrow">
+                                    <img src="{% static 'img/icon-arrowdown.png' %}">
+                                </span>
+                            </div>
+
+                            <div class="optionList" id="optionList">
+                                {% for dept in departments %}
+                                    <div class="deptOption" data-dept="{{ dept }}">
+                                        <img src="{% static 'img/icon-star-gray.svg' %}" class="deptStar">
+                                        <span>{{ dept }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="articleTxtBox">
+                        <div class="articleTxt">교수명</div>
+
+                        <select class="articleSelect" id="professorSelect" name="professor_id" required>
+                            {% for prof in professors %}
+                                <option
+                                    value="{{ prof.id }}"
+                                    {% if prof.id == post.professor.id %}selected{% endif %}
+                                >
+                                    {{ prof.name }} 교수님
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
             </article>
 
             <article class="articleContainer">
                 <div class="articleHead">
                     <div class="articleTitle">별점</div>
-                    <div class="articleRequired">필수</div>
+                    <img src="{% static 'img/icon-select.png' %}" class="articleRequired"></img>
                 </div>
 
                 <div class="article2ContentBox">
@@ -145,7 +201,7 @@
                 <div class="articleHeadBox">
                     <div class="articleHead">
                         <div class="articleTitle">제목</div>
-                        <div class="articleRequired">필수</div>
+                        <img src="{% static 'img/icon-select.png' %}" class="articleRequired"></img>
                     </div>
                     <p class="textLimit textLimit1">{{ post.title|length }}/50</p>
                 </div>
@@ -165,7 +221,7 @@
                 <div class="articleHeadBox">
                     <div class="articleHead">
                         <div class="articleTitle">본문</div>
-                        <div class="articleRequired">필수</div>
+                        <img src="{% static 'img/icon-select.png' %}" class="articleRequired"></img>
                     </div>
                     <p class="textLimit textLimit2">{{ post.content|length }}/1000</p>
                 </div>
