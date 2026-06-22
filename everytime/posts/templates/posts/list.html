@@ -50,10 +50,20 @@
 <div class="container">
     <header>
         <div class="headerBox">
-            <div class="backIcon"><img src="{% static 'img/icon-bar.png' %}" width="29px" height="29px"></div>
+            <div class="backIcon"><img src="{% static 'img/icon-profile.svg' %}" width="29px" height="29px"></div>
             <div class="headerTitle">교수 후기</div>
             <button type="button" class="submitBtn" onclick="location.href='{% url 'posts:search' %}'"><img width="24px" height="24px" src="{% static 'img/icon-search.png' %}"></button>
         </div>
+
+        <div class="profileBox">
+            <a class="archive">보관함</a>
+            <a class="profileSettings">프로필 설정</a>
+            <form class="logoutForm">
+            <button class="logoutBox" type="button">로그아웃</button>
+            </form>
+        </div>
+
+
     </header>
     <aside class="asideBox">
         <a href="{% url 'posts:list' %}?sort=latest" ><button type="button" class="latesBtn">최신순</button></a>

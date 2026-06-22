@@ -23,7 +23,7 @@ header{
     cursor:pointer;
 }
 .headerTitle{
-    font-size:16px;
+    font-size:20px;
     font-weight: bold;
 }
 .submitBtn{
@@ -40,6 +40,59 @@ header{
 .activeSort{
     color:#FE332E;
 }
+
+
+/* 보관함 */
+
+.profileBox{
+    display: none;
+    flex-direction: column;
+    border-radius: 5px;
+    border: 1px solid #D5D6D7;
+    background-color: white;
+    border-top-color: #f7f7f7;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    width:160px;
+    padding: 0;
+    position:absolute;
+    z-index: 100;
+    top:13px;
+    left:50%;
+    transform: translateX(-190px);
+    cursor: pointer;
+    font:16px;
+}
+.profileBox.active{
+    display: flex;
+}
+.archive{
+    border-bottom: 1px solid #D5D6D7;
+    padding: 12px 18px;
+
+}
+.profileSettings{
+    border-bottom: 1px solid #D5D6D7;
+    padding: 12px 18px;
+
+}
+.logoutForm{
+    
+}
+.logoutBox{
+    border: none;
+    background: none;
+    outline: none;
+
+    padding: 0;
+    margin: 0;
+
+    font: inherit;
+    color: inherit;
+    cursor:pointer;
+
+    padding: 12px 18px;
+}
+
 
 /*aside 버튼*/
 .asideBox{

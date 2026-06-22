@@ -51,3 +51,20 @@ if(sort === "popular"){
 }else{
     latestBtn.classList.add("activeSort");
 }
+
+//프로필박스
+const profileBtn = document.querySelector(".backIcon");
+const profileBox = document.querySelector(".profileBox");
+
+profileBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    profileBox.classList.toggle("active");
+});
+
+profileBox.addEventListener("click", (e) => {
+    e.stopPropagation();
+});
+
+document.addEventListener("click", () => {
+    profileBox.classList.remove("active");
+});

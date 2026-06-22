@@ -1,0 +1,60 @@
+{% load static %}
+<a href="{% url 'posts:detail' post.id %}" class="articleLink">
+        <article class="articleBox">
+
+            <div class="articleTitle">
+                <div class="majorBadge globalCollege">{{ post.professor.department }}</div>
+                <div class="professor">{{ post.professor.name }} 교수님</div>
+
+                <div class="starRaiting">
+                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
+                    <p class="starCount">{{ post.rating }}</p>
+                </div>
+
+                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}">
+            </div>
+
+            <div class="contentBox">
+                <p class="contentTitle">{{ post.title }}</p>
+                <p class="contentTxt">{{ post.content|truncatechars:50 }}</p>
+
+                {% if post.images.all %}
+                <div>🖼️ 이미지 (총 {{ post.images.count }}장)</div>
+                {% endif %}
+            </div>
+
+            <div class="articleFooter">
+                <div class="postMeta">
+                    <p class="writer">
+                        {% if post.is_anonymous %}
+                            익명
+                        {% else %}
+                            {{ post.user.username }}
+                        {% endif %}
+                    </p>
+                    <p>·</p>
+                    <p class="writeTime">{{ post.created_at|date:"m/d H:i" }}</p>
+                    <p>·</p>
+                    <p class="viewCount">조회 {{ post.views_count }}</p>
+                </div>
+
+                <div class="reactionBox">
+                    <div class="likeBox">
+                    {% if request.user in post.like_users.all %}
+                        <img src="{% static 'img/LikeBtn_active.svg' %}" width="18px" height="18px">
+                        <p class="likeTxtRed">{{ post.like_users.count }}</p>
+                    {% else %}
+                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
+                        <p class="likeTxt">{{ post.like_users.count }}</p>
+                    {% endif %}
+                    
+                    </div>
+                    <div class="commentBox">
+                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
+                        <p class="commentTxt">{{ post.comments.count }}</p>
+                    </div>
+                </div>
+            </div>
+
+        </article>
+        </a>
