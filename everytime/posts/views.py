@@ -264,5 +264,5 @@ def search(request):
 
 # archive확인용
 def archive(request):
-    posts = Post.objects.all()
+    posts = []
     return render(request, 'posts/archive.html', {'posts': posts})

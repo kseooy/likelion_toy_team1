@@ -18,8 +18,11 @@
         </div>
     </header>
     <aside class="asideBox2">
-        <a href="{% url 'posts:list' %}?sort=latest" class="likeLink"><button type="button" class="likedPages">좋아요한 글</button></a>
-        <a href="{% url 'posts:list' %}?sort=popular" class="bookmarkLink"><button type="button" class="bookmarkPages">북마크</button></a>
+        <!-- <a href="{% url 'posts:list' %}?sort=latest" class="likeLink"><button type="button" class="likedPages">좋아요한 글</button></a>
+        <a href="" class="bookmarkLink"><button type="button" class="bookmarkPages">북마크</button></a> -->
+        <a href="" class="likeLink">좋아요한 글</a>
+        <a href="" class="bookmarkLink">북마크</a>
+
     </aside>
 
     <div class="articleContainer">
@@ -88,7 +91,22 @@
         </article>
         </a>
         {% empty %}
-        <p>작성된 교수 후기가 없습니다.</p>
+        <div class="emptyMessage">
+            <!-- if문 -->
+                <img src="{% static 'img/icon-pageHeart.png' %}" width="164px" height="164px">
+                <p class="emptyTxt1">아직 좋아요한 후기가 없어요.</p>
+                <p class="emptyTxt2">도움이 된 후기에 좋아요를 눌러보세요</p>
+                <div class="listBtnBox">
+                    <button class="listBtn" type="button">교수 후기 둘러보기</button>
+                </div>
+            <!-- if문 -->
+                <!-- <img src=" img/icon-pageBookmark.png" width="164px" height="164px">
+                <p class="emptyTxt1">아직 저장한 후기가 없어요.</p>
+                <p class="emptyTxt2">나중에 다시 보고 싶은 후기를 저장해보세요</p>
+                <div class="listBtnBox">
+                    <button class="listBtn" type="button">교수 후기 둘러보기</button>
+                </div> -->
+        </div>
         
         {% endfor %}
     </div>

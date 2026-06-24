@@ -41,4 +41,3 @@ document.querySelectorAll(".majorBadge").forEach((major) =>{
 
 });
 const params = new URLSearchParams(window.location.search);
-c
