@@ -12,5 +12,4 @@ urlpatterns = [
     path('delete/<int:id>/', delete, name='delete'),
     path('post/<int:post_id>/like/', post_like, name='post_like'),
     path('search/', search, name='search'),
-    path('archive/', archive, name='archive'),
 ]

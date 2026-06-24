@@ -261,8 +261,3 @@ def search(request):
     }
     return render(request, 'posts/search.html', context)
 
-
-# archive확인용
-def archive(request):
-    posts = []
-    return render(request, 'posts/archive.html', {'posts': posts})
