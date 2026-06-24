@@ -260,3 +260,9 @@ def search(request):
         'search_query': search_query, 
     }
     return render(request, 'posts/search.html', context)
+
+
+# archive확인용
+def archive(request):
+    posts = Post.objects.all()
+    return render(request, 'posts/archive.html', {'posts': posts})
