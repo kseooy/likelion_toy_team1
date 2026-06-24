@@ -11,15 +11,15 @@
 <body>
 <div class="container">
     <header>
-        <div class="headerBox">
+        <div class="headerBox2">
             <a href="{% url 'posts:list' %}" class="backIcon"><img src="{% static 'img/icon-back.svg' %}"></a>
             <div class="headerTitle">보관함</div>
             <div></div>
         </div>
     </header>
-    <aside class="asideBox">
-        <a href="{% url 'posts:list' %}?sort=latest" ><button type="button" class="latesBtn">좋아요한 글</button></a>
-        <a href="{% url 'posts:list' %}?sort=popular"><button type="button" class="popularBtn">북마크</button></a>
+    <aside class="asideBox2">
+        <a href="{% url 'posts:list' %}?sort=latest" class="likeLink"><button type="button" class="likedPages">좋아요한 글</button></a>
+        <a href="{% url 'posts:list' %}?sort=popular" class="bookmarkLink"><button type="button" class="bookmarkPages">북마크</button></a>
     </aside>
 
     <div class="articleContainer">
@@ -32,11 +32,15 @@
                 <div class="professor">{{ post.professor.name }} 교수님</div>
 
                 <div class="starRaiting">
-                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
-                    <p class="starCount">{{ post.rating }}</p>
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= post.rating %}
+                                <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
+                            {% else %}
+                                <img class="starGray" src="{% static 'img/icon-star-gray.svg' %}">
+                            {% endif %}
+                        {% endfor %}
                 </div>
 
-                <img class="bookMark" src="{% static 'img/icon-bookmark-gray.png' %}">
             </div>
 
             <div class="contentBox">
@@ -93,7 +97,7 @@
     </div>
 
 </div>
-<script src="{% static 'js/post_list.js' %}">
-</script>
+<script src="{% static 'js/post_list.js' %}"></script>
+<script src="{% static 'js/archive.js' %}"></script>
 </body>
 </html>

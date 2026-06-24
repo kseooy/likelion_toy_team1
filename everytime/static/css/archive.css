@@ -1,7 +1,50 @@
+.headerBox2{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    padding:16px;
+}
+
 .archiveBox{
     border:1px solid #D5D6D7;
     border-radius: 10px;
+    padding-top:20px;
+    gap:5px;
 }
 .articleContainer{
     gap:20px;
+}
+
+.asideBox2{
+    display: flex;
+    justify-content: center;
+    padding:10px 5px 5px 5px;
+    font-size: 18px;
+    margin-bottom: 20px;
+    gap:50px;
+}
+.likeLink{
+    padding:20px 50px 10px 50px;
+    border-bottom:2px solid #FE332E;  
+}
+.bookmarkLink{
+    padding:20px 50px 10px 50px;
+}
+
+.likedPages{
+    border:none;
+    background-color: transparent;
+    cursor:pointer;
+
+    font-weight: 700;
+    font-size:14px;
+    padding:0;
+}
+.bookmarkPages{
+    border:none;
+    background-color: transparent;
+    cursor:pointer;
+    font-weight: 700;
+    font-size:14px;
+    padding:0;
 }
