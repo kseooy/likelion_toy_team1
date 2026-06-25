@@ -52,7 +52,7 @@ if(sort === "popular"){
     latestBtn.classList.add("activeSort");
 }
 
-//프로필박스
+//프로필 박스
 const profileBtn = document.querySelector(".backIcon");
 const profileBox = document.querySelector(".profileBox");
 
