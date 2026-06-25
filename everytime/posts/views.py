@@ -230,9 +230,16 @@ def delete(request, id):
     return redirect('posts:list')
 
 
+@login_required
 def post_like(request, post_id):
     post = get_object_or_404(Post, id=post_id)
 
+    if post.user == request.user:
+        # Django 내장 메시지 기능 활용함!
+        messages.error(request, "본인의 글에는 좋아요를 누를 수 없습니다.")
+        return redirect('posts:detail', id=post.id)
+
+    # 좋아요
     if post.like_users.filter(id=request.user.id).exists():
         post.like_users.remove(request.user)
     else:
