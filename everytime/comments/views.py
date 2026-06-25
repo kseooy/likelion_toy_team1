@@ -71,12 +71,11 @@ def comment_like(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     post_id = comment.post.id 
     
-    # 1. 본인 글 차단
+    # 1. 본인 좋아요 차단
     if comment.author == request.user:
-        # 📍 주소창 뒤에 직접 에러 파라미터를 붙여서 보냅니다.
-        return redirect(f'/detail/{post_id}/?error=mine')
+        return redirect('posts:detail', id=post_id) 
     
-    # 2. 좋아요 토글 로직
+    # 2. 좋아요
     is_liked = comment.like_users.filter(pk=request.user.pk).exists()
     
     if is_liked:
