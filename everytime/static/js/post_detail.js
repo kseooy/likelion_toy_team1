@@ -40,12 +40,12 @@ if (bookmarkBtn && bookmarkImg) {
 //     });
 // }
 
-// 댓글 & 대댓글 좋아요
+/* 댓글 & 대댓글 좋아요 - 대댓글 좋아요 무한히 눌리는 오류 해결 위해 주석 처리해 뒀습니다!
 const commentLikeBtns = document.querySelectorAll('.comment-like-btn');
 
 commentLikeBtns.forEach(function(btn) {
     btn.addEventListener('click', function(e) {
-        e.preventDefault(); 
+        e.preventDefault();
 
         const img = btn.querySelector('.comment-like-img');
         const countSpan = btn.querySelector('.comment-like-count');
@@ -64,7 +64,7 @@ commentLikeBtns.forEach(function(btn) {
             }
         }
     });
-});
+}); */
 
 // 익명 체크박스
 const anonToggleBtn = document.getElementById('anonToggleBtn');
