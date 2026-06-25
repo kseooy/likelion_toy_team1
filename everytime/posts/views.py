@@ -260,3 +260,4 @@ def search(request):
         'search_query': search_query, 
     }
     return render(request, 'posts/search.html', context)
+
