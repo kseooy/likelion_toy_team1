@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from posts.models import Post
 from .models import Comment
+from django.contrib import messages  
 
 @login_required
 def comment_create(request, post_id):
@@ -64,12 +65,16 @@ def comment_like(request, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     post_id = comment.post.id # 좋아요 처리 후 다시 돌아갈 원래 게시글 ID
     
-    # 이미 좋아요를 누른 유저라면 목록에서 제거 (좋아요 취소)
+    # 본인 댓글인지 검증
+    if comment.user == request.user:
+        messages.error(request, "본인의 댓글에는 좋아요를 누를 수 없습니다.")
+        return redirect('posts:detail', id=post_id)
+    
+    # 좋아요 취소
     if request.user in comment.like_users.all():
         comment.like_users.remove(request.user)
     else:
-        # 처음 누르는 유저라면 목록에 추가 (좋아요)
+        # 좋아요
         comment.like_users.add(request.user)
         
-    # 원래 보고 있던 게시글 상세 페이지로 돌려보내기
     return redirect('posts:detail', id=post_id)
