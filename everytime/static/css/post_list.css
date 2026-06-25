@@ -112,6 +112,7 @@ header{
 }
 .popularBtn{
     border:none;
+    border-bottom: 1px;
     background-color: transparent;
     cursor:pointer;
     font-weight: 500;

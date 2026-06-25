@@ -41,30 +41,3 @@ document.querySelectorAll(".majorBadge").forEach((major) =>{
 
 });
 const params = new URLSearchParams(window.location.search);
-const sort = params.get("sort");
-
-const latestBtn = document.querySelector(".latesBtn");
-const popularBtn = document.querySelector(".popularBtn");
-
-if(sort === "popular"){
-    popularBtn.classList.add("activeSort");
-}else{
-    latestBtn.classList.add("activeSort");
-}
-
-//프로필박스
-const profileBtn = document.querySelector(".backIcon");
-const profileBox = document.querySelector(".profileBox");
-
-profileBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    profileBox.classList.toggle("active");
-});
-
-profileBox.addEventListener("click", (e) => {
-    e.stopPropagation();
-});
-
-document.addEventListener("click", () => {
-    profileBox.classList.remove("active");
-});
