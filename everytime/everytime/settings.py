@@ -27,21 +27,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'rest_framework',
-    'rest_framework.authtoken',
     
     'posts',
     'comments',
     'accounts',
 ]
-
-# DRF 기본 전역 설정 추가 (선택)
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication', # 토큰 인증 사용
-        'rest_framework.authentication.SessionAuthentication', # admin 페이지용 세션 인증
-    ],
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
