@@ -7,27 +7,105 @@
     <link rel="stylesheet" href="../static/css/post_search.css" />
   </head>
   <body>
-    <div class="app-container">
-      <form action="" method="GET" class="search-form">
-        <div class="search-bar-wrap">
+    <div class="search-container">
+      <header class="header">
+        <button class="back-btn"><img src="../static/img/icon-back.svg" alt="뒤로가기"/></button>
+        <h2 class="title">교수 후기</h2>
+      </header>
+
+      <main class="search-page-main">
+        <div class="search-input-box">
           <input
             type="text"
-            name="q"
-            id="searchInput"
-            placeholder="검색어를 입력하세요. (전공, 교수 등)"
-            autocomplete="off"
+            class="search-input"
+            placeholder="검색어를 입력하세요 (전공, 교수 등)"
+            value=""
           />
-
-          <button type="submit" class="search-submit-btn">
-            <img
-              src="../static/img/SearchBtn.svg"
-              alt="검색하기"
-              id="searchBtn"
-            />
-          </button>
+          <button class="search-btn"><img src="../static/img/SearchBtn.svg" alt="검색" /></button>
         </div>
-      </form>
-      <div class="search-results-area" id="searchResults"></div>
+
+        <div class="content-body">
+          <div class="default-view">
+            <div class="recent-search-section">
+              <div class="section-header">
+                <h3>최근 검색어</h3>
+                <button class="clear-all-btn">전체 삭제</button>
+              </div>
+
+              <ul class="search-tags">
+                <li>
+                  <span>김윤희 교수</span>
+                  <button class="delete-tag-btn"><img src="../static/img/X.svg" alt="삭제" /></button>
+                </li>
+                <li>
+                  <span>유아교육</span>
+                  <button class="delete-tag-btn"><img src="../static/img/X.svg" alt="삭제" /></button>
+                </li>
+                <li>
+                  <span>시각디자인</span>
+                  <button class="delete-tag-btn"><img src="../static/img/X.svg" alt="삭제" /></button>
+                </li>
+              </ul>
+
+              <p class="empty-msg hide">최근 검색어가 없습니다</p>
+            </div>
+
+            <div class="popular-section">
+              <div class="section-header">
+                <h3>많이 찾는 교수</h3>
+              </div>
+              <ul class="professor-list">
+                <li>
+                  <div class="prof-info">
+                    <span class="rank top-rank">1</span>
+                    <div>
+                      <p class="prof-name">김윤희 교수</p>
+                      <p class="dept-name">유아교육과</p>
+                    </div>
+                  </div>
+                </li>
+              
+                <li>
+                  <div class="prof-info">
+                    <span class="rank">2</span>
+                    <div>
+                      <p class="prof-name">김윤희 교수</p>
+                      <p class="dept-name">유아교육과</p>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="prof-info">
+                    <span class="rank">3</span>
+                    <div>
+                      <p class="prof-name">김윤희 교수</p>
+                      <p class="dept-name">유아교육과</p>
+                    </div>
+                  </div>
+                </li>
+
+                <li>
+                  <div class="prof-info">
+                    <span class="rank">4</span>
+                    <div>
+                      <p class="prof-name">김윤희 교수</p>
+                      <p class="dept-name">유아교육과</p>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="no-result-view hide">
+            <div class="question-icon">?</div>
+            <p class="no-result-text">
+              <strong>'우아교육'</strong>에 대한<br />검색 결과가 없어요
+            </p>
+            <span class="sub-text">검색어를 다시 확인해주세요</span>
+          </div>
+        </div>
+      </main>
     </div>
   </body>
 </html>
