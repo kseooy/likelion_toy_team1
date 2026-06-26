@@ -19,8 +19,7 @@ class Professor(models.Model):
 
 
 class Post(models.Model):
-    # 나중 로그인 연동을 위해 임시로 null=True, blank=True를 주면 로그인 없이도 테스트가 수월해진다고 한다~~~
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts', null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     
     professor = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name='reviews')
     rating = models.IntegerField()                        # 별점 (1~5, 필수)
