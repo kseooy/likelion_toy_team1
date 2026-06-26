@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from .models import *
 
 # 로그인
 def login_view(request):
@@ -65,3 +66,26 @@ def check_username(request):
             return JsonResponse({"result": "success", "message": "사용 가능한 아이디입니다."}, status=200)
         except json.JSONDecodeError:
             return JsonResponse({"result": "fail", "message": "잘못된 요청 데이터입니다."}, status=400)
+        
+        
+#  닉네임 중복 확인         
+@csrf_exempt
+def check_nickname(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            nickname = data.get("nickname", "").strip() # 공백 제거 추가
+            
+            # 닉네임 2~12자
+            if len(nickname) < 2 or len(nickname) > 12:
+                return JsonResponse({"result": "fail", "message": "닉네임은 2~12자여야 합니다."}, status=400)
+                
+            # Profile 모델에서 중복 체크
+            if Profile.objects.filter(nickname=nickname).exists():
+                return JsonResponse({"result": "fail", "message": "이미 사용 중인 닉네임입니다."}, status=200)
+                
+            return JsonResponse({"result": "success", "message": "사용 가능한 닉네임입니다."}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({"result": "fail", "message": "잘못된 요청 데이터입니다."}, status=400)
+            
+    return JsonResponse({"result": "fail", "message": "잘못된 요청 메서드입니다."}, status=400)
