@@ -21,8 +21,9 @@
             
             <div class="profileSettings">프로필 설정</div>
             
-            <form class="logoutForm">
-                <button class="logoutBox" type="button">로그아웃</button>
+            <form class="logoutForm" method="post" action="{% url 'accounts:logout' %}">
+                {% csrf_token %}
+                <button class="logoutBox" type="submit">로그아웃</button>
             </form>
         </div>
     </header>

@@ -7,7 +7,6 @@ class Migration(migrations.Migration):
     dependencies = [
         # 배포 서버에서 충돌을 일으킨 두 명의 주범을 적어줍니다.
         ('posts', '0009_alter_post_user'),
-        ('posts', '0009_merge_20260626_1200'),
     ]
 
     operations = [
