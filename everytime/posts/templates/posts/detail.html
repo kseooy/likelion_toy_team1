@@ -7,7 +7,7 @@
 </head>
 <body>
     <h2>🔍 교수 후기 상세보기</h2>
-    <a href="{% url 'posts:list' %}">🔙 목록으로</a> | 
+    <a href="{% url 'posts:post_list' %}">🔙 목록으로</a> | 
     <a href="{% url 'posts:update' post.id %}">⚙️ 수정하기</a> | 
     <a href="{% url 'posts:delete' post.id %}" onclick="return confirm('게시글이 삭제됩니다. 정말 삭제하시겠습니까?');">🗑️ 삭제하기</a>
     <hr>

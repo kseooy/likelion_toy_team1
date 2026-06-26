@@ -19,7 +19,7 @@
         <div class="profileBox">
             <div class="archive" onclick="location.href='{% url "posts:archive" %}'" style="cursor: pointer;">보관함</div>
             
-            <div class="profileSettings">프로필 설정</div>
+            <a href="" class="profileSettings">프로필 설정</a>
             
             <form class="logoutForm" method="post" action="{% url 'accounts:logout' %}">
                 {% csrf_token %}

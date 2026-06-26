@@ -73,6 +73,7 @@ header{
 .profileSettings{
     border-bottom: 1px solid #D5D6D7;
     padding: 12px 18px;
+    text-decoration: none;
 
 }
 .logoutForm{
