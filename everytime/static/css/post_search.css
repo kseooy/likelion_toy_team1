@@ -1,75 +1,216 @@
-*{
+* {
     margin: 0;
     padding: 0;
     font-family: Pretendard;
 }
 
 body {
-    background-color: #f4f4f5; 
+    background-color: #f5f5f5;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-}
-
-.app-container {
-    width: 402px;
-    max-width: 402px;
-    min-height: 100vh;
-    margin: 0 auto; 
-    background: #ffffff;
     box-sizing: border-box;
 }
 
-.search-form {
-    display: block;
-    flex-direction: column;
-    align-items: center;
-    box-sizing: border-box;
-}
-
-.search-bar-wrap {
+/* 모바일 화면 크기 기준 레이아웃 */
+.search-container {
     width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    padding: 20px 14px 21px 20px;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #D5D6D7;
+    max-width: 402px;
+    background-color: #fff;
+    min-height: 100vh;
 }
 
-#searchInput {
-    flex: 1;
-    border: none;
+/* 상단 헤더 */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 18px 14px;
+}
+.back-btn {
+    position: absolute;
+    left: 14px;
     background: none;
+    border: none;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+}
+.back-btn img{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.search-page-main{
+    display: flex;
+    width: 100%;
+    max-width: 355px;
+    flex-direction: column;
+    margin: 20px auto 31px auto;
+    gap: 36px;
+}
+
+/* 검색창 */
+.search-input-box {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px 14px 10px;
+    gap: 50px;
+    border-radius: 10px;
+    border: 2px solid #D5D6D7;
+}
+.search-input {
+    border: none;
     outline: none;
+    width: 100%;
     color: #686866;
     font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
 }
-
-.search-submit-btn {
+.search-btn {
     background: none;
     border: none;
-    padding: 0;
+    cursor: pointer;
+    width: 26px;
+    height: 26px;
+}
+
+/* 검색 오류 상태일 때 */
+.search-input-box.is-error {
+    border: 2px solid #FE332E; 
+}
+
+/* 섹션 공통 */
+h3 {
+    color: #000;
+    font-size: 20px;
+    margin-bottom: 26px;
+    font-style: normal;
+    font-weight: 600;
+}
+
+/* 최근 검색어 태그 */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.clear-all-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #686866;
+    font-size: 16px;
+    margin-bottom: 26px;
+}
+.search-tags {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    margin-bottom: 36px;
+}
+.search-tags li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    border-radius: 99px;
+    border: 1px solid #D5D6D7;
+}
+.delete-tag-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 22px;
+    height: 22px;
+}
+
+/* 검색어 없을 때 메시지 */
+.empty-msg {
+    padding: 20px 0 40px 0;
+    color: #686866;
+    font-size: 16px;
+}
+
+/* 많이 찾는 교수 리스트 */
+.professor-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+}
+.professor-list li {
+    display: flex;
+    padding: 20px 10px;
+    align-items: center;
+    gap: 173px;
+    border-bottom: 1px solid #D5D6D7;
+}
+.prof-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.rank {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333333; /* 기본 검은색 */
+    width: 20px;    /* 숫자가 차지하는 가로 폭을 고정해주면 정렬이 예뻐집니다 */
+    text-align: center;
+}
+
+/* 🌟 1등 전용 스타일 (빨간색으로 덮어쓰기) */
+.rank.top-rank {
+    color: #ff4d4d; /* 피그마 가이드의 빨간색 입력 */
+}
+.prof-name {
+    font-size: 14px;
+    font-weight: bold;
+}
+.dept-name {
+    font-size: 11px;
+    color: #999;
+    margin-top: 2px;
+}
+
+/* 검색 결과 없음 */
+.no-result-view {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 0;
+    text-align: center;
+}
+.question-icon {
+    width: 60px;
+    height: 60px;
+    background-color: #ffb3b3;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 30px;
+    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    margin-left: 8px;
+    margin-bottom: 20px;
+}
+.no-result-text {
+    font-size: 16px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+.sub-text {
+    font-size: 12px;
+    color: #999;
 }
 
-#searchIcon {
-    width: 24px;
-    height: 24px;
-}
-
-/*하단 부분*/
-.search-results-area {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0 16px;
+/* 🌟 화면 제어의 핵심: 제어용 클래스 */
+.hide {
+    display: none !important;
 }
