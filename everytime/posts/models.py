@@ -37,6 +37,9 @@ class Post(models.Model):
     # 이 글을 좋아하는 유저들 목록
     like_users = models.ManyToManyField(User, related_name='like_posts', blank=True)
 
+    # 이 글을 북마크 한 유저들 목록
+    bookmark_users = models.ManyToManyField(User, related_name='bookmark_posts', blank=True)
+
     def __str__(self):
         return f"[{self.professor.department} - {self.professor.name} 교수님] {self.title}"
     

@@ -17,103 +17,148 @@
             <div></div>
         </div>
     </header>
-    <aside class="asideBox2">
-        <!-- <a href="{% url 'posts:list' %}?sort=latest" class="likeLink"><button type="button" class="likedPages">좋아요한 글</button></a>
-        <a href="" class="bookmarkLink"><button type="button" class="bookmarkPages">북마크</button></a> -->
-        <a href="" class="likeLink">좋아요한 글</a>
-        <a href="" class="bookmarkLink">북마크</a>
 
+    <aside class="asideBox2">
+        <a href="{% url 'posts:archive' %}?tab=liked" class="likeLink {% if request.GET.tab != 'bookmark' %}active{% endif %}">
+            좋아요한 글 <span class="badge">{{ liked_count }}</span>
+        </a>
+        <a href="{% url 'posts:archive' %}?tab=bookmark" class="bookmarkLink {% if request.GET.tab == 'bookmark' %}active{% endif %}">
+            북마크 <span class="badge">{{ bookmarked_count }}</span>
+        </a>
     </aside>
 
     <div class="articleContainer">
-        {% for post in posts %}
-        <a href="{% url 'posts:detail' post.id %}" class="articleLink">
-        <article class="articleBox archiveBox">
+        {% if request.GET.tab != 'bookmark' %}
+            {% for post in liked_posts %}
+                <a href="{% url 'posts:detail' post.id %}" class="articleLink">
+                <article class="articleBox archiveBox">
+                    <div class="articleTitle">
+                        <div class="majorBadge globalCollege">{{ post.professor.department }}</div>
+                        <div class="professor">{{ post.professor.name }} 교수님</div>
+                        <div class="starRaiting">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= post.rating %}
+                                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
+                                {% else %}
+                                    <img class="starGray" src="{% static 'img/icon-star-gray.svg' %}">
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
 
-            <div class="articleTitle">
-                <div class="majorBadge globalCollege">{{ post.professor.department }}</div>
-                <div class="professor">{{ post.professor.name }} 교수님</div>
-
-                <div class="starRaiting">
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= post.rating %}
-                                <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
-                            {% else %}
-                                <img class="starGray" src="{% static 'img/icon-star-gray.svg' %}">
-                            {% endif %}
-                        {% endfor %}
-                </div>
-
-            </div>
-
-            <div class="contentBox">
-                <p class="contentTitle">{{ post.title }}</p>
-                <p class="contentTxt">{{ post.content|truncatechars:50 }}</p>
-
-                {% if post.images.all %}
-                <div>🖼️ 이미지 (총 {{ post.images.count }}장)</div>
-                {% endif %}
-            </div>
-
-            <div class="articleFooter">
-                <div class="postMeta">
-                    <p class="writer">
-                        {% if post.is_anonymous %}
-                            익명
-                        {% else %}
-                            {{ post.user.username }}
+                    <div class="contentBox">
+                        <p class="contentTitle">{{ post.title }}</p>
+                        <p class="contentTxt">{{ post.content|truncatechars:50 }}</p>
+                        {% if post.images.all %}
+                        <div>🖼️ 이미지 (총 {{ post.images.count }}장)</div>
                         {% endif %}
-                    </p>
-                    <p>·</p>
-                    <p class="writeTime">{{ post.created_at|date:"m/d H:i" }}</p>
-                    <p>·</p>
-                    <p class="viewCount">조회 {{ post.views_count }}</p>
-                </div>
-
-                <div class="reactionBox">
-                    <div class="likeBox">
-                    {% if request.user in post.like_users.all %}
-                        <img src="{% static 'img/LikeBtn_active.svg' %}" width="18px" height="18px">
-                        <p class="likeTxtRed">{{ post.like_users.count }}</p>
-                    {% else %}
-                        <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
-                        <p class="likeTxt">{{ post.like_users.count }}</p>
-                    {% endif %}
-                    
                     </div>
-                    <div class="commentBox">
-                        <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
-                        <p class="commentTxt">{{ post.comments.count }}</p>
+
+                    <div class="articleFooter">
+                        <div class="postMeta">
+                            <p class="writer">
+                                {% if post.is_anonymous %}익명{% else %}{{ post.user.username }}{% endif %}
+                            </p>
+                            <p>·</p>
+                            <p class="writeTime">{{ post.created_at|date:"m/d H:i" }}</p>
+                            <p>·</p>
+                            <p class="viewCount">조회 {{ post.views_count }}</p>
+                        </div>
+                        <div class="reactionBox">
+                            <div class="likeBox">
+                                {% if request.user in post.like_users.all %}
+                                    <img src="{% static 'img/LikeBtn_active.svg' %}" width="18px" height="18px">
+                                    <p class="likeTxtRed">{{ post.like_users.count }}</p>
+                                {% else %}
+                                    <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
+                                    <p class="likeTxt">{{ post.like_users.count }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="commentBox">
+                                <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
+                                <p class="commentTxt">{{ post.comments.count }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                </a>
+            {% empty %}
+                <div class="emptyMessage">
+                    <img src="{% static 'img/icon-pageHeart.png' %}" width="164px" height="164px">
+                    <p class="emptyTxt1">아직 좋아요한 후기가 없어요.</p>
+                    <p class="emptyTxt2">도움이 된 후기에 좋아요를 눌러보세요</p>
+                    <div class="listBtnBox">
+                        <a href="{% url 'posts:list' %}"><button class="listBtn" type="button">교수 후기 둘러보기</button></a>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
 
-        </article>
-        </a>
-        {% empty %}
-        <div class="emptyMessage">
-            <!-- if문 -->
-                <img src="{% static 'img/icon-pageHeart.png' %}" width="164px" height="164px">
-                <p class="emptyTxt1">아직 좋아요한 후기가 없어요.</p>
-                <p class="emptyTxt2">도움이 된 후기에 좋아요를 눌러보세요</p>
-                <div class="listBtnBox">
-                    <button class="listBtn" type="button">교수 후기 둘러보기</button>
+        {% else %}
+            {% for post in bookmarked_posts %}
+                <a href="{% url 'posts:detail' post.id %}" class="articleLink">
+                <article class="articleBox archiveBox">
+                    <div class="articleTitle">
+                        <div class="majorBadge globalCollege">{{ post.professor.department }}</div>
+                        <div class="professor">{{ post.professor.name }} 교수님</div>
+                        <div class="starRaiting">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= post.rating %}
+                                    <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
+                                {% else %}
+                                    <img class="starGray" src="{% static 'img/icon-star-gray.svg' %}">
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="contentBox">
+                        <p class="contentTitle">{{ post.title }}</p>
+                        <p class="contentTxt">{{ post.content|truncatechars:50 }}</p>
+                        {% if post.images.all %}
+                        <div>🖼️ 이미지 (총 {{ post.images.count }}장)</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="articleFooter">
+                        <div class="postMeta">
+                            <p class="writer">
+                                {% if post.is_anonymous %}익명{% else %}{{ post.user.username }}{% endif %}
+                            </p>
+                            <p>·</p>
+                            <p class="writeTime">{{ post.created_at|date:"m/d H:i" }}</p>
+                            <p>·</p>
+                            <p class="viewCount">조회 {{ post.views_count }}</p>
+                        </div>
+                        <div class="reactionBox">
+                            <div class="likeBox">
+                                {% if request.user in post.like_users.all %}
+                                    <img src="{% static 'img/LikeBtn_active.svg' %}" width="18px" height="18px">
+                                    <p class="likeTxtRed">{{ post.like_users.count }}</p>
+                                {% else %}
+                                    <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
+                                    <p class="likeTxt">{{ post.like_users.count }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="commentBox">
+                                <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
+                                <p class="commentTxt">{{ post.comments.count }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                </a>
+            {% empty %}
+                <div class="emptyMessage">
+                    <img src="{% static 'img/icon-pageBookmark.png' %}" width="164px" height="164px">
+                    <p class="emptyTxt1">아직 저장한 후기가 없어요.</p>
+                    <p class="emptyTxt2">나중에 다시 보고 싶은 후기를 저장해보세요</p>
+                    <div class="listBtnBox">
+                        <a href="{% url 'posts:list' %}"><button class="listBtn" type="button">교수 후기 둘러보기</button></a>
+                    </div>
                 </div>
-            <!-- if문 -->
-                <!-- <img src=" img/icon-pageBookmark.png" width="164px" height="164px">
-                <p class="emptyTxt1">아직 저장한 후기가 없어요.</p>
-                <p class="emptyTxt2">나중에 다시 보고 싶은 후기를 저장해보세요</p>
-                <div class="listBtnBox">
-                    <button class="listBtn" type="button">교수 후기 둘러보기</button>
-                </div> -->
-        </div>
-        
-        {% endfor %}
+            {% endfor %}
+        {% endif %}
     </div>
-
-        
-    </div>
-
 </div>
 <script src="{% static 'js/post_list.js' %}"></script>
 <script src="{% static 'js/archive.js' %}"></script>

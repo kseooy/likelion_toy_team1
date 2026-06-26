@@ -232,6 +232,9 @@ def delete(request, id):
 
 @login_required
 def post_like(request, post_id):
+    """
+    6. 게시글 좋아요 누르기 기능
+    """
     post = get_object_or_404(Post, id=post_id)
 
     if post.user == request.user:
@@ -248,9 +251,29 @@ def post_like(request, post_id):
     return redirect('posts:detail', id=post.id)
 
 
+@login_required
+def post_bookmark(request, post_id):
+    """
+    7. 게시글 북마크(저장) 토글 기능 - 에타 보관함의 '북마크' 탭에 사용!
+    """
+    post = get_object_or_404(Post, id=post_id)
+
+    # 북마크(저장)는 내 글도 저장할 수 있는 게 일반적이므로 본인 차단 로직은 생략했습니다!
+    
+    # 이미 북마크를 누른 상태라면 취소(제거)
+    if post.bookmark_users.filter(id=request.user.id).exists():
+        post.bookmark_users.remove(request.user)
+    else:
+        # 누르지 않았다면 북마크 목록에 추가
+        post.bookmark_users.add(request.user)
+
+    # 처리가 끝나면 다시 보던 상세 페이지로 복귀
+    return redirect('posts:detail', id=post.id)
+
+
 def search(request):
     """
-    7. 검색 전용 페이지 및 검색 결과 반환
+    8. 검색 전용 페이지 및 검색 결과 반환
     """
     search_query = request.GET.get('q', '') 
     posts = []
@@ -268,3 +291,24 @@ def search(request):
     }
     return render(request, 'posts/search.html', context)
 
+@login_required
+def archive(request):
+    """
+    9. 보관함 기능 (내가 좋아요 한 후기 / 내가 저장(북마크)한 후기 목록 조회)
+    """
+    # 좋아요 한 글
+    liked_posts = request.user.like_posts.all().order_by('-id')
+    # 북마크 한 글
+    bookmarked_posts = request.user.bookmark_posts.all().order_by('-id')
+
+    # 몇 개인지 카운트
+    liked_count = liked_posts.count()
+    bookmarked_count = bookmarked_posts.count()
+
+    context = {
+        'liked_posts': liked_posts,
+        'bookmarked_posts': bookmarked_posts,
+        'liked_count': liked_count,
+        'bookmarked_count': bookmarked_count,
+    }
+    return render(request, 'posts/archive.html', context)
