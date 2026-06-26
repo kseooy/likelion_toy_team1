@@ -10,11 +10,11 @@ import json
 
 def home(request):
     if request.user.is_authenticated:
-        return redirect('posts:list')
+        return redirect('posts:post_list')
     return redirect('accounts:login')
 
 
-def list(request):
+def post_list(request):  # 함수명 list -> post_list 변경
     """
     1. 교수 후기 메인페이지 (전체보기 목록 조회)
     - 최신순, 인기순 정렬 기능 포함
@@ -86,7 +86,7 @@ def create(request):
         for img in images:
             PostImage.objects.create(post=post, image=img)
             
-        return redirect('posts:list') 
+        return redirect('posts:post_list') 
         
     # 처음에 글 쓰기 화면에 진입했을 때 (GET)
     return render(request, 'posts/create.html', {

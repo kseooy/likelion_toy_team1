@@ -14,7 +14,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             auth_login(request, user) 
-            return redirect('posts:list')
+            return redirect('posts:post_list')
         else:
             messages.error(request, "아이디 또는 비밀번호가 틀렸습니다.")
     else:
