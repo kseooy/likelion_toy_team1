@@ -4,6 +4,9 @@ from django.contrib.auth.decorators import login_required  # 로그인 권한 �
 from .models import Professor, Post, PostImage
 from django.db.models import Q
 from comments.models import Comment
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt  
+import json
 
 def home(request):
     if request.user.is_authenticated:
@@ -273,12 +276,22 @@ def post_bookmark(request, post_id):
 
 def search(request):
     """
-    8. 검색 전용 페이지 및 검색 결과 반환
+    8. 검색 전용 페이지 및 검색 결과 반환 - 최근 검색어 최대 3개, 최신순 유지
     """
-    search_query = request.GET.get('q', '') 
+    search_query = request.GET.get('q', '').strip()
     posts = []
     
+    search_history = request.session.get('search_history', [])
+
     if search_query:
+        if search_query in search_history:
+            search_history.remove(search_query)
+        search_history.insert(0, search_query)
+        
+        search_history = search_history[:3]
+        request.session['search_history'] = search_history
+        request.session.modified = True
+        
         posts = Post.objects.filter(
             Q(title__icontains=search_query) |          
             Q(content__icontains=search_query) |        
@@ -288,8 +301,35 @@ def search(request):
     context = {
         'posts': posts,
         'search_query': search_query, 
+        'search_history': search_history,
+        'popular_professors': ["김교수", "이교수", "박교수"], # 하드 코딩 - 프론트엔드 화면용
     }
     return render(request, 'posts/search.html', context)
+
+
+@csrf_exempt
+def delete_search_keyword(request):
+    """
+    + 최근 검색어 하나씩 삭제 API (X 버튼 대응)
+    """
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            keyword_to_delete = data.get('keyword', '').strip()
+        except json.JSONDecodeError:
+            return JsonResponse({"result": "fail", "message": "잘못된 데이터 형식입니다."}, status=400)
+
+        search_history = request.session.get('search_history', [])
+        
+        if keyword_to_delete in search_history:
+            search_history.remove(keyword_to_delete)
+            request.session['search_history'] = search_history
+            request.session.modified = True
+            return JsonResponse({"result": "success", "message": f"'{keyword_to_delete}' 검색어가 삭제되었습니다."})
+            
+        return JsonResponse({"result": "fail", "message": "존재하지 않는 검색어입니다."}, status=400)
+        
+    return JsonResponse({"result": "fail", "message": "잘못된 요청 메서드입니다."}, status=400)
 
 @login_required
 def archive(request):
