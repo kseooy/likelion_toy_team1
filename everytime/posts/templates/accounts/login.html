@@ -12,23 +12,11 @@
 <body>
 <div class="container">
     <header>
-        <div class="headerBox">
-            <a href="{% url 'posts:list' %}" class="backIcon">
-                <img src="{% static 'img/icon-back.svg' %}" alt="뒤로가기">
-            </a>
-            <div class="headerTitle">로그인</div>
-            <div class="emptyBox"></div>
-        </div>
+        <div class="loginTitle">로그인</div>
+        <div class="notice">서비스를 이용하려면 로그인이 필요해요</div>
     </header>
 
 <main class="loginContainer">
-
-    <div class="notice">
-        <img src="{% static 'img/icon-notice.svg' %}" class="icon-notice" alt="안내">
-        <div class="noticeTxt">
-            로그인하면 좋아요와 후기 기능을 이용할 수 있어요!
-        </div>
-    </div>
 
     {% if messages %}
         {% for message in messages %}
@@ -42,7 +30,7 @@
         {% csrf_token %}
 
         <div class="inputBox">
-            <label for="username">아이디</label>
+            <!-- <label for="username">아이디</label> -->
             <input
                 type="text"
                 id="username"
@@ -53,7 +41,7 @@
         </div>
 
         <div class="inputBox">
-            <label for="password">비밀번호</label>
+            <!-- <label for="password">비밀번호</label> -->
             <input
                 type="password"
                 id="password"
@@ -63,14 +51,38 @@
             >
         </div>
 
-        <button type="submit" class="loginBtn">
+        <div class="loginCheck">
+            <img src="{% static 'img/icon-check-gray.svg' %}" class="loginCheckImg">
+            <span>로그인 상태 유지</span>
+
+        </div>
+
+        <button type="submit" class="loginBtn" disabled>
             로그인
         </button>
     </form>
 
+    <div class="divider">또는</div>
+
+    <div class="socialLogin">
+        <button type="button" class="socialBtn googleBtn">
+            <img src="{% static 'img/icon-google.png' %}">
+            <span>Google로 계속하기</span>
+        </button>
+        <button type="button" class="socialBtn appleBtn">
+            <img src="{% static 'img/icon-apple.png' %}">
+            <span> Apple로 계속하기</span>
+        </button>
+    </div>
+
+    <div class="signupBox">
+        <span>계정이 없으신가요?</span>
+        <a href="" class="signupLink">회원가입</a>
+    </div>
+
 </main>
-
-
 </div>
+
+<script src="{% static 'js/login.js' %}"></script>
 </body>
 </html>
