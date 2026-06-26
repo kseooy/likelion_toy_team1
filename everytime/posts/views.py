@@ -274,28 +274,25 @@ def post_bookmark(request, post_id):
     return redirect('posts:detail', id=post.id)
 
 
+# posts/views.py 최종본 (3개 제한 + 개별 삭제 + 인기 교수 유지)
+
 def search(request):
     """
-    8. 검색 전용 페이지 및 검색 결과 반환 
-    - 최근 검색어 저장(최대 5개, 최신순)
-    - 많이 찾는 교수 리스트 전달
+    8. 검색 전용 페이지 및 검색 결과 반환 - 최근 검색어 최대 3개 제한
     """
-    search_query = request.GET.get('q', '').strip() # 공백 제거 추가
+    search_query = request.GET.get('q', '').strip()
     posts = []
     
-    # 💡 세션에서 현재 유저의 최근 검색어 목록 가져오기 (없으면 빈 리스트)
     search_history = request.session.get('search_history', [])
 
     if search_query:
-        # 최근 검색어 목록 갱신 및 최신순 정렬
         if search_query in search_history:
-            search_history.remove(search_query) # 기존에 있던 같은 단어는 지우고
-        search_history.insert(0, search_query) # 맨 앞에 추가
+            search_history.remove(search_query)
+        search_history.insert(0, search_query)
         
-        # 최근 검색어는 최대 5개까지만 유지
-        search_history = search_history[:5]
+        search_history = search_history[:3] # 💡 3개 최적화
         request.session['search_history'] = search_history
-        request.session.modified = True # 세션 변경 사항을 DB/쿠키에 강제 저장
+        request.session.modified = True
         
         posts = Post.objects.filter(
             Q(title__icontains=search_query) |          
@@ -306,23 +303,39 @@ def search(request):
     context = {
         'posts': posts,
         'search_query': search_query, 
-        'search_history': search_history, # HTML 화면에 최근 검색어 목록 전달
-        'popular_professors': ["김교수", "이교수", "박교수"], # 많이 찾는 교수 탑3 (우선 임시 하드코딩)
+        'search_history': search_history,
+        #  프론트엔드 화면 깨짐 방지를 위해 임시 하드코딩 리스트 유지
+        'popular_professors': ["김교수", "이교수", "박교수"], 
     }
     return render(request, 'posts/search.html', context)
 
 
 @csrf_exempt
-def clear_search_history(request):
+def delete_search_keyword(request):
     """
-    9. 최근 검색어 전체 삭제 API (프론트엔드 비동기 JavaScript 요청용)
+    + 최근 검색어 개별 삭제 API (X 버튼 대응)
     """
     if request.method == "POST":
-        if 'search_history' in request.session:
-            del request.session['search_history']
+        try:
+            data = json.loads(request.body)
+            keyword_to_delete = data.get('keyword', '').strip()
+        except json.JSONDecodeError:
+            return JsonResponse({"result": "fail", "message": "잘못된 데이터 형식입니다."}, status=400)
+
+        search_history = request.session.get('search_history', [])
+        
+        if keyword_to_delete in search_history:
+            search_history.remove(keyword_to_delete)
+            request.session['search_history'] = search_history
             request.session.modified = True
-        return JsonResponse({"result": "success", "message": "최근 검색어가 전체 삭제되었습니다."})
-    return JsonResponse({"result": "fail", "message": "잘못된 요청입니다."}, status=400)
+            return JsonResponse({"result": "success", "message": f"'{keyword_to_delete}' 검색어가 삭제되었습니다."})
+            
+        return JsonResponse({"result": "fail", "message": "존재하지 않는 검색어입니다."}, status=400)
+        
+    return JsonResponse({"result": "fail", "message": "잘못된 요청 메서드입니다."}, status=400)
+
+
+
 
 
 
