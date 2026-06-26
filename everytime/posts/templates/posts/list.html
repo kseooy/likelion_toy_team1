@@ -1,42 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>교수 후기 게시판</title>
-</head>
-<body>
-    <h2>🏫 교수 후기 메인 게시판</h2>
-    
-    <a href="{% url 'posts:create' %}">✏️ 새 후기 작성하기</a>
-    <hr>
-
-    <div>
-        <a href="{% url 'posts:list' %}?sort=latest">최신순</a> | 
-        <a href="{% url 'posts:list' %}?sort=popular">인기순</a>
-    </div>
-    <br>
-
-    {% for post in posts %}
-        <div style="border: 1px solid gray; padding: 10px; margin-bottom: 10px;">
-            <h3>
-                <a href="{% url 'posts:detail' post.id %}">
-                    [{{ post.professor.department }} - {{ post.professor.name }} 교수님] {{ post.title }}
-                </a>
-            </h3>
-            <p>⭐ 별점: {{ post.rating }} / 조회수: {{ post.views_count }}</p>
-            <p>내용 요약: {{ post.content|truncatechars:50 }}</p> 
-            
-            {% if post.images.all %}
-                <div>🖼️ 이미지 있음 (총 {{ post.images.count }}장)</div>
-            {% endif %}
-        </div>
-    {% empty %}
-        <p>작성된 교수 후기가 없습니다.</p>
-    {% endfor %}
-</body>
-</html> -->
-
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -56,20 +17,19 @@
         </div>
 
         <div class="profileBox">
-    <div class="archive" onclick="location.href='{% url "posts:archive" %}'" style="cursor: pointer;">보관함</div>
-    
-    <div class="profileSettings">프로필 설정</div>
-    
-    <form class="logoutForm">
-        <button class="logoutBox" type="button">로그아웃</button>
-    </form>
-</div>
-
-
+            <div class="archive" onclick="location.href='{% url "posts:archive" %}'" style="cursor: pointer;">보관함</div>
+            
+            <div class="profileSettings">프로필 설정</div>
+            
+            <form class="logoutForm">
+                <button class="logoutBox" type="button">로그아웃</button>
+            </form>
+        </div>
     </header>
+
     <aside class="asideBox">
-        <a href="{% url 'posts:list' %}?sort=latest" ><button type="button" class="latesBtn">최신순</button></a>
-        <a href="{% url 'posts:list' %}?sort=popular"><button type="button" class="popularBtn">인기순</button></a>
+        <a href="{% url 'posts:post_list' %}?sort=latest" ><button type="button" class="latesBtn">최신순</button></a>
+        <a href="{% url 'posts:post_list' %}?sort=popular"><button type="button" class="popularBtn">인기순</button></a>
     </aside>
 
     <div class="articleContainer">
@@ -82,8 +42,6 @@
                 <div class="professor">{{ post.professor.name }} 교수님</div>
 
                 <div class="starRaiting">
-                    <!-- <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
-                    <p class="starCount">{{ post.rating }}</p> -->
                         {% for i in "12345" %}
                             {% if forloop.counter <= post.rating %}
                                 <img class="starYellow" src="{% static 'img/icon-star-yellow.png' %}">
@@ -92,7 +50,6 @@
                             {% endif %}
                         {% endfor %}
                 </div>
-
             </div>
 
             <div class="contentBox">
@@ -128,7 +85,6 @@
                         <img src="{% static 'img/icon-like-gray.png' %}" width="18px" height="18px">
                         <p class="likeTxt">{{ post.like_users.count }}</p>
                     {% endif %}
-                    
                     </div>
                     <div class="commentBox">
                         <img src="{% static 'img/icon-comment.png' %}" width="15px" height="15px">
@@ -141,17 +97,13 @@
         </a>
         {% empty %}
         <p>작성된 교수 후기가 없습니다.</p>
-        
         {% endfor %}
     </div>
-
-        
-    </div>
+    
     <a href="{% url 'posts:create' %}">
         <img src="{% static 'img/icon-pencil.png' %}" class="pencilButton">
     </a>
 </div>
-<script src="{% static 'js/post_list.js' %}">
-</script>
+<script src="{% static 'js/post_list.js' %}"></script>
 </body>
 </html>

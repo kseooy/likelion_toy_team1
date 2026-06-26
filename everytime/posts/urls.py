@@ -5,7 +5,7 @@ app_name = 'posts'
 
 urlpatterns = [
     path('', home, name='home'),
-    path('list/', list, name='post_list'),  # post_list로 함수명 수정
+    path('list/', post_list, name='post_list'),  # post_list로 함수명 수정
     path('create/', create, name='create'),
     path('detail/<int:id>/', detail, name='detail'),
     path('update/<int:id>/', update, name='update'),

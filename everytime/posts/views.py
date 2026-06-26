@@ -230,7 +230,7 @@ def delete(request, id):
         img.image.delete() 
     post.delete()
     
-    return redirect('posts:list')
+    return redirect('posts:post_list')
 
 
 @login_required
