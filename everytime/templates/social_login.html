@@ -1,1 +1,16 @@
 <!-- 로그인 컴포넌트-->
+{% load static %}
+<button type="button" class="sns-btn {{ provider }}-btn">
+  <img src="{{ icon_path }}" alt="{{ text }}" />
+  <span>{{ text }}</span>
+</button>
+
+<!-- 
+{% static 'img/icon-google.svg' as google_url %}
+{% include 'social_login.html' with provider='google' icon_path=google_url text='Google로 가입하기' %}
+
+{% static 'img/icon-apple.svg' as apple_url %}
+{% include 'social_login.html' with provider='apple' icon_path=apple_url text='Apple로 가입하기' %}
+    
+컴포넌트 사용하실 때 이런형식으로 사용하시면 됩니다.
+-->
