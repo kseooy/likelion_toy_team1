@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 설정</title>
+    <link rel="stylesheet" href="{% static 'css/signup_complete.css' %}">
+</head>
+<body>
+    <div class="p-container">
+        <div class="p-content">
+            <header class="p-header">
+                <h1 class="p-main-title">프로필 설정</h1>
+                <p class="p-sub-title">
+                    글 작성에 사용할 프로필을 설정해주세요<br>
+                    프로필은 언제든지 수정할 수 있어요
+                </p>
+            </header>
+
+            <div class="p-image-zone">
+                <label for="profile-file-input" class="p-circle-button" title="프로필 사진 변경">
+                    <img src="{% static 'img/signup_usercircle.svg' %}" alt="기본 프로필" class="p-avatar-img">
+                    <div class="p-camera-badge">
+                        <img src="{% static 'img/camera.svg' %}" alt="카메라 아이콘" class="p-camera-img">
+                    </div>
+                </label>
+                <input type="file" id="profile-file-input" accept="image/*" style="display: none;">
+            </div>
+
+            <form class="p-form" id="profile-form" method="POST" action="">
+                <div class="p-input-group">
+                    <label class="p-input-label">닉네임</label>
+                    <div class="p-input-container">
+                        <input
+                            type="text"
+                            id="profile_nickname"
+                            name="nickname"
+                            value="abcd1234"
+                            class="p-input-field is-default"
+                            placeholder="닉네임을 입력해주세요"
+                            autocomplete="off"
+                        />
+                    </div>
+                    <div class="p-status-box">
+                        <span class="p-status-item" id="nick-len">2~12자 <img src="../static/img/Check.svg" alt="체크"/></span>
+                        <span class="p-status-item" id="nick-check">중복확인 <img src="../static/img/Check.svg" alt="체크"/></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="p-submit-btn" id="profile-submit-btn" disabled>완료</button>
+            </form>
+
+        </div>
+    </div>
+    <script src="{% static 'js/signup_complete.js' %}" defer></script>
+</body>
+</html>
