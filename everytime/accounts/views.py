@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from .models import *
+from django.contrib.auth.decorators import login_required
 
 # 로그인
 def login_view(request):
@@ -88,4 +89,34 @@ def check_nickname(request):
         except json.JSONDecodeError:
             return JsonResponse({"result": "fail", "message": "잘못된 요청 데이터입니다."}, status=400)
             
+    return JsonResponse({"result": "fail", "message": "잘못된 요청 메서드입니다."}, status=400)
+
+
+
+# 중복 검증 완료 후 최종적으로 닉네임을 변경 및 저장하는 API
+@login_required
+@csrf_exempt
+def update_profile(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            new_nickname = data.get('nickname', '').strip()
+        except json.JSONDecodeError:
+            return JsonResponse({"result": "fail", "message": "잘못된 데이터 형식입니다."}, status=400)
+
+        # 닉네임 글자 수 검증 (기획 명세 반영: 2자 이상 12자 이하)
+        if not (2 <= len(new_nickname) <= 12):
+            return JsonResponse({"result": "fail", "message": "닉네임은 2자 이상 12자 이하로 입력해주세요."}, status=400)
+
+        # 다른 유저가 이미 선점한 닉네임인지 최종 마지노선 중복 검증
+        if Profile.objects.filter(nickname=new_nickname).exclude(user=request.user).exists():
+            return JsonResponse({"result": "fail", "message": "이미 사용 중인 닉네임입니다."}, status=400)
+
+        # 현재 로그인한 유저의 프로필 가져와서 저장
+        profile = request.user.profile
+        profile.nickname = new_nickname
+        profile.save()
+
+        return JsonResponse({"result": "success", "message": "프로필 설정이 정상적으로 완료되었습니다."})
+
     return JsonResponse({"result": "fail", "message": "잘못된 요청 메서드입니다."}, status=400)
