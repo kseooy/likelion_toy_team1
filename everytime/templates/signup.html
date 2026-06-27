@@ -77,28 +77,10 @@
 
         <button type="submit" class="submit-btn">회원가입 하기</button>
       </div>
-      <div class="divider-zone">
-        <span class="divider-text">또는</span>
-      </div>
 
-      <div class="social-login-component">
-        <!--<button type="button" class="sns-btn google-btn">
-          <img src="../static/img/icon-google.svg" alt="Google" />
-          <span>Google로 가입하기</span>
-        </button>
-        <button type="button" class="sns-btn apple-btn">
-          <img src="../static/img/icon-apple.svg" alt="Apple" />
-          <span>Apple로 가입하기</span>
-        </button>-->
-        {% static 'img/icon-google.svg' as google_url %}
-        {% include 'social_login.html' with provider='google' icon_path=google_url text='Google로 가입하기' %}
-        
-        {% static 'img/icon-apple.svg' as apple_url %}
-        {% include 'social_login.html' with provider='apple' icon_path=apple_url text='Apple로 가입하기' %}
-        <div class="footer-link-box">
-          <span class="footer-text">이미 계정이 있으신가요?</span>
-          <a href="/login/" class="footer-link">로그인</a>
-        </div>
+      <div class="footer-link-box">
+        <span class="footer-text">이미 계정이 있으신가요?</span>
+        <a href="/login/" class="footer-link">로그인</a>
       </div>
     </main>
   </body>
