@@ -157,26 +157,6 @@ body {
   cursor: pointer;
 }
 
-/* ---또는--- 구분선 영역
-.divider-zone {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin: 12px 0;
-}
-.divider-zone::before,
-.divider-zone::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background-color: #d5d6d7;
-}
-.divider-text {
-  font-size: 13px;
-  color: #686866;
-  padding: 0 18px;
-} */
-
 .footer-link-box {
   display: flex;
   align-items: center;
@@ -229,6 +209,7 @@ body {
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
+    margin: 60px 0 80px 0;
 }
 
 .submit-btn:not(:disabled) {

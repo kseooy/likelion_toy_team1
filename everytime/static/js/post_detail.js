@@ -1,71 +1,3 @@
-// 북마크 버튼
-const bookmarkBtn = document.getElementById('bookmarkBtn');
-const bookmarkImg = document.getElementById('bookmarkImg');
-
-if (bookmarkBtn && bookmarkImg) {
-    bookmarkBtn.addEventListener('click', function() {
-        if (bookmarkImg.src.includes('Bookmark_active.svg')) {
-            // 이미 활성화된 상태라면 -> 비활성화(기본) 이미지로 변경
-            bookmarkImg.src = bookmarkImg.dataset.inactive;
-            bookmarkImg.alt = '북마크 하기';
-        } else {
-            // 기본 상태라면 -> 활성화 이미지로 변경
-            bookmarkImg.src = bookmarkImg.dataset.active;
-            bookmarkImg.alt = '북마크 취소';
-        }
-    });
-}
-
-// 좋아요 버튼
-// 게시글 좋아요 버튼 로직
-// const mainLikeBtn = document.getElementById('likeBtn');
-// const mainLikeBtnImg = document.getElementById('likeBtnImg');
-// const mainLikeCount = document.getElementById('likeCount');
-
-// if (mainLikeBtn && mainLikeBtnImg && mainLikeCount) {
-//     mainLikeBtn.addEventListener('click', function(e) {
-//         //새로고침(깜빡임) 강제로 막음
-//         e.preventDefault(); 
-
-//         let currentCount = parseInt(mainLikeCount.innerText);
-//         if (mainLikeBtnImg.src.includes('LikeBtn_active.svg')) {
-//             mainLikeBtnImg.src = mainLikeBtnImg.dataset.inactive;
-//             mainLikeBtnImg.alt = '좋아요';
-//             mainLikeCount.innerText = currentCount - 1;
-//         } else {
-//             mainLikeBtnImg.src = mainLikeBtnImg.dataset.active;
-//             mainLikeBtnImg.alt = '좋아요 취소';
-//             mainLikeCount.innerText = currentCount + 1;
-//         }
-//     });
-// }
-
-/* 댓글 & 대댓글 좋아요 - 대댓글 좋아요 무한히 눌리는 오류 해결 위해 주석 처리해 뒀습니다!
-const commentLikeBtns = document.querySelectorAll('.comment-like-btn');
-
-commentLikeBtns.forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-
-        const img = btn.querySelector('.comment-like-img');
-        const countSpan = btn.querySelector('.comment-like-count');
-        
-        if (img && countSpan) {
-            let currentCount = parseInt(countSpan.innerText);
-            
-            if (img.src.includes('LikeBtn_active.svg')) {
-                img.src = img.dataset.inactive;
-                img.alt = '좋아요';
-                countSpan.innerText = currentCount - 1;
-            } else {
-                img.src = img.dataset.active;
-                img.alt = '좋아요 취소';
-                countSpan.innerText = currentCount + 1;
-            }
-        }
-    });
-}); */
-
 // 익명 체크박스
 const anonToggleBtn = document.getElementById('anonToggleBtn');
 const anonCheckImg = document.getElementById('anonCheckImg');
@@ -151,24 +83,45 @@ sortBtns.forEach(function(btn) {
 });
 
 // 1. 대댓글(답글) 작성 폼 열고 닫기 토글 함수
-function prepareReply(commentId) {
+// 대댓글 작성 폼 열기 (이름 전달받음)
+function prepareReply(commentId, targetName) {
     const parentInput = document.getElementById('parentCommentId');
     const commentInput = document.getElementById('commentInput');
+    const replyIndicator = document.getElementById('replyIndicator');
+    const replyTargetName = document.getElementById('replyTargetName');
     
-    if (parentInput && commentInput) {
+    if (parentInput && commentInput && replyIndicator && replyTargetName) {
         parentInput.value = commentId;
-        commentInput.placeholder = '대댓글을 입력하세요.';
-        commentInput.focus();
+        replyTargetName.innerText = targetName; // 클릭한 사람 이름으로 변경
+        replyIndicator.classList.add('show');   // 배너 나타나기
+        commentInput.placeholder = '대댓글을 입력해주세요.';
+        commentInput.focus(); // 입력창으로 커서 자동 이동
     }
 }
 
+// X 버튼 누르면 대댓글 모드 취소
+document.addEventListener('DOMContentLoaded', function() {
+    const cancelReplyBtn = document.getElementById('cancelReplyBtn');
+    const replyIndicator = document.getElementById('replyIndicator');
+    const parentInput = document.getElementById('parentCommentId');
+    const commentInput = document.getElementById('commentInput');
+
+    if (cancelReplyBtn) {
+        cancelReplyBtn.addEventListener('click', function() {
+            replyIndicator.classList.remove('show'); // 배너 숨김
+            if (parentInput) parentInput.value = ''; // 타겟 초기화
+            if (commentInput) commentInput.placeholder = '댓글을 입력해주세요.';
+        });
+    }
+});
+
 // 2. 게시글 메인 로직 영역
 document.addEventListener('DOMContentLoaded', function() {
-    // [A] 삭제 확인 커스텀 모달창 관련 요소
+    // 삭제 확인
     const deleteModal = document.getElementById('deleteModal');
     const deleteTriggerBtn = document.getElementById('deleteTriggerBtn'); 
 
-    // [B] 익명 체크박스 토글 관련 요소
+    // 익명 체크박스 토글 관련 요소
     const anonToggleBtn = document.getElementById('anonToggleBtn');
     const anonCheckbox = document.getElementById('anonCheckbox');
     const anonCheckImg = document.getElementById('anonCheckImg');
@@ -195,6 +148,123 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 anonCheckImg.src = anonCheckImg.dataset.inactive;
             }
+        });
+    }
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    if (cancelDeleteBtn && deleteModal) {
+        cancelDeleteBtn.addEventListener('click', function() {
+            deleteModal.classList.remove('show');
+        });
+    }
+});
+
+// 공유하기 버튼 및 토스트 알림 요소
+const exportBtn = document.querySelector('.export-btn'); 
+const copyToast = document.getElementById('copyToast');
+const toastCloseBtn = document.getElementById('toastCloseBtn');
+let toastTimeout; // 알림창 타이머
+
+if (exportBtn && copyToast) {
+    exportBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // 클립보드에 현재 URL 복사
+        navigator.clipboard.writeText(window.location.href).then(function() {
+            // 복사 성공 시 토스트 알림창 표시
+            copyToast.classList.add('show');
+            
+            // 만약 기존에 세팅된 타이머가 있다면 초기화
+            clearTimeout(toastTimeout);
+            
+            // 3초뒤에 알아서 사라지도록 설정
+            toastTimeout = setTimeout(function() {
+                copyToast.classList.remove('show');
+            }, 3000);
+            
+        }).catch(function(err) {
+            console.error('링크 복사 실패:', err);
+        });
+    });
+}
+
+// X 버튼을 누르면 즉시 알림창 닫기
+if (toastCloseBtn) {
+    toastCloseBtn.addEventListener('click', function() {
+        copyToast.classList.remove('show');
+        clearTimeout(toastTimeout); // 닫은 후 타이머 꼬이지 않게 초기화
+    });
+}
+
+// 전체화면 이미지 뷰어 로직
+document.addEventListener('DOMContentLoaded', function() {
+    const imageViewer = document.getElementById('imageViewer');
+    const viewerMainImg = document.getElementById('viewerMainImg');
+    const viewerCounter = document.getElementById('viewerCounter');
+    const viewerCloseBtn = document.getElementById('viewerCloseBtn');
+    const viewerPrevBtn = document.getElementById('viewerPrevBtn');
+    const viewerNextBtn = document.getElementById('viewerNextBtn');
+    
+    // 본문 이미지들과 하단 썸네일들 가져오기
+    const postImages = document.querySelectorAll('.post-img');
+    const thumbImages = document.querySelectorAll('.viewer-thumb');
+    
+    let currentImageIndex = 0;
+    const totalImages = postImages.length;
+
+    if (imageViewer && totalImages > 0) {
+        
+        // 뷰어 화면을 특정 사진에 맞게 업데이트하는 함수
+        function updateViewer(index) {
+            currentImageIndex = index;
+            
+            // 메인 이미지 주소 바꾸기
+            viewerMainImg.src = postImages[index].src;
+            
+            // 상단 숫자 바꾸기
+            viewerCounter.innerText = `${index + 1}/${totalImages}`;
+            
+            // 썸네일 하얀 테두리 효과
+            thumbImages.forEach(function(thumb, idx) {
+                if (idx === index) {
+                    thumb.classList.add('active');
+                } else {
+                    thumb.classList.remove('active');
+                }
+            });
+            
+            // 4. 맨 처음이거나 맨 마지막일 때 화살표 숨기기
+            viewerPrevBtn.style.display = index === 0 ? 'none' : 'flex';
+            viewerNextBtn.style.display = index === totalImages - 1 ? 'none' : 'flex';
+        }
+
+        // 게시글 본문 사진 클릭 시 뷰어 띄우기
+        postImages.forEach(function(img, idx) {
+            img.addEventListener('click', function() {
+                updateViewer(idx); // 누른 사진의 인덱스로 업데이트
+                imageViewer.classList.add('show');
+            });
+        });
+
+        // 좌상단 뒤로가기(닫기) 버튼
+        viewerCloseBtn.addEventListener('click', function() {
+            imageViewer.classList.remove('show');
+        });
+
+        // 이전(〈) 버튼
+        viewerPrevBtn.addEventListener('click', function() {
+            if (currentImageIndex > 0) updateViewer(currentImageIndex - 1);
+        });
+
+        // 다음(〉) 버튼
+        viewerNextBtn.addEventListener('click', function() {
+            if (currentImageIndex < totalImages - 1) updateViewer(currentImageIndex + 1);
+        });
+
+        // 하단 썸네일 클릭 시 해당 사진으로 이동
+        thumbImages.forEach(function(thumb, idx) {
+            thumb.addEventListener('click', function() {
+                updateViewer(idx);
+            });
         });
     }
 });
