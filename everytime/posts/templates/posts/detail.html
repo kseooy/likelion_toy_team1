@@ -136,13 +136,23 @@
             </a>
             <div class="post-header-right">
                 <h2>교수 후기</h2>
-                <button type="button" class="bookmark-btn" id="bookmarkBtn">
-                    <img src="{% static 'img/Bookmark.svg' %}" 
-                        id="bookmarkImg" 
-                        alt="북마크"
-                        data-active="{% static 'img/Bookmark_active.svg' %}"
-                        data-inactive="{% static 'img/Bookmark.svg' %}"/>
-                </button>
+                <a href="{% url 'posts:post_bookmark' post.id %}" style="text-decoration: none;">
+                    <button type="button" class="bookmark-btn" id="bookmarkBtn">
+                        {% if request.user in post.bookmark_users.all %}
+                            <img src="{% static 'img/Bookmark_active.svg' %}" 
+                                id="bookmarkImg" 
+                                alt="북마크"
+                                data-active="{% static 'img/Bookmark_active.svg' %}"
+                                data-inactive="{% static 'img/Bookmark.svg' %}"/>
+                        {% else %}
+                            <img src="{% static 'img/Bookmark.svg' %}" 
+                                id="bookmarkImg" 
+                                alt="북마크"
+                                data-active="{% static 'img/Bookmark_active.svg' %}"
+                                data-inactive="{% static 'img/Bookmark.svg' %}"/>
+                        {% endif %}
+                    </button>
+                </a>
             </div>
         </header>
 
