@@ -360,10 +360,9 @@ def archive(request):
     """
     10. 보관함 기능 (내가 좋아요 한 후기 / 내가 저장(북마크)한 후기 목록 조회)
     """
-    # 좋아요 한 글
     liked_posts = request.user.like_posts.all().order_by('-id')
-    # 북마크 한 글
-    bookmarked_posts = request.user.bookmark_posts.all().order_by('-id')
+    
+    bookmarked_posts = Post.objects.filter(bookmark_users=request.user).order_by('-id')
 
     # 몇 개인지 카운트
     liked_count = liked_posts.count()
@@ -376,6 +375,3 @@ def archive(request):
         'bookmarked_count': bookmarked_count,
     }
     return render(request, 'posts/archive.html', context)
-
-
-
