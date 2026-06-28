@@ -26,25 +26,19 @@
     gap:50px;
 }
 
-.likeLink{
-    padding:20px 50px 10px 50px;
-    border-bottom:2px solid #FE332E;
-
-    text-decoration:none;
-    color : #FE332E;
-
-    font-weight:700;
-    font-size:14px;
-}
-
+.likeLink,
 .bookmarkLink{
     padding:20px 50px 10px 50px;
-
     text-decoration:none;
-    color:inherit;
-
+    color:#000;
     font-weight:700;
     font-size:14px;
+    border-bottom:2px solid transparent;
+}
+
+.active{
+    color:#FE332E;
+    border-bottom:2px solid #FE332E;
 }
 
 /* 좋아요 글 없을 시 */

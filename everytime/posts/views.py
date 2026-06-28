@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages  # 필수 항목 누락이나 글자 수 제한 알림창(messages) 기능
 from django.contrib.auth.decorators import login_required  # 로그인 권한 데코레이터 추가
-from .models import Professor, Post, PostImage
+from .models import *
 from django.db.models import Q
 from django.http import JsonResponse
 from comments.models import Comment
@@ -335,7 +335,23 @@ def delete_search_keyword(request):
     return JsonResponse({"result": "fail", "message": "잘못된 요청 메서드입니다."}, status=400)
 
 
+@login_required
+@csrf_exempt
+def delete_all_search_keywords(request):
+    """
+    + 최근 검색어 전체 삭제 API
+    """
+    if request.method == "POST":
+        # 현재 로그인한 유저의 검색어 데이터를 모두 찾아 일괄 삭제
+        user_keywords = SearchKeyword.objects.filter(user=request.user)
+        
+        if user_keywords.exists():
+            user_keywords.delete()
+            return JsonResponse({"result": "success", "message": "최근 검색어가 모두 삭제되었습니다."})
+        else:
+            return JsonResponse({"result": "success", "message": "삭제할 검색어 내역이 없습니다."})
 
+    return JsonResponse({"result": "fail", "message": "잘못된 요청 메서드입니다."}, status=400)
 
 
 
@@ -344,10 +360,9 @@ def archive(request):
     """
     10. 보관함 기능 (내가 좋아요 한 후기 / 내가 저장(북마크)한 후기 목록 조회)
     """
-    # 좋아요 한 글
     liked_posts = request.user.like_posts.all().order_by('-id')
-    # 북마크 한 글
-    bookmarked_posts = request.user.bookmark_posts.all().order_by('-id')
+    
+    bookmarked_posts = Post.objects.filter(bookmark_users=request.user).order_by('-id')
 
     # 몇 개인지 카운트
     liked_count = liked_posts.count()
@@ -360,6 +375,3 @@ def archive(request):
         'bookmarked_count': bookmarked_count,
     }
     return render(request, 'posts/archive.html', context)
-
-
-
