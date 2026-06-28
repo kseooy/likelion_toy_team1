@@ -14,5 +14,6 @@ urlpatterns = [
     path('post/<int:post_id>/bookmark/', post_bookmark, name='post_bookmark'),
     path('search/', search, name='search'),
     path('search/delete/', delete_search_keyword, name='delete_search_keyword'),
+    path('search/delete-all/', delete_all_search_keywords, name='delete_all_search_keywords'),
     path('archive/', archive, name='archive'),
 ]

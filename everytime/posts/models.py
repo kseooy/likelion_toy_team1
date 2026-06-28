@@ -46,3 +46,17 @@ class Post(models.Model):
 class PostImage(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to=upload_filepath)
+    
+    
+    
+
+class SearchKeyword(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='search_keywords')
+    keyword = models.CharField(max_length=255)  # 검색 키워드
+    created_at = models.DateTimeField(auto_now_add=True)  # 검색한 시간 (최신순 정렬용)
+
+    class Meta:
+        ordering = ['-created_at']  # 기본 정렬을 항상 최신순으로 설정
+
+    def __str__(self):
+        return f"{self.user.username}의 검색어: {self.keyword}"
