@@ -69,13 +69,21 @@ def check_username(request):
             return JsonResponse({"result": "fail", "message": "잘못된 요청 데이터입니다."}, status=400)
         
         
+
+# 프로필 설정 페이지(HTML)를 보여주는 뷰
+@login_required 
+def profile_setup_view(request):
+    return render(request, 'profile_setup.html')
+
+
+        
 #  닉네임 중복 확인         
 @csrf_exempt
 def check_nickname(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
-            nickname = data.get("nickname", "").strip() # 공백 제거 추가
+            nickname = data.get("nickname", "").strip() 
             
             # 닉네임 2~12자
             if len(nickname) < 2 or len(nickname) > 12:
