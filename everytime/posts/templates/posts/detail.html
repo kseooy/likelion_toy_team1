@@ -1,124 +1,3 @@
-<!--
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>후기 상세보기</title>
-</head>
-<body>
-    <h2>🔍 교수 후기 상세보기</h2>
-    <a href="{% url 'posts:post_list' %}">🔙 목록으로</a> | 
-    <a href="{% url 'posts:update' post.id %}">⚙️ 수정하기</a> | 
-    <a href="{% url 'posts:delete' post.id %}" onclick="return confirm('게시글이 삭제됩니다. 정말 삭제하시겠습니까?');">🗑️ 삭제하기</a>
-    <hr>
-
-    <h3>[{{ post.professor.department }}] {{ post.professor.name }} 교수님 후기</h3>
-    <p><b>제목:</b> {{ post.title }}</p>
-    
-    <p>
-        <a href="{% url 'posts:post_like' post.id %}" style="text-decoration: none;">
-            👍 <b>{{ post.like_users.count }}</b>
-        </a> 
-        | <b>별점:</b> ⭐ {{ post.rating }} / 5.0 
-        | <b>조회수:</b> {{ post.views_count }}
-    </p>
-    
-    <p><b>작성일:</b> {{ post.created_at|date:"Y년 m월 d일 H:i" }}</p>
-    <hr>
-    
-    <p style="white-space: pre-wrap;"><b>본문 내용:</b><br>{{ post.content }}</p>
-    <hr>
-
-    <h4>🖼️ 첨부 이미지 (총 {{ post.images.count }}장)</h4>
-    {% if post.images.all %}
-        {% for img_obj in post.images.all %}
-            <img src="{{ img_obj.image.url }}" width="300" style="margin-right: 10px; border: 1px solid #ccc;">
-        {% endfor %}
-    {% else %}
-        <p>첨부된 이미지가 없습니다.</p>
-    {% endif %}
-
-    <hr>
-    <h3>💬 댓글 (총 {{ post.comments.count }}개)</h3>
-    <p>최신순 | 인기순</p>
-    <hr>
-
-    {% for comment in post.comments.all %}
-        {% if not comment.parent %}
-            <div style="margin-bottom: 20px;">
-                <p>
-                    <b>👤 
-                        {% if comment.is_anonymous %}
-                            {% if comment.author == post.user %}
-                                <span style="color: red;">익명(작성자)</span>
-                            {% else %}
-                                <span>익명</span>
-                            {% endif %}
-                        {% else %}
-                            {{ comment.author.username }}
-                        {% endif %}
-                    </b>
-                    <small>({{ comment.created_at|date:"Y/m/d H:i" }})</small>
-                </p>
-                
-                <p>내용: {{ comment.content }}</p>
-                
-                <p>
-                    <a href="{% url 'comments:comment_like' comment.id %}" style="text-decoration: none;">
-                        👍 {{ comment.like_count }}  </a>
-                </p>
-
-                {% if comment.replies.all %}
-                    <blockquote style="background: #f9f9f9; padding: 10px; margin-left: 20px;">
-                        {% for reply in comment.replies.all %}
-                            <p>
-                                └ <b>
-                                    {% if reply.is_anonymous %}
-                                        {% if reply.author == post.user %}<span style="color: red;">익명(작성자)</span>{% else %}익명{% endif %}
-                                    {% else %}
-                                        {{ reply.author.username }}
-                                    {% endif %}
-                                </b>
-                                <small>({{ reply.created_at|date:"Y/m/d H:i" }})</small>
-                            </p>
-                            <p>{{ reply.content }}</p>
-                            
-                            <p>
-                                <a href="{% url 'comments:comment_like' reply.id %}" style="text-decoration: none; font-size: 0.8rem;">
-                                    👍 {{ reply.like_count }}
-                                </a>
-                            </p>
-                            <hr style="border: 0.5px solid #eee;">
-                        {% endfor %}
-                    </blockquote>
-                {% endif %}
-
-                <div style="margin-left: 20px; margin-top: 10px; background: #fdfdfd; padding: 5px; border: 1px dashed #ccc;">
-                    <form action="{% url 'comments:comment_create' post.id %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                        <input type="text" name="content" placeholder="이 댓글에 답글 달기..." style="width: 70%;" required>
-                        <label><input type="checkbox" name="is_anonymous" checked> 익명</label>
-                        <button type="submit">답글등록</button>
-                    </form>
-                </div>
-            </div>
-            <hr>
-        {% endif %}
-    {% endfor %}
-
-    <h4>✍️ 새 댓글 작성하기</h4>
-    <form action="{% url 'comments:comment_create' post.id %}" method="POST">
-        {% csrf_token %}
-        <textarea name="content" placeholder="댓글을 입력하세요." style="width: 100%; height: 50px;" required></textarea>
-        <br>
-        <label><input type="checkbox" name="is_anonymous" checked> 익명으로 쓰기</label>
-        <button type="submit">🚀 댓글 등록</button>
-    </form>
-
-</body>
-</html>-->
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="ko">
@@ -159,43 +38,82 @@
         <section>
             <div class="post-content">
                 <div class="post-meta">
-                    <div class="post-info">
-                        <div class="majorBadge">{{ post.professor.department }}</div>
-                        <div class="prof-info">{{ post.professor.name }} 교수님</div>
-                        <div class="prof-rating">
-                            <img src="{% static 'img/Star.svg' %}" alt="별점" class="star-icon"/>
-                            <span class="rating-score">{{ post.rating }}</span>
+                    <div class="profile">
+                        <div class="user-profile"><img src="{% static 'img/UserCircle.svg' %}" alt="유저 프로필"/></div>
+                        <div class="user-meta">
+                            
+                            <div class="user-name">
+                                {% if post.is_anonymous %}
+                                    <span style="font-weight: bold;">익명</span>
+                                {% else %}
+                                    {{ post.user.username }}
+                                {% endif %}
+                            </div>
+                            
+                            <div class="post-date">{{ post.created_at|date:"Y.m.d · H:i" }} · 조회 {{ post.views_count }}</div>
                         </div>
                     </div>
+                    
                 
                     <div class="post-actions">
-                        <div class="author-only">
-                            <a href="#" id="deleteTriggerBtn">삭제</a> | 
-                            <a href="{% url 'posts:update' post.id %}">수정</a>
-                        </div>
-                        <div class="viewer-only">
-                            <button class="dots-btn"><img class="dots" src="{% static 'img/DotsThree.svg' %}" alt="점세개"/></button>
-                        </div>
+                        {% if request.user == post.user %}
+                            <div class="author-only" style="font-size: 11px;">
+                                <a href="#" id="deleteTriggerBtn">삭제</a> | 
+                                <a href="{% url 'posts:update' post.id %}">수정</a>
+                            </div>
+                        {% else %}
+                            <div class="dots-container">
+                                <button type="button" class="dots-btn">
+                                    <img class="dots" src="{% static 'img/DotsThree.svg' %}" alt="점세개"/>
+                                </button>
+
+                                <div class="dots-menu">
+                                    <button type="button" class="menu-item">쪽지 보내기</button>
+                                    <div class="menu-divider"></div>
+                                    <button type="button" class="menu-item report">신고하기</button>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 
                 <div class="post-body">
-                    <h1 class="post-title">{{ post.title }}</h1>
+                    <div class="post-info">
+                        <div class="majorBadge">{{ post.professor.department }}</div>
+                        <div class="prof-info">{{ post.professor.name }} 교수</div>
+                        <div class="prof-rating">
+                            {% if post.rating >= 1 %}
+                                <img src="{% static 'img/Star.svg' %}" alt="별점" class="star-icon"/>
+                            {% else %}
+                                <img src="{% static 'img/Star_gray.svg' %}" alt="빈 별점" class="star-icon"/>
+                            {% endif %}
 
-                    <div class="profile">
-                        <div class="user-profile"><img src="{% static 'img/UserCircle.svg' %}" alt="유저 프로필"/></div>
-                        <div class="user-meta">
-                            <div class="user-name">
-                                {% if post.is_anonymous %}
-                                    <span style="color: #c62917; font-weight: bold;">익명(글쓴이)</span>
-                                {% else %}
-                                    {{ post.author.username }}
-                                {% endif %}
-                            </div>
-                            <div class="post-date">{{ post.created_at|date:"Y년 m월 d일 H:i" }} · 조회 {{ post.views_count }}</div>
+                            {% if post.rating >= 2 %}
+                                <img src="{% static 'img/Star.svg' %}" alt="별점" class="star-icon"/>
+                            {% else %}
+                                <img src="{% static 'img/Star_gray.svg' %}" alt="빈 별점" class="star-icon"/>
+                            {% endif %}
+
+                            {% if post.rating >= 3 %}
+                                <img src="{% static 'img/Star.svg' %}" alt="별점" class="star-icon"/>
+                            {% else %}
+                                <img src="{% static 'img/Star_gray.svg' %}" alt="빈 별점" class="star-icon"/>
+                            {% endif %}
+
+                            {% if post.rating >= 4 %}
+                                <img src="{% static 'img/Star.svg' %}" alt="별점" class="star-icon"/>
+                            {% else %}
+                                <img src="{% static 'img/Star_gray.svg' %}" alt="빈 별점" class="star-icon"/>
+                            {% endif %}
+
+                            {% if post.rating >= 5 %}
+                                <img src="{% static 'img/Star.svg' %}" alt="별점" class="star-icon"/>
+                            {% else %}
+                                <img src="{% static 'img/Star_gray.svg' %}" alt="빈 별점" class="star-icon"/>
+                            {% endif %}
                         </div>
                     </div>
-
+                    <h1 class="post-title">{{ post.title }}</h1>
                     <p class="post-text">{{ post.content }}</p>
                 </div>
             </div>
@@ -204,28 +122,21 @@
                 <div class="image-list">
                     {% if post.images.all %}
                         {% for img_obj in post.images.all %}
-                            <img src="{{ img_obj.image.url }}" alt="첨부이미지" class="post-attached-img" width="300"/>
+                            <img src="{{ img_obj.image.url }}" alt="첨부이미지" class="post-img"/>
                         {% endfor %}
-                        <p class="image-count">첨부 이미지 {{ post.images.count }}장</p>
                     {% endif %}
                 </div>
             </div>
 
             <div class="action-bar">
-                <div class="action-left">
-                    <a href="{% url 'posts:post_like' post.id %}" class="like-count">
-                        {% if request.user in post.like_users.all %}
-                            <img src="{% static 'img/LikeBtn_active.svg' %}" id="likeBtnImg" alt="좋아요 취소">
-                        {% else %}
-                            <img src="{% static 'img/LikeBtn.svg' %}" id="likeBtnImg" alt="좋아요">
-                        {% endif %}
-                        <span id="likeCount">{{ post.like_users.count }}</span>
-                    </a>
-
-                    <span class="comment-count">
-                        <img src="{% static 'img/ChatCircle.svg' %}" alt="댓글"/>{{ post.comments.count }}
-                    </span>
-                </div>
+                <a href="{% url 'posts:post_like' post.id %}" class="like-count">
+                    {% if request.user in post.like_users.all %}
+                        <img src="{% static 'img/LikeBtn_active.svg' %}" id="likeBtnImg" alt="좋아요 취소">
+                    {% else %}
+                        <img src="{% static 'img/LikeBtn.svg' %}" id="likeBtnImg" alt="좋아요">
+                    {% endif %}
+                    <span id="likeCount">{{ post.like_users.count }}</span>
+                </a>
 
                 <button class="export-btn">
                     <img src="{% static 'img/Export.svg' %}" alt="공유하기"/> 공유하기
@@ -245,16 +156,32 @@
             <div class="comment-list">
                 {% for comment in comments %}
                     {% if not comment.parent %}
-                        <div class="comment-item-group" style="margin-bottom: 15px;">
+                        <div class="comment-item-group">
                             <div class="comment-item">
                                 <div class="comment-body">
                                     <div class="profile">
                                         <div class="user-profile"><img src="{% static 'img/UserCircle.svg' %}" alt="유저 프로필"/></div>
                                         <div class="user-meta">
                                             <div class="user-name">
-                                                <span>{{ comment.anonymous_name }}</span>
+                                                {% if comment.author == post.author %}
+                                                    <span style="color: #FE332E; font-weight: 700;">
+                                                        {% if comment.is_anonymous %}
+                                                            익명(작성자)
+                                                        {% else %}
+                                                            {{ comment.author.username }}(작성자)
+                                                        {% endif %}
+                                                    </span>
+                                                {% else %}
+                                                    <span>
+                                                        {% if comment.is_anonymous %}
+                                                            {{ comment.anonymous_name|default:"익명" }}
+                                                        {% else %}
+                                                            {{ comment.author.username }}
+                                                        {% endif %}
+                                                    </span>
+                                                {% endif %}
                                             </div>
-                                            <div class="post-date">{{ comment.created_at|date:"Y/m/d · H:i" }}</div>
+                                            <div class="post-date">{{ comment.created_at|date:"Y.m.d · H:i" }}</div>
                                         </div>
                                     </div>
                                     <div class="comment-main">
@@ -268,7 +195,7 @@
                                                      data-inactive="{% static 'img/LikeBtn.svg' %}"/>
                                                 <span class="comment-like-count">{{ comment.like_count }}</span>
                                             </a>
-                                            <button type="button" class="comment-reply-btn" onclick="prepareReply('{{ comment.id }}')">답글달기</button>
+                                            <button type="button" class="comment-reply-btn" onclick="prepareReply('{{ comment.id }}', '{{ comment.anonymous_name }}')">답글달기</button>
                                         </div>
                                     </div>
                                 </div>
@@ -292,8 +219,8 @@
                                 {% endif %}
                             </div>
 
-                            {% if comment.replies.all %}
-                                {% for reply in comment.replies.all %}
+                            {% for reply in comments %}
+                                {% if reply.parent == comment %}
                                     <div class="comment-item reply">
                                         <div class="reply-comment-group">
                                             <img class="reply-arrow" src="{% static 'img/ArrowElbowDownRight.svg' %}" alt="대댓글"/>
@@ -301,10 +228,16 @@
                                                 <div class="profile">
                                                     <div class="user-profile"><img src="{% static 'img/UserCircle.svg' %}" alt="유저 프로필"/></div>
                                                     <div class="user-meta">
+
                                                         <div class="user-name">
-                                                            <span>{{ reply.anonymous_name }}</span>
+                                                            {% if reply.author == post.author %}
+                                                                <span style="color: #FE332E; font-weight: bold;">{{ reply.anonymous_name }}</span>
+                                                            {% else %}
+                                                                <span>{{ reply.anonymous_name }}</span>
+                                                            {% endif %}
                                                         </div>
-                                                        <div class="post-date">{{ reply.created_at|date:"Y/m/d · H:i" }}</div>
+
+                                                        <div class="post-date">{{ reply.created_at|date:"Y.m.d · H:i" }}</div>
                                                     </div>
                                                 </div>
                                                 <div class="reply-comment-main">
@@ -314,10 +247,12 @@
                                                             <img src="{% static 'img/LikeBtn.svg' %}" class="comment-like-img" alt="좋아요"/>
                                                             <span class="comment-like-count">{{ reply.like_count }}</span>
                                                         </a>
+                                                        <button type="button" class="comment-reply-btn" onclick="prepareReply('{{ comment.id }}', '{{ reply.anonymous_name }}')">답글달기</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="comment-actions">
                                             {% if request.user == reply.author %}
                                                 <div class="author-only" style="font-size: 11px;">
@@ -338,75 +273,112 @@
                                             {% endif %}
                                         </div>
                                     </div>
-                                {% endfor %}
-                            {% endif %}
-
-                            <div id="reply-form-{{ comment.id }}">
-                                <form action="{% url 'comments:comment_create' post.id %}" method="POST">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                                    <div class="comment-input-area">
-                                        <div class="comment-input">
-                                            <input type="text" name="content" placeholder="이 댓글에 답글 달기..." required/>
-                                            <label class="checkbox-label">
-                                                <input type="checkbox" name="is_anonymous" checked>
-                                                <span class="checkbox-text">익명</span>
-                                            </label>
-                                        </div>
-                                        <button type="submit" class="comment-submit-btn">
-                                            <img src="{% static 'img/Submitbtn.svg' %}" alt="전송"/>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     {% endif %}
                 {% endfor %}
             </div>
         </section>
 
+        </section>
+
         <form action="{% url 'comments:comment_create' post.id %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="parent_id" id="parentCommentId" value="">
-            <div class="comment-input-area">
-                <div class="comment-input">
-                    <input type="text" id="commentInput" name="content" placeholder="댓글을 입력해주세요." required/>
-                    
-                    <label for="anonCheckbox" class="checkbox-label" id="anonToggleBtn">
-                        <input type="checkbox" id="anonCheckbox" name="is_anonymous" checked style="display: none;">
-                        <span class="checkbox-box">
-                            <img src="{% static 'img/Checkbox_active.svg' %}" 
-                                id="anonCheckImg" 
-                                alt="체크박스 해제"
-                                data-active="{% static 'img/Checkbox_active.svg' %}"
-                                data-inactive="{% static 'img/Checkbox.svg' %}"/>
-                        </span>
-                        <span class="checkbox-text">익명</span>
-                    </label>
+            
+            <div class="fixed-bottom-wrapper">
+                <div class="reply-indicator" id="replyIndicator">
+                    <span class="indicator-text"><span id="replyTargetName">익명</span> 님에게 대댓글 작성 중</span>
+                    <button type="button" id="cancelReplyBtn" class="indicator-close-btn">✕</button>
                 </div>
                 
-                <button type="submit" class="comment-submit-btn" id="submitBtn">
-                    <img src="{% static 'img/Submitbtn.svg' %}" 
-                        id="submitBtnImg" 
-                        alt="전송"
-                        data-active="{% static 'img/Submitbtn_active.svg' %}"
-                        data-inactive="{% static 'img/Submitbtn.svg' %}"/>
-                </button>
+                <div class="comment-input-area">
+                    <div class="comment-input">
+                        <input type="text" id="commentInput" name="content" placeholder="댓글을 입력해주세요." required/>
+                        
+                        <label for="anonCheckbox" class="checkbox-label" id="anonToggleBtn">
+                            <input type="checkbox" id="anonCheckbox" name="is_anonymous" checked style="display: none;">
+                            <span class="checkbox-box">
+                                <img src="{% static 'img/Checkbox_active.svg' %}" 
+                                    id="anonCheckImg" 
+                                    alt="체크박스 해제"
+                                    data-active="{% static 'img/Checkbox_active.svg' %}"
+                                    data-inactive="{% static 'img/Checkbox.svg' %}"/>
+                            </span>
+                            <span class="checkbox-text">익명</span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="comment-submit-btn" id="submitBtn">
+                        <img src="{% static 'img/Submitbtn.svg' %}" 
+                            id="submitBtnImg" 
+                            alt="전송"
+                            data-active="{% static 'img/Submitbtn_active.svg' %}"
+                            data-inactive="{% static 'img/Submitbtn.svg' %}"/>
+                    </button>
+                </div>
             </div>
         </form>
+    </div> <div id="deleteModal" class="modal-overlay">
     </div>
 
-    <div class="modal-overlay" id="deleteModal">
-        <div class="modal-box">
-            <div class="modal-content">
-                <p>게시글이 삭제됩니다.</p>
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <img src="{% static 'img/Trash.svg' %}" alt="삭제 아이콘" />
             </div>
-            <a href="{% url 'posts:delete' post.id %}" class="modal-confirm-btn" id="modalConfirmBtn">
-                확인
-            </a>
+
+            <h3 class="modal-title">정말로 삭제하시겠어요?</h3>
+            <p class="modal-desc">삭제된 내용은 복구할 수 없습니다.</p>
+
+            <div class="modal-btn-group">
+                <button type="button" id="cancelDeleteBtn" class="modal-btn cancel-btn">취소</button>
+
+                <form action="{% url 'posts:delete' post.id %}" method="POST" style="margin: 0; flex: 1;">
+                    {% csrf_token %}
+                    <button type="submit" class="modal-btn delete-btn">삭제</button>
+                </form>
+            </div>
         </div>
     </div>
-    
+
+    <div id="copyToast" class="copy-toast">
+        <button type="button" id="toastCloseBtn" class="toast-close-btn">✕</button>
+        <div class="toast-text">
+            링크가 복사되었습니다.<br>원하는 곳에 붙여넣기(Ctrl+V)해주세요.
+        </div>
+    </div>
+
+    <div id="imageViewer" class="image-viewer">
+        <div class="viewer-top">
+            <button type="button" id="viewerCloseBtn" class="viewer-close">
+                <img src="{% static 'img/CaretLeft.svg' %}" alt="닫기" style="filter: brightness(0) invert(1);"/>
+            </button>
+            <span id="viewerCounter" class="viewer-counter">1/1</span>
+            <div style="width: 24px;"></div> </div>
+
+        <div class="viewer-mid">
+            <button type="button" id="viewerPrevBtn" class="viewer-nav-btn"><img src="{% static 'img/CaretCircleRight.svg' %}" alt="다음" style="transform: scaleX(-1);"/></button>
+            <img id="viewerMainImg" src="" alt="상세 이미지"/>
+            <button type="button" id="viewerNextBtn" class="viewer-nav-btn"><img src="{% static 'img/CaretCircleRight.svg' %}" alt="다음"/></button>
+        </div>
+
+        <div class="viewer-bottom">
+            {% if post.images.all %}
+                {% for img_obj in post.images.all %}
+                    <img src="{{ img_obj.image.url }}" class="viewer-thumb" alt="썸네일"/>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    {% if messages %}
+        <script>
+            {% for message in messages %}
+                alert("{{ message }}");
+            {% endfor %}
+        </script>
+    {% endif %}
     <script src="{% static 'js/post_detail.js' %}" defer></script>
     <script src="{% static 'js/post_list.js' %}" defer></script>
 </body>
