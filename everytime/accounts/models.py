@@ -19,7 +19,3 @@ def create_user_profile(sender, instance, created, **kwargs):
         # 가입 초기에는 고유 ID를 활용해 중복되지 않는 기본 닉네임을 부여
         Profile.objects.create(user=instance, nickname=f"유저_{instance.id}")
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    """User 모델이 수정/저장될 때 Profile 모델도 함께 저장"""
-    instance.profile.save()
