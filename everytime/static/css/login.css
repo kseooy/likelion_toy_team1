@@ -7,6 +7,9 @@ body {
     max-width: 402px;
     min-height: 100vh;
     margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -40,6 +43,8 @@ header {
     display: flex;
     flex-direction: column;
     gap: 30px;
+
+    flex: 1;
 }
 
 .loginTitle{
@@ -180,6 +185,9 @@ header {
     gap:30px;
     justify-content: center;
     font-size:15px;
+
+    margin-top: auto;
+    padding-bottom: 20px;
 }
 .signupLink{
     text-decoration: none;
