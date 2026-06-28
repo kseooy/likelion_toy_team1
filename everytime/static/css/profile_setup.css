@@ -1,54 +1,54 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Pretendard;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Pretendard;
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 /* 중앙 화이트 카드 구역 */
 .p-container {
-    background-color: #ffffff;
-    width: 100%;
-    max-width: 402px;
-    min-height: 680px;
-    padding: 45px 28px 45px 27px;
-    display: flex;
-    flex-direction: column;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 402px;
+  min-height: 680px;
+  padding: 45px 28px 45px 27px;
+  display: flex;
+  flex-direction: column;
 }
 
 .p-content {
-    display: flex;
-    width: 347px;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  width: 347px;
+  flex-direction: column;
+  align-items: center;
 }
 
 .p-header {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    gap: 18px;
-    margin-bottom: 60px;
-    text-align: left;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 60px;
+  text-align: left;
 }
 
 .p-main-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: #000000;
+  font-size: 28px;
+  font-weight: 700;
+  color: #000000;
 }
 
 .p-sub-title {
-    color: #000;
-    font-size: 18px;
-    font-weight: normal;
+  color: #000;
+  font-size: 18px;
+  font-weight: normal;
 }
 
 .p-image-zone {
@@ -97,10 +97,9 @@ body {
   height: 25px;
 }
 
-
 .p-input-group {
-    width: 347px;
-    margin-bottom: 230px;
+  width: 347px;
+  margin-bottom: 230px;
 }
 
 .p-input-label {
@@ -128,9 +127,9 @@ body {
   color: #686866;
 }
 
-.p-input-field:focus{
-    border: 2px solid #FE332E;
-    color: #000000;
+.p-input-field:focus {
+  border: 2px solid #fe332e;
+  color: #000000;
 }
 /* 자바스크립트가 초기화시키면 원래 텍스트 컬러로 복귀 */
 .p-input-field:not(.is-default) {
@@ -154,7 +153,7 @@ body {
 
 /* 검증 완료 시 에타 레드로 점등 */
 .p-status-item.active {
-  color: #FE332E;
+  color: #fe332e;
 }
 
 .p-status-item img {
@@ -170,14 +169,14 @@ body {
   font-size: 15px;
   font-weight: 700;
   border: none;
-  background-color: #FDCED0;
+  background-color: #fdced0;
   color: #ffffff;
   cursor: not-allowed;
   transition: background-color 0.2s ease;
 }
 
-/* 조건 달성하여 활성화 시 진짜 에타 레드 돌격 */
+/* 조건 달성하여 활성화 시*/
 .p-submit-btn:not(:disabled) {
-  background-color: #FE332E;
+  background-color: #fe332e;
   cursor: pointer;
 }

@@ -75,8 +75,6 @@ def check_username(request):
 def profile_setup_view(request):
     return render(request, 'profile_setup.html')
 
-
-        
 #  닉네임 중복 확인         
 @csrf_exempt
 def check_nickname(request):
