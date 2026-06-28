@@ -1,230 +1,201 @@
-*{
-    margin: 0;
-    padding: 0;
-    font-family: Pretendard;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    letter-spacing: -0.02em;
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Pretendard;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.02em;
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
 .signup-container {
-    display: flex;
-    max-width: 402px;
-    width: 100%;
-    box-sizing: border-box;
-    background: #fff;
-    padding: 45px 29px;
-    flex-direction: column;
-    justify-content: center;
+  display: flex;
+  max-width: 402px;
+  width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+  padding: 45px 29px;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .signup-content {
-    display: flex;
-    width: 100%;
-    max-width: 344px;
-    flex-direction: column;
-    gap: 36px;
+  display: flex;
+  width: 100%;
+  max-width: 344px;
+  flex-direction: column;
+  gap: 36px;
 }
 
 /* 상단 헤더 영역 */
 .signup-header {
-    display: flex;
-    width: 309px;
-    flex-direction: column;
-    gap: 18px;
+  display: flex;
+  width: 309px;
+  flex-direction: column;
+  gap: 18px;
 }
 .main-title {
-    color: #000;
-    font-size: 28px;
-    font-weight: 700;
+  color: #000;
+  font-size: 28px;
+  font-weight: 700;
 }
 .sub-title {
-    color: #000;
-    font-size: 18px;
-    font-weight: normal;
-    font-style: normal;
-    white-space: nowrap;
+  color: #000;
+  font-size: 18px;
+  font-weight: normal;
+  font-style: normal;
+  white-space: nowrap;
 }
 
 /* 입력 폼 */
 .signup-form {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 .input-label {
-    font-size: 14px;
-    font-weight: 500;
-    color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
 }
 
 .input-container {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 .input-field {
-    width: 100%;
-    padding: 16px; 
-    border-radius: 10px;
-    border: 2px solid #D5D6D7;
-    font-size: 15px;
-    outline: none;
-    box-sizing: border-box;
-    color: #686866;
+  width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  border: 2px solid #d5d6d7;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+  color: #686866;
 }
 
-.input-field:focus{
-    border: 2px solid #FE332E;
+.input-field:focus {
+  border: 2px solid #fe332e;
 }
 
 /* 비밀번호 토글 버튼 */
 .password-toggle-btn {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 .password-toggle-btn img {
-    width: 26px;
-    height: 26px;
-    opacity: 0.4;
+  width: 26px;
+  height: 26px;
+  opacity: 0.4;
 }
 
 /* 하단 조건 체크리스트 */
 .status-message-box {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 .status-item {
-    display: flex;
-    font-size: 12px;
-    color: #686866;
-    align-items: center;
+  display: flex;
+  font-size: 12px;
+  color: #686866;
+  align-items: center;
 }
-.status-item img{
-    width: 16px;
-    height: 16px;
+.status-item img {
+  width: 16px;
+  height: 16px;
 }
 .status-item.is-success {
-    color: #FE332E;
+  color: #fe332e;
 }
 /* 에러 */
 .input-container.is-error .input-field {
-    border-color: #FE332E;
+  border-color: #fe332e;
 }
 .status-message-box.is-error .status-item {
-    color: #FE332E;
+  color: #fe332e;
 }
 .status-item.single-msg {
-    color: #FE332E;
+  color: #fe332e;
 }
 
 /* 회원가입 완료 버튼 */
 .submit-btn {
-    width: 100%;
-    height: 52px;
-    background-color: #FDCED0;
-    border: none;
-    border-radius: 10px;
-    color: #FFFFFF;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: not-allowed;
-    transition: background-color 0.2s;
+  width: 100%;
+  height: 52px;
+  background-color: #fdced0;
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: not-allowed;
+  transition: background-color 0.2s;
 }
 
 .submit-btn.is-active {
-    background-color: #FF4D4D;
-    cursor: pointer;
+  background-color: #ff4d4d;
+  cursor: pointer;
 }
 
-/* ---또는--- 구분선 영역 */
+/* ---또는--- 구분선 영역
 .divider-zone {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin: 12px 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 12px 0;
 }
 .divider-zone::before,
 .divider-zone::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background-color: #D5D6D7;
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: #d5d6d7;
 }
 .divider-text {
-    font-size: 13px;
-    color: #686866;
-    padding: 0 18px;
-}
-
-.social-login-component {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-}
-
-/* 소셜 버튼 공통 스타일 */
-.sns-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px 78px 16px 34px;
-    gap: 48px;
-    width: 100%;
-    height: 52px;
-    border: 2px solid #D5D6D7;
-    border-radius: 10px;
-    background-color: #FFFFFF;
-    font-size: 15px;
-    font-weight: 400;
-    cursor: pointer;
-    box-sizing: border-box;
-}
-.sns-btn img {
-    width: 27px;
-    height: 27px;
-}
+  font-size: 13px;
+  color: #686866;
+  padding: 0 18px;
+} */
 
 .footer-link-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 28px;
-    margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  margin-top: 20px;
 }
 .footer-text {
-    font-size: 14px;
-    color: #666666;
+  font-size: 14px;
+  color: #666666;
 }
 .footer-link {
-    font-size: 14px;
-    font-weight: bold;
-    color: #FE332E;
-    text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fe332e;
+  text-decoration: none;
 }
 .footer-link:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 /* 기본 상태: 회색 */
@@ -238,7 +209,7 @@ body {
 }
 
 .status-message-box .status-item.active {
-  color: #FE332E;
+  color: #fe332e;
   font-weight: 500;
 }
 
@@ -250,16 +221,18 @@ body {
   font-size: 15px;
   font-weight: bold;
   border: none;
-  
-  background-color: #FDCED0;
+
+  background-color: #fdced0;
   color: #fff;
   cursor: not-allowed;
-  
-  transition: background-color 0.2s ease, color 0.2s ease;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .submit-btn:not(:disabled) {
-  background-color: #FE332E;
+  background-color: #fe332e;
   color: #ffffff;
   cursor: pointer;
 }

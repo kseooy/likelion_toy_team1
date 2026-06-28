@@ -69,54 +69,66 @@ def check_username(request):
             return JsonResponse({"result": "fail", "message": "잘못된 요청 데이터입니다."}, status=400)
         
         
+
+# 프로필 설정 페이지(HTML)를 보여주는 뷰
+@login_required 
+def profile_setup_view(request):
+    return render(request, 'profile_setup.html')
+
+
+        
 #  닉네임 중복 확인         
 @csrf_exempt
 def check_nickname(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            nickname = data.get("nickname", "").strip() # 공백 제거 추가
+    if request.method != "POST":
+        return JsonResponse({"result": "fail", "message": "잘못된 요청 메서드입니다."}, status=405) # 405 Method Not Allowed
+        
+    try:
+        data = json.loads(request.body)
+        nickname = data.get("nickname", "").strip()
+        
+        if len(nickname) < 2 or len(nickname) > 12:
+            return JsonResponse({"result": "fail", "message": "닉네임은 2~12자여야 합니다."}, status=400)
             
-            # 닉네임 2~12자
-            if len(nickname) < 2 or len(nickname) > 12:
-                return JsonResponse({"result": "fail", "message": "닉네임은 2~12자여야 합니다."}, status=400)
-                
-            # Profile 모델에서 중복 체크
-            if Profile.objects.filter(nickname=nickname).exists():
-                return JsonResponse({"result": "fail", "message": "이미 사용 중인 닉네임입니다."}, status=200)
-                
-            return JsonResponse({"result": "success", "message": "사용 가능한 닉네임입니다."}, status=200)
-        except json.JSONDecodeError:
-            return JsonResponse({"result": "fail", "message": "잘못된 요청 데이터입니다."}, status=400)
+        if Profile.objects.filter(nickname=nickname).exists():
+            return JsonResponse({"result": "fail", "message": "이미 사용 중인 닉네임입니다."}, status=400)
             
-    return JsonResponse({"result": "fail", "message": "잘못된 요청 메서드입니다."}, status=400)
+        return JsonResponse({"result": "success", "message": "사용 가능한 닉네임입니다."}, status=200)
+    except json.JSONDecodeError:
+        return JsonResponse({"result": "fail", "message": "잘못된 요청 데이터입니다."}, status=400)
 
 
 
 # 중복 검증 완료 후 최종적으로 닉네임을 변경 및 저장하는 API
-@login_required
 @csrf_exempt
 def update_profile(request):
-    if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            new_nickname = data.get('nickname', '').strip()
-        except json.JSONDecodeError:
-            return JsonResponse({"result": "fail", "message": "잘못된 데이터 형식입니다."}, status=400)
+    # API 환경에 맞는 로그인 필수 검증
+    if not request.user.is_authenticated:
+        return JsonResponse({"result": "fail", "message": "로그인이 필요한 서비스입니다."}, status=401)
 
-        # 닉네임 글자 수 검증 (기획 명세 반영: 2자 이상 12자 이하)
-        if not (2 <= len(new_nickname) <= 12):
-            return JsonResponse({"result": "fail", "message": "닉네임은 2자 이상 12자 이하로 입력해주세요."}, status=400)
+    if request.method != "POST":
+        return JsonResponse({"result": "fail", "message": "잘못된 요청 메서드입니다."}, status=405)
 
-        # 다른 유저가 이미 선점한 닉네임인지 최종 마지노선 중복 검증
-        if Profile.objects.filter(nickname=new_nickname).exclude(user=request.user).exists():
-            return JsonResponse({"result": "fail", "message": "이미 사용 중인 닉네임입니다."}, status=400)
+    try:
+        data = json.loads(request.body)
+        new_nickname = data.get('nickname', '').strip()
+    except json.JSONDecodeError:
+        return JsonResponse({"result": "fail", "message": "잘못된 데이터 형식입니다."}, status=400)
 
-        # 현재 로그인한 유저의 프로필 가져와서 저장
+    if not (2 <= len(new_nickname) <= 12):
+        return JsonResponse({"result": "fail", "message": "닉네임은 2자 이상 12자 이하로 입력해주세요."}, status=400)
+
+    # 본인이 현재 사용 중인 닉네임을 그대로 유지하는 경우는 통과시키고, 다른 사람이 쓰는 경우만 차단
+    if Profile.objects.filter(nickname=new_nickname).exclude(user=request.user).exists():
+        return JsonResponse({"result": "fail", "message": "이미 사용 중인 닉네임입니다."}, status=400)
+
+    # 안전하게 프로필 가져오기 (get_or_create 등을 활용해 에러 방지 가능)
+    try:
         profile = request.user.profile
-        profile.nickname = new_nickname
-        profile.save()
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user, nickname=f"유저_{request.user.id}")
 
-        return JsonResponse({"result": "success", "message": "프로필 설정이 정상적으로 완료되었습니다."})
+    profile.nickname = new_nickname
+    profile.save()
 
-    return JsonResponse({"result": "fail", "message": "잘못된 요청 메서드입니다."}, status=400)
+    return JsonResponse({"result": "success", "message": "프로필 설정이 정상적으로 완료되었습니다."}, status=200)
