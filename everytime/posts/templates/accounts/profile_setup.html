@@ -1,13 +1,15 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>프로필 설정</title>
-    <link rel="stylesheet" href="{% static 'css/profile_setup.css' %}">
+    <link rel="stylesheet" href="{% static 'css/profile_setup.css' %}?v=1.0" />
 </head>
 <body>
+    <input type="hidden" id="csrf-token" value="{{ csrf_token }}">
+
     <div class="p-container">
         <div class="p-content">
             <header class="p-header">
@@ -20,12 +22,12 @@
 
             <div class="p-image-zone">
                 <label for="profile-file-input" class="p-circle-button" title="프로필 사진 변경">
-                    <img src="{% static 'img/signup_usercircle.svg' %}" alt="기본 프로필" class="p-avatar-img">
+                    <img src="{% if user_profile_img %}{{ user_profile_img }}{% else %}{% static 'img/signup_usercircle.svg' %}{% endif %}" alt="기본 프로필" class="p-avatar-img"/>
                     <div class="p-camera-badge">
-                        <img src="{% static 'img/camera.svg' %}" alt="카메라 아이콘" class="p-camera-img">
+                        <img src="{% static 'img/camera.svg' %}" alt="카메라 아이콘" class="p-camera-img"/>
                     </div>
                 </label>
-                <input type="file" id="profile-file-input" accept="image/*" style="display: none;">
+                <input type="file" id="profile-file-input" name="profile_image" accept="image/*" style="display: none"/>
             </div>
 
             <form class="p-form" id="profile-form" method="POST" action="">
@@ -36,15 +38,15 @@
                             type="text"
                             id="profile_nickname"
                             name="nickname"
-                            value="abcd1234"
+                            value="{{ initial_nickname }}"
                             class="p-input-field is-default"
                             placeholder="닉네임을 입력해주세요"
                             autocomplete="off"
                         />
                     </div>
                     <div class="p-status-box">
-                        <span class="p-status-item" id="nick-len">2~12자 <img src="../static/img/Check.svg" alt="체크"/></span>
-                        <span class="p-status-item" id="nick-check">중복확인 <img src="../static/img/Check.svg" alt="체크"/></span>
+                        <span class="p-status-item" id="nick-len">2~12자 <img src="{% static 'img/Check.svg' %}" alt="체크"/></span>
+                        <span class="p-status-item" id="nick-check">중복확인 <img src="{% static 'img/Check.svg' %}" alt="체크"/></span>
                     </div>
                 </div>
 
@@ -53,6 +55,6 @@
 
         </div>
     </div>
-    <script src="{% static 'js/signup_complete.js' %}" defer></script>
+    <script src="{% static 'js/profile_setup.js' %}?v=1.0" defer></script>
 </body>
 </html>

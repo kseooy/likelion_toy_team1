@@ -9,7 +9,7 @@ urlpatterns = [
     path('signup/complete/', signup_complete, name='signup_complete'), 
     path('login/', login_view, name='login'),                         
     path('logout/', logout_view, name='logout'),   
-    path('check-username/', check_username, name='check_username'),  
+    path('check-username/', check_username, name='check_username'),
     path('profile/setup/', profile_setup_view, name='profile_setup'),
     path('profile/update/', update_profile, name='update_profile'),                   
 ]
